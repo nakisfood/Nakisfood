@@ -1171,6 +1171,10 @@ html.pw-tam #karRepBox{max-width:none!important;padding-left:8px!important;paddi
 </style>
 <style id="npCalCss">
 input[type=date]::-webkit-calendar-picker-indicator{display:none}
+.pvb{font-size:15px!important;font-weight:800!important;padding:10px 22px!important;border-radius:10px!important;border:0!important;cursor:pointer}
+.pvg{background:#1e3a5f!important;color:#fff!important}.pvx{background:#1a7f3c!important;color:#fff!important}.pvp{background:#c4252d!important;color:#fff!important}
+.pvb:hover{filter:brightness(1.07)}.pvx[hidden],.pvp[hidden]{display:none!important}
+.sbn{background:#1e3a5f!important}.sbb{font-weight:800!important;border:0!important;border-radius:9px!important;padding:8px 16px!important;color:#fff!important}.sbv{background:#1f6feb!important}.sbp{background:#c4252d!important}.sbx{background:#1a7f3c!important}.sba{background:#5b3fa3!important}
 body.subeonly #sbTog, body.subeonly .naksetmark, body.subeonly .hqb, body.subeonly .vwbox, body.subeonly #sNav, body.subeonly #gsBox, body.subeonly #toolOv .mhead button, body.subeonly #gsOv{display:none!important}
 body.subeonly.subeara #gsBox{display:flex!important}
 body.subeonly :is(.toolbar,main,#home){visibility:hidden}
@@ -1567,13 +1571,13 @@ body.subeonly #toolOv{left:0!important}
   <div class="modal" style="width:min(1400px,100%);height:calc(100vh - 24px);display:flex;flex-direction:column">
     <div class="mhead" style="gap:10px;flex-wrap:wrap">
       <h2>👁 <span id="prevTtl">Rapor Ön İzleme</span> <span id="prevInfo" style="font-size:12px;font-weight:400;color:var(--muted)"></span></h2>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button id="prevBack">← Seçime dön</button>
-        <button id="prevXlsx" data-perm="rapxls">⬇ Excel indir</button>
-        <button class="primary" id="prevPdf" data-perm="rappdf">🖨 PDF oluştur</button>
-      </div>
     </div>
-    <iframe id="prevFrame" title="Rapor ön izleme" style="flex:1;border:0;width:100%;background:#fff;border-radius:0 0 10px 10px"></iframe>
+    <iframe id="prevFrame" title="Rapor ön izleme" style="flex:1;border:0;width:100%;background:#fff"></iframe>
+    <div id="prevBar" style="display:flex;gap:12px;align-items:center;padding:12px 16px;border-top:2px solid #e3e7ee;background:#f7f9fc;border-radius:0 0 10px 10px">
+      <span style="flex:1"></span><button id="prevBack" class="pvb pvg">← Seçime dön</button>
+      <button id="prevXlsx" class="pvb pvx" data-perm="rapxls">⬇ Excel indir</button>
+      <button id="prevPdf" class="pvb pvp" data-perm="rappdf">🖨 PDF oluştur</button>
+    </div>
   </div>
 </div>
 
@@ -6779,7 +6783,7 @@ function openCompare(){
         const wait = setInterval(()=>{ if(!$('overlay').classList.contains('open')){ clearInterval(wait); if(inv && CMP.fat) cmpFatApply(inv); } }, 400); return; }
       const sp = e.target.closest('[data-subeprev],[data-subepdf],[data-subedelr]'); if(sp && CMP.sube){ const id = sp.dataset.subeprev || sp.dataset.subepdf || sp.dataset.subedelr, inv = (typeof faturalar!=='undefined' ? faturalar : []).find(f=>String(f.id||f.no)===id); if(!inv) return;
         if(sp.dataset.subedelr){ if(!subeAdm() || !confirm(tr('Kayıtlı karşılaştırma silinsin mi?'))) return; delete inv.cmpAn; if(typeof persistFat==='function') persistFat(); TOOL.render(); return; }
-        cmpFatApply(inv); CMP.step = 1; cmpCustPreview(); if(sp.dataset.subepdf) setTimeout(()=>{ try{ $('prevFrame').contentWindow.print(); }catch(e){} }, 700); cmpFatClear(); TOOL.render(); return; }
+        cmpFatApply(inv); CMP.step = 1; CMP.subeAll = true; cmpCustPreview(); CMP.subeAll = false; if(sp.dataset.subepdf) setTimeout(()=>{ try{ $('prevFrame').contentWindow.print(); }catch(e){} }, 700); cmpFatClear(); TOOL.render(); return; }
       const so = e.target.closest('[data-subeopen]'); if(so && CMP.sube){ const inv = (typeof faturalar!=='undefined' ? faturalar : []).find(f=>String(f.id||f.no)===so.dataset.subeopen); if(inv){ cmpFatApply(inv); CMP.step = 1; TOOL.render(); } return; }
       const a = e.target.closest('[data-ta]')?.dataset.ta; if(!a) return;
       if(a==='clrsel'){ const F = new Set(filtProds(CMP.f).map(p=>p.id)); [...CMP.sel].forEach(id=>{ if(!F.has(id)) CMP.sel.delete(id); }); TOOL.render(); return; }
@@ -6787,6 +6791,8 @@ function openCompare(){
       if(a==='snapedit' && CMP.fat && !CMP.sube){ CMP.snapEdit = true; TOOL.render(); return; }
       if(a==='snapdel' && CMP.fat && CMP.fat.inv && CMP.fat.inv.cmpAn){ if(confirm(tr('Kaydedilen karşılaştırma silinsin mi? Fatura silinmez.'))){ delete CMP.fat.inv.cmpAn; if(typeof persistFat==='function') persistFat(); CMP.snapEdit = false; TOOL.render(); } return; }
       if(a==='tplvm'){ cmpTplOpen(); return; }
+      if(a==='subexls' && CMP.fat){ cmpCustXlsx(); return; }
+      if(a==='subeall' && CMP.fat){ CMP.subeAll = true; cmpCustPreview(); CMP.subeAll = false; return; }
       if(a==='subeback'){ if(!cmpFrozen() && CMP.fat && !window.NP_RO && !confirm(tr('Bu karşılaştırma kaydedilmedi. Çıkılsın mı?'))) return; subeReset(); return; }
       if(a==='subesave' && CMP.fat){ if(!confirm(tr('Bu karşılaştırma kaydedilsin mi? Kaydedildikten sonra değiştirilemez.'))) return; [1,2,4].forEach(n=>cmpAnSave(n)); try{ ssToastSafe('✔ ' + tr('Karşılaştırma kaydedildi')); }catch(e){} subeReset(); return; }
       if(a==='subedel' && CMP.fat && subeAdm()){ if(!confirm(tr('Kayıtlı karşılaştırma silinsin mi?'))) return; delete CMP.fat.inv.cmpAn; if(typeof persistFat==='function') persistFat(); subeReset(); return; }
@@ -6980,8 +6986,8 @@ function cmpSubeBody(){ const V = cmpLvFind(/vak/i) || '1', M = cmpLvFind(/marke
 function cmpSubeFoot(){ const F = $('toolFoot'); if(!F) return;
   if(!CMP.fat){ F.innerHTML = subeOnly() ? '' : `<span class="grow"></span><button data-ta="cancel">${esc(tr('Kapat'))}</button>`; return; }
   const st = cmpStep(), fz = cmpFrozen(), nx = st===1 ? 2 : st===2 ? 4 : 0;
-  F.innerHTML = `<button data-ta="subeback">← ${esc(tr(fz ? 'Listeye dön' : 'Vazgeç'))}</button>${fz && subeAdm() ? `<button data-ta="subedel" style="color:#c62828">🗑 ${esc(tr('Sil'))}</button>` : ''}<span class="grow"></span>
-    <button data-ta="prev">👁 ${esc(tr('Önizle'))}</button><button data-ta="cpdf">📄 PDF</button>
+  F.innerHTML = `${fz && subeAdm() ? `<button data-ta="subedel" style="color:#c62828">🗑 ${esc(tr('Sil'))}</button>` : ''}<span class="grow"></span><button class="sbb sbn" data-ta="subeback">← ${esc(tr(fz ? 'Listeye dön' : 'Vazgeç'))}</button>
+    <button class="sbb sbv" data-ta="prev" title="${esc(tr('Sadece bu adım'))}">👁 ${esc(tr('Önizle'))}</button><button class="sbb sbp" data-ta="cpdf" title="${esc(tr('Sadece bu adım'))}">📄 PDF</button><button class="sbb sbx" data-ta="subexls" title="${esc(tr('Sadece bu adım'))}">⬇ Excel</button><button class="sbb sba" data-ta="subeall" title="${esc(tr('3 adım tek belgede'))}">📑 ${esc(tr('Tüm rapor (3 adım)'))}</button>
     ${fz || window.NP_RO ? '' : nx ? `<button class="primary" data-cstep="${nx}">${esc(tr('Devam et'))} →</button>` : `<button class="primary" data-ta="subesave">💾 ${esc(tr('Kaydet ve bitir'))}</button>`}`; }
 function subeReset(){ cmpFatClear(); CMP.step = 1; TOOL.render(); const b = $('toolBody'); if(b) b.scrollTop = 0; }
 function cmpTplOpen(){ CMP.tplPrev = {cl:CMP.cl, fbl:CMP.fbl}; CMP.tpl = 'vm'; cmpFatClear(); TOOL.render(); }
@@ -7029,7 +7035,7 @@ function cmpCustHtml(){ const D = cmpCustData(), F = CMP.fat, st = cmpStep(), lo
     .hd{display:flex;align-items:center;gap:16px;border-bottom:3px solid #b5121b;padding-bottom:8px;margin-bottom:12px}.hd img{height:48px}.hd h1{margin:0;font-size:19px;color:#b5121b}.hd .m{color:#555;font-size:10pt;margin-top:3px}${CMP_CSS}.ctab{font-size:8.5pt}.ctile b{font-size:15px}
     @media print{.ctab tr{break-inside:avoid}}</style></head><body>
     <div class="hd">${logo?`<img src="${logo}">`:''}<div><h1>${esc(CMP.sube ? tr('Şube Vakıf-Market Fiyat Karşılaştırma') : cmpStepTitle())}</h1><div class="m">${esc([F.no, F.tarih?deDate(F.tarih):'', CMP.cust||F.musteri].filter(Boolean).join(' · '))}${D.L && st!==2 ? ' · '+esc(tr('Karşılaştırma'))+': '+esc(cmpClLab(D.L)) : ''}</div></div></div>
-    ${CMP.sube ? [1,2,4].map((n,i)=>`<div style="${i?'margin-top:22px;break-before:page;page-break-before:always':''}"><h2 style="font-size:15px;color:#b5121b;margin:0 0 8px;border-bottom:1px solid #f0c9cc;padding-bottom:4px">${n===4?3:n}. ${esc(cmpStepTitle(n))}</h2>${cmpCustTiles(D, n)}${cmpCustTable(D, n, true)}${cmpVerdict(D, n)}</div>`).join('') : ''}
+    ${CMP.sube ? (CMP.subeAll ? [1,2,4] : [st]).map((n,i)=>`<div style="${i?'margin-top:22px;break-before:page;page-break-before:always':''}"><h2 style="font-size:15px;color:#b5121b;margin:0 0 8px;border-bottom:1px solid #f0c9cc;padding-bottom:4px">${n===4?3:n}. ${esc(cmpStepTitle(n))}</h2>${cmpCustTiles(D, n)}${cmpCustTable(D, n, true)}${cmpVerdict(D, n)}</div>`).join('') : ''}
     ${CMP.sube ? '' : `${cmpCustTiles(D, st)}${cmpCustTable(D, st, true)}`}${!CMP.sube && D.rows.some(x=>x.ed) && st!==2 ? `<p style="font-size:8.5pt;color:#8a5a00">✏ ${esc(tr('İşaretli fiyatlar bu analiz için elle düzenlendi.'))}</p>` : ''}${CMP.sube ? '' : cmpVerdict(D, st)}
     ${CMP.sube?'':`<p style="color:#666;font-size:8.5pt">${esc(cmpNote(st))}</p>`}</body></html>`; }
 function cmpCustPreview(){ openPreview({title: (CMP.sube ? tr('Şube Vakıf-Market Fiyat Karşılaştırma') : cmpStepTitle()) + ' – ' + tr('Ön İzleme'), info: `${CMP.fat.no||''}`, html: cmpCustHtml(), xlsx: ()=>cmpCustXlsx(), pdf: ()=>{ try{ $('prevFrame').contentWindow.print(); }catch(e){} }, backLabel:'Geri', back: ()=>{} }); }

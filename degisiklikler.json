@@ -1,5 +1,20 @@
 [
  {
+  "id": "2026-11-25 21:35",
+  "tr": "Önizleme ve Şube ekranı: «Geri / Vazgeç / Listeye dön» koyu lacivert ve belirgin; tüm butonlar sağ altta yan yana.",
+  "de": "Vorschau und Filial-Ansicht: «Zurück / Abbrechen / Zur Liste» dunkelblau und deutlich; alle Knöpfe unten rechts nebeneinander."
+ },
+ {
+  "id": "2026-11-25 21:25",
+  "tr": "Tüm önizlemelerde butonlar artık altta, büyük ve renkli: gri «Geri», yeşil «Excel indir», kırmızı «PDF oluştur». Şube ekranında altta renkli Önizle / PDF / Excel / Tüm rapor butonları.",
+  "de": "In allen Vorschauen sind die Knöpfe jetzt unten, groß und farbig: grau «Zurück», grün «Excel», rot «PDF». In der Filial-Ansicht farbige Knöpfe Vorschau / PDF / Excel / Gesamtbericht."
+ },
+ {
+  "id": "2026-11-25 21:10",
+  "tr": "Şube: Önizle ve PDF artık bulunduğunuz adımı gösterir; 3 adım birlikte için yeni «📑 Tüm rapor (3 adım)» butonu. Listedeki Önizle/PDF tüm raporu verir.",
+  "de": "Filiale: Vorschau und PDF zeigen jetzt den aktuellen Schritt; neuer Knopf «📑 Gesamtbericht (3 Schritte)». Vorschau/PDF in der Liste liefern den Gesamtbericht."
+ },
+ {
   "id": "2026-11-25 21:00",
   "tr": "Şube: Önizle ve PDF artık tek belge – 1. Alış karşılaştırması, 2. Satış kârı, 3. Yan yana arka arkaya.",
   "de": "Filiale: Vorschau und PDF jetzt ein Dokument – 1. Einkaufsvergleich, 2. Verkaufsgewinn, 3. Nebeneinander."
