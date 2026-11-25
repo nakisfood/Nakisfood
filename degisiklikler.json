@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-26 02:40",
+  "tr": "Özel Kullanıcılar → Fiyat Listeleri / Afişler: arama, klasör ve durum filtresi; toplu seç → klasöre taşı, yayınla, yayından kaldır, sil. «Diğer» klasörü kaldırıldı.",
+  "de": "Spezielle Benutzer → Preislisten / Plakate: Suche, Ordner- und Statusfilter; Mehrfachauswahl → verschieben, veröffentlichen, aufheben, löschen. Ordner «Sonstiges» entfernt."
+ },
+ {
   "id": "2026-11-26 02:10",
   "tr": "Özel kullanıcılar: fiyat listeleri ve afişler klasörlü. Gönderirken klasör sorulur; Yönetim → Özel Kullanıcılar’da klasör ekle / sırala / sil ve dosya taşı.",
   "de": "Spezielle Benutzer: Preislisten und Plakate in Ordnern. Beim Senden wird der Ordner abgefragt; Ordner verwalten und Dateien verschieben unter Verwaltung → Spezielle Benutzer."
