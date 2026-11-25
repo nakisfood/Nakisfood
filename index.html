@@ -6729,7 +6729,7 @@ function cmpFatApply(inv){ cmpFatClear(); let rows = []; try{ rows = invCalc(inv
   CMP.step = 1; CMP.fbl = '';
   CMP.fat = {no:inv.no||'', tarih:inv.tarih||'', musteri:inv.musteri||'', dosya:inv.dosya||'', n, miss, inv, ek, skipN};
   if(!CMP.lvs.includes('fat')) CMP.lvs = ['fat', ...CMP.lvs]; CMP.base = 'fat'; if(CMP.lvs.length<2) CMP.lvs.push('1');
-  if(inv.musteri && !String(CMP.cust||'').trim()) CMP.cust = inv.musteri; CMP.fbl = cmpFblMem(inv.musteri) || cmpFblMem(CMP.cust); CMP.onlySel = true; CMP.f = Object.assign({}, CMP.f, {akt:'hepsi', tpl:'', q:''}); cmpOrder(); TOOL.render(); }
+  if(inv.musteri && !String(CMP.cust||'').trim()) CMP.cust = inv.musteri; CMP.fbl = cmpFblMem(inv.musteri) || cmpFblMem(CMP.cust) || cmpFblAuto(inv); CMP.onlySel = true; CMP.f = Object.assign({}, CMP.f, {akt:'hepsi', tpl:'', q:''}); cmpOrder(); TOOL.render(); }
 /* faturadaki masraf satırları (nakliye, leergut…): her biri ayrı satır, tutar elle değiştirilebilir, tüm fiyatlara aynı eklenir */
 const cmpEkAmt = e => { const v = CMP.fatX && CMP.fatX.t[e.key]; return v!=null && String(v).trim()!=='' ? (num(v)||0) : e.t0; };
 const cmpEkOn = e => !(CMP.fatX && CMP.fatX.off[e.key]);
@@ -6752,7 +6752,11 @@ const KEY_FATFBL = 'nakis_fatura_fiyat_v1';
 function cmpFblMem(name, set){ const k = norm(String(name||'').trim()); if(!k) return ''; let m = {}; try{ m = JSON.parse(localStorage.getItem(KEY_FATFBL)||'{}')||{}; }catch(e){}
   if(set!==undefined){ if(set) m[k] = set; else delete m[k]; try{ localStorage.setItem(KEY_FATFBL, JSON.stringify(m)); }catch(e){} return set; }
   const v = m[k]; return v && ['1','2','3','4','5','6','mof'].includes(v) ? v : ''; }
-const cmpFatPH = () => cmpFbl() ? cmpFbl() + ' ' + tr('fiyatı') : tr('Alış fiyatı (fatura)');
+/* faturadaki fiyatlar hangi fiyat seviyesine uyuyor? (seçim yoksa otomatik) */
+function cmpFblAuto(inv){ try{ const rows = invCalc(inv).rows.filter(r=>r.p && r.kind!=='kor' && r.kind!=='ek' && r.price!=null); if(!rows.length) return '';
+    const cnt = {}; rows.forEach(r=>{ ['1','2','3','4','5','6','mof'].forEach(l=>{ const v = cmpPrice(r.p, l); if(v!=null && Math.abs(v - r.price) <= Math.max(0.011, Math.abs(v)*0.005)) cnt[l] = (cnt[l]||0) + 1; }); });
+    const best = Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0]; return best && cnt[best] >= Math.max(2, rows.length*0.5) ? best : ''; }catch(e){ return ''; } }
+const cmpFatPH = () => cmpFbl() ? tr('Alış fiyatı') + ' (' + cmpFbl() + ')' : tr('Alış fiyatı (fatura)');
 const cmpFatAH = () => cmpFbl() ? tr('Alış tutarı') + ' (' + cmpFbl() + ')' : tr('Alış tutarı (fatura)');
 /* seçilen fiyatta nakliye / leergut yok sayılır (0); kullanıcı elle girebilir */
 const cmpIsLeer = e => /leergut|pfand|leihgut|kiste|palette/i.test(e.ad||'');
@@ -6800,10 +6804,12 @@ const cmpPill = v => v==null ? '<span class="na">–</span>' : `<span class="cpi
 function cmpVerdict(D, st){ const ln = D.L ? cmpClLab(D.L) : '', E = v => fmtE(Math.abs(v)), box = (cls, ic, h, txt) => `<div class="cverd ${cls}"><div class="cvi">${ic}</div><div><b>${h}</b><div>${txt}</div></div></div>`;
   if(st===1){ if(!D.L) return '';
     const df = D.totM - D.totF, eq = Math.abs(df)<0.005;
-    const fb = cmpFbl(), base = esc(fb ? fb + ' ' + tr('fiyatlarıyla ödediğiniz toplam (nakliye / leergut dahil)') : tr('Faturadaki fiyatlarla ödediğiniz toplam (nakliye / leergut dahil)')) + `: <b>${fmtE(D.totF)}</b>. ` + esc(tr('Aynı ürünleri şu fiyattan alsaydınız')) + ` (${esc(ln)}): <b>${fmtE(D.totM)}</b>.`;
-    if(eq) return box('', '＝', esc(fb ? fb + ' ' + tr('ile seçilen fiyat aynı tutuyor.') : tr('Fatura ile seçilen fiyat aynı tutuyor.')), base);
-    return df>0 ? box('ok', '✔', `${esc(fb ? fb + ' ' + tr('ile almanız daha kârlı') : tr('Faturayla almanız daha kârlı'))}: ${E(df)} ${esc(tr('daha ucuz'))}`, base + ' ' + esc(fb ? fb + ' ' + tr('ile aldığınızda, seçilen fiyata göre bu kadar daha az ödediniz.') : tr('Yani fatura ile aldığınızda, seçilen fiyata göre bu kadar daha az ödediniz.')))
-      : box('bad', '!', `${esc(fb ? fb + ' ' + tr('ile almanız daha pahalı') : tr('Faturayla almanız daha pahalı'))}: ${E(df)} ${esc(tr('fazla ödendi'))}`, base + ' ' + esc(tr('Seçilen fiyattan alsaydınız bu kadar daha az öderdiniz.'))); }
+    const fb = cmpFbl(), fbN = fb || DL('Rechnung','Fatura'), de = DL(1,0)===1;
+    const base = (de ? (fb ? `Mit den ${esc(fb)}-Preisen der Rechnung bezahlt (inkl. Fracht / Leergut)` : 'Mit den Rechnungspreisen bezahlt (inkl. Fracht / Leergut)') : (fb ? `Faturadaki ${esc(fb)} fiyatlarıyla ödediğiniz toplam (nakliye / leergut dahil)` : 'Faturadaki fiyatlarla ödediğiniz toplam (nakliye / leergut dahil)'))
+      + `: <b>${fmtE(D.totF)}</b>. ` + (de ? `Mit ${esc(ln)}-Preisen` : `${esc(ln)} fiyatlarıyla`) + `: <b>${fmtE(D.totM)}</b>.`;
+    if(eq) return box('', '＝', de ? `${esc(fbN)} und ${esc(ln)} ergeben denselben Betrag.` : `${esc(fbN)} ile ${esc(ln)} aynı tutuyor.`, base);
+    return df>0 ? box('ok', '✔', de ? `Mit ${esc(fbN)} günstiger: ${E(df)} weniger` : `${esc(fbN)} ile almanız daha kârlı: ${E(df)} daha ucuz`, base + ' ' + (de ? `Im Vergleich zu ${esc(ln)}-Preisen haben Sie so viel weniger bezahlt.` : `${esc(ln)} fiyatlarına göre bu kadar daha az ödediniz.`))
+      : box('bad', '!', de ? `Mit ${esc(fbN)} teurer: ${E(df)} mehr bezahlt` : `${esc(fbN)} ile almanız daha pahalı: ${E(df)} fazla ödendi`, base + ' ' + (de ? `Mit ${esc(ln)}-Preisen hätten Sie so viel weniger bezahlt.` : `${esc(ln)} fiyatlarıyla alsaydınız bu kadar daha az öderdiniz.`)); }
   if(st===2){ const v = D.k; return box(v<0?'bad':'ok', v<0?'!':'€', `${esc(tr('Bu ürünleri son satış fiyatından satarsanız'))}: ${v<0?esc(tr('zarar')):esc(tr('kâr'))} ${E(v)} · ${esc(tr('marj'))} ${fmtP(D.m)}`,
       esc(tr('Hesap: satış tutarı (KDV hariç)')) + ` ${fmtE(D.sT)} − ` + esc(tr('faturadaki alış tutarı')) + ` ${fmtE(D.aOk)} − ` + esc(tr('nakliye / leergut')) + ` ${fmtE(D.ekT)}.`); }
   if(st===3){ const v = D.ck; if(v==null) return ''; return box(v<0?'bad':'ok', v<0?'!':'€', `${esc(ln)} ${esc(tr('fiyatından alıp son satış fiyatından satsaydınız'))}: ${v<0?esc(tr('zarar')):esc(tr('kâr'))} ${E(v)} · ${esc(tr('marj'))} ${fmtP(D.cm)}`,
