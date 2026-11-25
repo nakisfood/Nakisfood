@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-26 00:05",
+  "tr": "«Özel kullanıcılara gönder» butonları sadece admin ve kullanıcı yönetimi yetkisi olanlarda görünür.",
+  "de": "Knöpfe «An spezielle Benutzer senden» nur für Admin und Benutzerverwaltung sichtbar."
+ },
+ {
+  "id": "2026-11-25 23:55",
+  "tr": "Özel kullanıcı: ürün kartı (maliyet, kâr marjları) ve programın diğer pencereleri artık hiç açılmaz.",
+  "de": "Spezieller Benutzer: Artikelkarte (Kosten, Margen) und andere Programmfenster öffnen sich nicht mehr."
+ },
+ {
   "id": "2026-11-25 23:45",
   "tr": "Özel kullanıcılar: fiyat listeleri ve afişler artık ayrı dosyalar. Yönetim → Özel Kullanıcılar'dan PDF/resim yükleyin ya da Hazır Kataloglar ve Afişler'deki «📤 Özel kullanıcılara gönder» ile tek tıkla gönderin. Özel kullanıcı girişinde kendi ana sayfasının bazen açılmaması düzeltildi.",
   "de": "Spezielle Benutzer: Preislisten und Plakate sind jetzt eigene Dateien. Unter Verwaltung → Spezielle Benutzer hochladen oder mit «📤 An spezielle Benutzer senden» in Fertigen Katalogen und Plakaten senden. Fehler behoben: eigene Startseite öffnete sich teils nicht."
