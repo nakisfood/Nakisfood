@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-26 05:20",
+  "tr": "Özel kullanıcı: fiyat listelerinde Excel butonu her zaman (eski listelerin Excel’i otomatik hazırlanır); afişlerde resim (JPG/PNG) ve PDF butonları.",
+  "de": "Spezielle Benutzer: Excel-Knopf bei allen Preislisten (für ältere automatisch erstellt); Plakate als Bild (JPG/PNG) und PDF."
+ },
+ {
   "id": "2026-11-26 05:05",
   "tr": "Özel kullanıcı fiyat listeleri: kartta yan yana «👁 Önizle · 📄 PDF · 📊 Excel» butonları.",
   "de": "Preislisten (spezielle Benutzer): Knöpfe «👁 Vorschau · 📄 PDF · 📊 Excel» nebeneinander."
