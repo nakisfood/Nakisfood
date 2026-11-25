@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-25 20:35",
+  "tr": "Şube: yeni yetki «Şube (kısıtlı kullanıcı)» – bu kullanıcı sadece Şube Vakıf-Market ekranını, dil seçimini, kendi adını ve Çıkış'ı görür (arama ayrı yetkiyle). Kayıtlı listede Önizle/PDF/Sil; aynı fatura tekrar kaydedilemez.",
+  "de": "Filiale: neues Recht «Filiale (eingeschränkter Benutzer)» – sieht nur den Filial-Vergleich, Sprache, eigenen Namen und Abmelden (Suche mit eigenem Recht). Gespeicherte Liste mit Vorschau/PDF/Löschen; gleiche Rechnung nicht doppelt."
+ },
+ {
   "id": "2026-11-25 20:15",
   "tr": "Şube Vakıf-Market: sade ekran – sadece fatura yükle; Vakıf↔Market sabit; resim sütunu; Fark ve Kâr € sütunları kaldırıldı; adımlar arası «Devam et», sonda «Kaydet ve bitir»; kayıtlılar kilitli (Önizle, PDF, admin için Sil).",
   "de": "Filiale Vakıf-Market: schlanke Ansicht – nur Rechnung hochladen; Vakıf↔Market fest; Bildspalte; Spalten Differenz und Gewinn € entfernt; «Weiter» zwischen den Schritten, am Ende «Speichern und beenden»; gespeicherte gesperrt (Vorschau, PDF, Löschen nur Admin)."
