@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-25 20:00",
+  "tr": "Müşteriler → yeni «Şube Vakıf-Market Fiyat Karşılaştırma»: Fiyat Karşılaştırma ile aynı seçenekler, Vakıf ve Market hazır seçili gelir. Fiyat Karşılaştırma'daki şablon butonu kaldırıldı.",
+  "de": "Kunden → neu «Filiale Vakıf-Market Preisvergleich»: gleiche Optionen wie Preisvergleich, Vakıf und Market sind vorausgewählt. Vorlagen-Schaltfläche im Preisvergleich entfernt."
+ },
+ {
   "id": "2026-11-25 19:43",
   "tr": "Fiyat Karşılaştırma: «Şablon: Vakıf – Market» butonu (taslak) – sadece fatura yüklenir, seçenekler sabit.",
   "de": "Preisvergleich: Schaltfläche «Vorlage: Vakıf – Market» (Entwurf) – nur Rechnung hochladen, feste Einstellungen."
