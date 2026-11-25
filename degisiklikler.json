@@ -1,5 +1,25 @@
 [
  {
+  "id": "2026-11-25 19:43",
+  "tr": "Fiyat Karşılaştırma: «Şablon: Vakıf – Market» butonu (taslak) – sadece fatura yüklenir, seçenekler sabit.",
+  "de": "Preisvergleich: Schaltfläche «Vorlage: Vakıf – Market» (Entwurf) – nur Rechnung hochladen, feste Einstellungen."
+ },
+ {
+  "id": "2026-11-25 19:42",
+  "tr": "Kaydedilen karşılaştırma ve teklifler kaydedildiği andaki fiyatlarla açılır; değiştirmek için «Düzenle», silmek için «Sil».",
+  "de": "Gespeicherte Vergleiche und Angebote öffnen mit den Preisen beim Speichern; «Bearbeiten» zum Ändern, «Löschen» zum Entfernen."
+ },
+ {
+  "id": "2026-11-25 19:41",
+  "tr": "Leergut artık müşterinin kârından düşülmüyor (iade edildiği için); sadece nakliye düşülüyor.",
+  "de": "Leergut wird nicht mehr vom Gewinn abgezogen (Rückgabe); nur Fracht."
+ },
+ {
+  "id": "2026-11-25 19:40",
+  "tr": "Fatura karşılaştırma: özet cümlesinde fark tutarı yazıyor (örn. «Market fiyatlarıyla alsaydınız 18,95 € daha az öderdiniz»).",
+  "de": "Rechnungsvergleich: Die Zusammenfassung nennt jetzt den Differenzbetrag."
+ },
+ {
   "id": "2026-11-25 19:00",
   "tr": "Dil: tarih alanları ve takvim artık seçilen dilde (TR/DE); Chrome'un çeviri önerisi kapatıldı.",
   "de": "Sprache: Datumsfelder und Kalender jetzt in der gewählten Sprache (TR/DE); Chrome-Übersetzungsvorschlag deaktiviert."
