@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-25 21:00",
+  "tr": "Şube: Önizle ve PDF artık tek belge – 1. Alış karşılaştırması, 2. Satış kârı, 3. Yan yana arka arkaya.",
+  "de": "Filiale: Vorschau und PDF jetzt ein Dokument – 1. Einkaufsvergleich, 2. Verkaufsgewinn, 3. Nebeneinander."
+ },
+ {
+  "id": "2026-11-25 20:50",
+  "tr": "İndirme (Excel vb.): Chrome'da artık «Farklı kaydet» penceresi açılır, nereye kaydedileceğini siz seçersiniz. Bir işlem hata verirse altta kırmızı bir not çıkar.",
+  "de": "Download (Excel usw.): In Chrome öffnet sich jetzt «Speichern unter» – Sie wählen den Ort. Bei einem Fehler erscheint unten ein roter Hinweis."
+ },
+ {
   "id": "2026-11-25 20:35",
   "tr": "Şube: yeni yetki «Şube (kısıtlı kullanıcı)» – bu kullanıcı sadece Şube Vakıf-Market ekranını, dil seçimini, kendi adını ve Çıkış'ı görür (arama ayrı yetkiyle). Kayıtlı listede Önizle/PDF/Sil; aynı fatura tekrar kaydedilemez.",
   "de": "Filiale: neues Recht «Filiale (eingeschränkter Benutzer)» – sieht nur den Filial-Vergleich, Sprache, eigenen Namen und Abmelden (Suche mit eigenem Recht). Gespeicherte Liste mit Vorschau/PDF/Löschen; gleiche Rechnung nicht doppelt."

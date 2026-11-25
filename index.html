@@ -6909,9 +6909,9 @@ function cmpVerdict(D, st){ const ln = D.L ? cmpClLab(D.L) : '', E = v => fmtE(M
       esc(tr('Hesap: satış tutarı (KDV hariç)')) + ` ${fmtE(D.sT)} − ` + esc(tr('faturadaki alış tutarı')) + ` ${fmtE(D.aOk)} − ` + esc(tr('nakliye')) + ` ${fmtE(D.ekTp)}.`); }
   if(st===3){ const v = D.ck; if(v==null) return ''; return box(v<0?'bad':'ok', v<0?'!':'€', `${esc(ln)} ${esc(tr('fiyatından alıp son satış fiyatından satsaydınız'))}: ${v<0?esc(tr('zarar')):esc(tr('kâr'))} ${E(v)} · ${esc(tr('marj'))} ${fmtP(D.cm)}`,
       esc(tr('Hesap: satış tutarı (KDV hariç)')) + ` ${fmtE(D.sT3)} − ${esc(ln)} ` + esc(tr('alış tutarı')) + ` ${fmtE(D.caT)} − ` + esc(tr('nakliye')) + ` ${fmtE(D.ekTMp)}.`); }
-  if(D.d==null) return ''; const eq = Math.abs(D.d)<0.005, base = `${esc(tr('Fatura ile kârınız'))}: <b>${fmtE(D.k4)}</b> · ${esc(ln)} ${esc(tr('ile kârınız'))}: <b>${fmtE(D.ck)}</b>.`;
+  if(D.d==null) return ''; const fb4 = cmpFbl(), eq = Math.abs(D.d)<0.005, base = `${esc(fb4 ? fb4 + ' ' + tr('ile kârınız') : tr('Fatura ile kârınız'))}: <b>${fmtE(D.k4)}</b> · ${esc(ln)} ${esc(tr('ile kârınız'))}: <b>${fmtE(D.ck)}</b>.`;
   if(eq) return box('', '＝', esc(tr('İkisinde de kâr aynı.')), base);
-  return D.d<0 ? box('ok', '✔', `${esc(tr('Fatura ile daha çok kazanıyorsunuz'))}: ${E(D.d)} ${esc(tr('daha fazla kâr'))}`, base)
+  return D.d<0 ? box('ok', '✔', `${esc(fb4 ? fb4 + ' ' + tr('ile daha çok kazanıyorsunuz') : tr('Fatura ile daha çok kazanıyorsunuz'))}: ${E(D.d)} ${esc(tr('daha fazla kâr'))}`, base)
     : box('bad', '!', `${esc(ln)} ${esc(tr('ile alsaydınız daha çok kazanırdınız'))}: ${E(D.d)} ${esc(tr('daha fazla kâr'))}`, base); }
 function cmpCustTiles(D, st){ const t = (v, l, cls) => `<div class="ctile ${cls||''}"><b>${v}</b><span>${esc(l)}</span></div>`, ln = D.L ? cmpClLab(D.L) : '', fl = cmpFatLab();
   const nx = st===1 ? D.miss : st===2 ? D.noSon+D.miss : D.noSon+D.miss+D.noCp, miss = t(String(nx), tr('Hesaba katılmayan satır'), nx?'warn':'ok');
@@ -7025,13 +7025,14 @@ function cmpCpxCheck(t){ if(!CMP.fat || CMP._live || !t.isConnected) return; con
   if(mn!=null) CMP.fatX.cpx[key] = String(mn).replace('.',','); else delete CMP.fatX.cpx[key]; cmpAnReset(); TOOL.render(); }
 document.addEventListener('focusout', e=>{ const t = e.target; if(t && t.dataset && t.dataset.cpx!=null && typeof _toolTitle!=='undefined' && _toolTitle==='Fiyat Karşılaştırma') setTimeout(()=>cmpCpxCheck(t), 0); });
 function cmpCustHtml(){ const D = cmpCustData(), F = CMP.fat, st = cmpStep(), logo = CMP.x.logo ? (document.querySelector('.brandlogo')?.src || '') : '';
-  return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(cmpStepTitle())}</title><style>body{font-family:Arial,Helvetica,sans-serif;color:#1d2733;margin:0;padding:14px 16px;font-size:9pt}
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(CMP.sube ? tr('Şube Vakıf-Market Fiyat Karşılaştırma') : cmpStepTitle())}</title><style>body{font-family:Arial,Helvetica,sans-serif;color:#1d2733;margin:0;padding:14px 16px;font-size:9pt}
     .hd{display:flex;align-items:center;gap:16px;border-bottom:3px solid #b5121b;padding-bottom:8px;margin-bottom:12px}.hd img{height:48px}.hd h1{margin:0;font-size:19px;color:#b5121b}.hd .m{color:#555;font-size:10pt;margin-top:3px}${CMP_CSS}.ctab{font-size:8.5pt}.ctile b{font-size:15px}
     @media print{.ctab tr{break-inside:avoid}}</style></head><body>
-    <div class="hd">${logo?`<img src="${logo}">`:''}<div><h1>${esc(cmpStepTitle())}</h1><div class="m">${esc([F.no, F.tarih?deDate(F.tarih):'', CMP.cust||F.musteri].filter(Boolean).join(' · '))}${D.L && st!==2 ? ' · '+esc(tr('Karşılaştırma'))+': '+esc(cmpClLab(D.L)) : ''}</div></div></div>
-    ${cmpCustTiles(D, st)}${cmpCustTable(D, st, true)}${D.rows.some(x=>x.ed) && st!==2 ? `<p style="font-size:8.5pt;color:#8a5a00">✏ ${esc(tr('İşaretli fiyatlar bu analiz için elle düzenlendi.'))}</p>` : ''}${cmpVerdict(D, st)}
+    <div class="hd">${logo?`<img src="${logo}">`:''}<div><h1>${esc(CMP.sube ? tr('Şube Vakıf-Market Fiyat Karşılaştırma') : cmpStepTitle())}</h1><div class="m">${esc([F.no, F.tarih?deDate(F.tarih):'', CMP.cust||F.musteri].filter(Boolean).join(' · '))}${D.L && st!==2 ? ' · '+esc(tr('Karşılaştırma'))+': '+esc(cmpClLab(D.L)) : ''}</div></div></div>
+    ${CMP.sube ? [1,2,4].map((n,i)=>`<div style="${i?'margin-top:22px;break-before:page;page-break-before:always':''}"><h2 style="font-size:15px;color:#b5121b;margin:0 0 8px;border-bottom:1px solid #f0c9cc;padding-bottom:4px">${n===4?3:n}. ${esc(cmpStepTitle(n))}</h2>${cmpCustTiles(D, n)}${cmpCustTable(D, n, true)}${cmpVerdict(D, n)}</div>`).join('') : ''}
+    ${CMP.sube ? '' : `${cmpCustTiles(D, st)}${cmpCustTable(D, st, true)}`}${!CMP.sube && D.rows.some(x=>x.ed) && st!==2 ? `<p style="font-size:8.5pt;color:#8a5a00">✏ ${esc(tr('İşaretli fiyatlar bu analiz için elle düzenlendi.'))}</p>` : ''}${CMP.sube ? '' : cmpVerdict(D, st)}
     ${CMP.sube?'':`<p style="color:#666;font-size:8.5pt">${esc(cmpNote(st))}</p>`}</body></html>`; }
-function cmpCustPreview(){ openPreview({title: cmpStepTitle() + ' – ' + tr('Ön İzleme'), info: `${CMP.fat.no||''}`, html: cmpCustHtml(), xlsx: ()=>cmpCustXlsx(), pdf: ()=>{ try{ $('prevFrame').contentWindow.print(); }catch(e){} }, backLabel:'Geri', back: ()=>{} }); }
+function cmpCustPreview(){ openPreview({title: (CMP.sube ? tr('Şube Vakıf-Market Fiyat Karşılaştırma') : cmpStepTitle()) + ' – ' + tr('Ön İzleme'), info: `${CMP.fat.no||''}`, html: cmpCustHtml(), xlsx: ()=>cmpCustXlsx(), pdf: ()=>{ try{ $('prevFrame').contentWindow.print(); }catch(e){} }, backLabel:'Geri', back: ()=>{} }); }
 function cmpCustXlsx(){ const D = cmpCustData(), st = cmpStep(), C = cmpCustCols(D, st).filter(c=>c.k!=='img'), pc = v => v==null ? '' : String(Math.round(v*100)/100).replace('.',',')+' %';
   const dg = k => k==='q' ? 1000 : ['buy','cp','sn','sb'].includes(k) ? 10000 : 100, rd = (v, k) => typeof v==='number' && isFinite(v) ? Math.round(v*dg(k))/dg(k) : v;
   const rows = D.rows.map(x=>C.map(c=>{ const v = c.v(x); return c.p ? pc(v) : rd(v, c.k); })), ekRow = vals => C.map(c=>c.k==='ad' ? vals.ad : rd(vals[c.k] ?? '', c.k));

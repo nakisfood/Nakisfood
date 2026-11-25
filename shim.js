@@ -88,10 +88,19 @@
   const downloads = {
     async save({ filename, data }) {
       const blob = data instanceof Blob ? data : new Blob([data == null ? '' : data], { type: 'application/octet-stream' });
+      // 1) Chrome / Edge: «Farklı kaydet» penceresi (nereye kaydedileceğini sorar)
+      if (window.showSaveFilePicker) {
+        try {
+          const h = await window.showSaveFilePicker({ suggestedName: filename || 'download' });
+          const w = await h.createWritable(); await w.write(blob); await w.close();
+          return { status: 'saved' };
+        } catch (e) { if (e && e.name === 'AbortError') throw err('declined'); /* izin yoksa normal indirmeye geç */ }
+      }
+      // 2) normal indirme
       const u = URL.createObjectURL(blob); const a = document.createElement('a');
       a.href = u; a.download = filename || 'download'; a.setAttribute('data-np-native', '1'); a.style.display = 'none';
-      document.body.appendChild(a); HTMLAnchorElement.prototype.__npRawClick ? HTMLAnchorElement.prototype.__npRawClick.call(a) : a.dispatchEvent(new MouseEvent('click'));
-      setTimeout(() => { URL.revokeObjectURL(u); a.remove(); }, 4000);
+      document.body.appendChild(a); (HTMLAnchorElement.prototype.__npRawClick || HTMLAnchorElement.prototype.click).call(a);
+      setTimeout(() => { URL.revokeObjectURL(u); a.remove(); }, 60000);
       return { status: 'saved' };
     },
   };
@@ -157,4 +166,19 @@
   }
   const start = () => { check(); setInterval(() => { if (!document.hidden && !open) check(); }, 30000); document.addEventListener('visibilitychange', () => { if (!document.hidden && !open) check(); }); };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+
+
+/* Hata göstergesi: bir işlem hata verirse ekranın altında kısa bir kırmızı not çıkar (sessizce bozulmasın) */
+(function () {
+  let last = '', t = null;
+  function show(msg) {
+    msg = String(msg || '').slice(0, 220); if (!msg || msg === last) return; last = msg;
+    let d = document.getElementById('npErr');
+    if (!d) { d = document.createElement('div'); d.id = 'npErr'; d.style.cssText = 'position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:2147483003;background:#c62828;color:#fff;font:13px system-ui,sans-serif;padding:8px 14px;border-radius:9px;box-shadow:0 8px 20px rgba(0,0,0,.25);max-width:90vw;cursor:pointer'; d.onclick = () => { d.remove(); last = ''; }; document.body.appendChild(d); }
+    d.textContent = '⚠ ' + msg; clearTimeout(t); t = setTimeout(() => { d.remove(); last = ''; }, 12000);
+  }
+  const ok = m => m && !/ResizeObserver|Script error|NpDialogPending|unauthenticated|declined/i.test(m);
+  window.addEventListener('error', e => { const m = e && (e.message || (e.error && e.error.message)); if (ok(m)) show(m); });
+  window.addEventListener('unhandledrejection', e => { const r = e && e.reason, m = r && (r.message || r.code || String(r)); if (ok(m)) show(m); });
 })();
