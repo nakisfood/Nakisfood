@@ -111,34 +111,50 @@
   }, 500);
 })();
 
-/* Sürüm: yeni sürüm yayına girince üstte uyarı + sağ altta sürüm saati */
+/* Sürüm: her güncellemede sorar ve ne değiştiğini kısa notla gösterir; sağ altta sürüm saati */
 (function () {
   'use strict';
   const de = () => { try { return (window.LANG || localStorage.getItem('np_lang') || document.documentElement.lang) === 'de'; } catch (e) { return false; } };
-  let cur = null, shown = false;
+  const SEEN = 'np_seen_ver', SEEN_ID = 'np_seen_note';
+  const lsG = k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, lsS = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  let cur = null, open = false, later = 0;
   const fmt = iso => { try { return new Date(iso).toLocaleString('de-DE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } };
   function badge(at) {
     let b = document.getElementById('npVer');
     if (!b) { b = document.createElement('div'); b.id = 'npVer'; b.style.cssText = 'position:fixed;right:8px;bottom:6px;z-index:30;font:11px system-ui,sans-serif;color:#8a94a3;background:rgba(255,255,255,.85);padding:2px 7px;border-radius:6px;pointer-events:none'; document.body.appendChild(b); }
     b.textContent = (de() ? 'Version: ' : 'Sürüm: ') + fmt(at);
   }
-  function banner() {
-    if (shown) return; shown = true;
+  const newNotes = notes => { const s = lsG(SEEN_ID) || ''; const n = (notes || []).filter(x => x && x.id && (!s || String(x.id) > s)); return n.length ? n.slice(0, 6) : (s ? [] : (notes || []).slice(0, 1)); };
+  function card(title, notes, btns) {
+    if (open) return; open = true;
     const d = document.createElement('div'); d.id = 'npNewVer';
-    d.style.cssText = 'position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2147483001;background:#1f6feb;color:#fff;font:600 14px system-ui,sans-serif;padding:10px 14px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;gap:12px;align-items:center';
-    d.innerHTML = '<span>🔄 ' + (de() ? 'Neue Version ist bereit' : 'Yeni sürüm hazır') + '</span><button style="background:#fff;color:#1f6feb;border:0;border-radius:7px;padding:6px 12px;font-weight:700;cursor:pointer">' + (de() ? 'Neu laden' : 'Yenile') + '</button><button title="x" style="background:transparent;color:#fff;border:0;font-size:16px;cursor:pointer">✕</button>';
-    const [ok, x] = d.querySelectorAll('button');
-    ok.onclick = async () => { try { if (window.npSyncState) { for (let i = 0; i < 40 && (window.npSyncState().dirty.length || window.npSyncState().pushing); i++) await new Promise(r => setTimeout(r, 250)); } } catch (e) { } location.reload(); };
-    x.onclick = () => d.remove();
+    d.style.cssText = 'position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2147483001;background:#fff;color:#1d2733;font:14px system-ui,sans-serif;padding:14px 16px;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);border-top:4px solid #1f6feb;width:min(520px,92vw)';
+    const L = de() ? 'de' : 'tr';
+    d.innerHTML = `<div style="font-weight:700;font-size:15px;margin-bottom:6px">${title}</div>`
+      + (notes.length ? `<ul style="margin:4px 0 10px 18px;padding:0;color:#374151">${notes.map(n => `<li style="margin:3px 0">${esc(n[L] || n.tr)} <span style="color:#9aa3ae;font-size:11px">${esc(n.id)}</span></li>`).join('')}</ul>` : '')
+      + `<div style="display:flex;gap:8px;justify-content:flex-end">${btns.map((b, i) => `<button data-i="${i}" style="border:0;border-radius:8px;padding:7px 14px;font-weight:700;cursor:pointer;${b.main ? 'background:#1f6feb;color:#fff' : 'background:#eef2f7;color:#1d2733'}">${esc(b.t)}</button>`).join('')}</div>`;
+    d.addEventListener('click', e => { const b = e.target.closest('button[data-i]'); if (!b) return; const f = btns[+b.dataset.i].f; d.remove(); open = false; f && f(); });
     document.body.appendChild(d);
   }
+  async function waitSaved() { try { if (window.npSyncState) for (let i = 0; i < 40 && (window.npSyncState().dirty.length || window.npSyncState().pushing); i++) await new Promise(r => setTimeout(r, 250)); } catch (e) { } }
+  function markSeen(j) { lsS(SEEN, j.v); if (j.notes && j.notes[0]) lsS(SEEN_ID, String(j.notes[0].id)); }
   async function check() {
     try {
       const r = await fetch('/api/version', { credentials: 'same-origin', cache: 'no-store' }); if (!r.ok) return;
       const j = await r.json();
-      if (cur == null) { cur = j.v; badge(j.at); } else if (j.v !== cur) banner();
+      if (cur == null) { // sayfa açılışı
+        cur = j.v; badge(j.at);
+        if (lsG(SEEN) !== j.v) { const n = newNotes(j.notes);
+          if (lsG(SEEN) == null && !n.length) { markSeen(j); return; }
+          card('✅ ' + (de() ? 'Programm wurde aktualisiert' : 'Program güncellendi'), n, [{ t: de() ? 'OK' : 'Tamam', main: true, f: () => markSeen(j) }]); }
+        return;
+      }
+      if (j.v !== cur && Date.now() > later) card('🔄 ' + (de() ? 'Neue Version ist bereit – jetzt neu laden?' : 'Yeni sürüm hazır – şimdi yenilensin mi?'), newNotes(j.notes),
+        [{ t: de() ? 'Später (10 Min.)' : 'Sonra (10 dk)', f: () => { later = Date.now() + 600000; } },
+         { t: de() ? 'Neu laden' : 'Yenile', main: true, f: async () => { markSeen(j); await waitSaved(); location.reload(); } }]);
     } catch (e) { }
   }
-  const start = () => { check(); setInterval(() => { if (!document.hidden) check(); }, 30000); document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); }); };
+  const start = () => { check(); setInterval(() => { if (!document.hidden && !open) check(); }, 30000); document.addEventListener('visibilitychange', () => { if (!document.hidden && !open) check(); }); };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();

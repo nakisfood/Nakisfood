@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" translate="no">
 <head>
 <script src="/shim.js"></script>
+<meta name="google" content="notranslate">
 <style id="npBootCss">
 #npLoad{position:fixed;inset:0;z-index:2147483000;background:#f5f6f9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;font:15px "Segoe UI",system-ui,sans-serif;color:#4a5568}
 #npLoad .sp{width:34px;height:34px;border:4px solid #f1c3c6;border-top-color:#c4252d;border-radius:50%;animation:npSpin .8s linear infinite}
@@ -1168,6 +1169,61 @@ html.pw-tam #karRepBox{max-width:none!important;padding-left:8px!important;paddi
 .phtab{width:100%;border-collapse:collapse;font-size:13px}.phtab th{position:sticky;top:0;background:#f3f4f7;text-align:left;padding:6px 8px;font-size:11.5px}.phtab td{padding:5px 8px;border-bottom:1px solid #e9ecf0}.phtab .n{text-align:right;white-space:nowrap}
 .c-teal{--dl:#178a8a;background:linear-gradient(145deg,#1f9a9a,#11706f)}.c-purple{--dl:#7b4fb0;background:linear-gradient(145deg,#8a5fc0,#63399a)}
 </style>
+<style id="npCalCss">
+input[type=date]::-webkit-calendar-picker-indicator{display:none}
+#npCal{position:fixed;z-index:2147483002;background:#fff;border:1px solid #d6dde6;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.2);padding:10px;font:13px "Segoe UI",system-ui,sans-serif;color:#1d2733;width:262px;user-select:none}
+#npCal .h{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}#npCal .h b{font-size:14px}
+#npCal button{border:0;background:#f1f4f8;border-radius:7px;padding:4px 9px;cursor:pointer;font:inherit}
+#npCal .g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+#npCal .w{font-size:11px;color:#7a8694;font-weight:700;padding:3px 0}
+#npCal .d{padding:6px 0;border-radius:7px;cursor:pointer}#npCal .d:hover{background:#e8f0fe}
+#npCal .o{color:#b8c0ca}#npCal .t{outline:1px solid #1f6feb}#npCal .s{background:#1f6feb!important;color:#fff;font-weight:700}
+#npCal .f{display:flex;justify-content:space-between;margin-top:8px}
+</style>
+<script>
+/* 25.11.: tarih alanları için programın dilinde takvim (TR / DE) – tarayıcının kendi takvimi yerine */
+(function(){
+  const NM = {tr:{m:['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'], w:['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'], t:'Bugün', c:'Temizle'},
+              de:{m:['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'], w:['Mo','Di','Mi','Do','Fr','Sa','So'], t:'Heute', c:'Löschen'}};
+  const lang = () => (document.documentElement.lang==='de' ? 'de' : 'tr');
+  const iso = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  let box = null, inp = null, vy = 0, vm = 0;
+  function close(){ if(box){ box.remove(); box = null; inp = null; } }
+  function setVal(v){ if(!inp) return; const el = inp; el.value = v; el.dispatchEvent(new Event('input', {bubbles:true})); el.dispatchEvent(new Event('change', {bubbles:true})); close(); try{ (el.__npd || el).focus(); }catch(e){} }
+  function draw(){ const N = NM[lang()], first = new Date(vy, vm, 1), off = (first.getDay()+6)%7, days = new Date(vy, vm+1, 0).getDate(), today = iso(new Date()), sel = inp && inp.value;
+    let h = `<div class="h"><button data-c="p">‹</button><b>${N.m[vm]} ${vy}</b><button data-c="n">›</button></div><div class="g">` + N.w.map(w=>`<div class="w">${w}</div>`).join('');
+    for(let i=0;i<off;i++){ const d = new Date(vy, vm, i-off+1); h += `<div class="d o" data-v="${iso(d)}">${d.getDate()}</div>`; }
+    for(let i=1;i<=days;i++){ const v = iso(new Date(vy, vm, i)); h += `<div class="d${v===today?' t':''}${v===sel?' s':''}" data-v="${v}">${i}</div>`; }
+    const rest = (7 - (off+days)%7)%7; for(let i=1;i<=rest;i++){ const d = new Date(vy, vm+1, i); h += `<div class="d o" data-v="${iso(d)}">${i}</div>`; }
+    box.innerHTML = h + `</div><div class="f"><button data-c="t">${N.t}</button><button data-c="x">${N.c}</button></div>`; }
+  function openFor(el, anchor){ if(el.disabled || el.readOnly) return; close(); inp = el; const v = /^\d{4}-\d{2}-\d{2}$/.test(el.value) ? new Date(el.value+'T00:00') : new Date(); vy = v.getFullYear(); vm = v.getMonth();
+    box = document.createElement('div'); box.id = 'npCal'; document.body.appendChild(box); draw();
+    const r = (anchor || el).getBoundingClientRect(), bh = box.offsetHeight, bw = box.offsetWidth; let top = r.bottom + 4; if(top + bh > innerHeight - 6) top = Math.max(6, r.top - bh - 4);
+    box.style.top = top + 'px'; box.style.left = Math.max(6, Math.min(r.left, innerWidth - bw - 6)) + 'px';
+    box.addEventListener('mousedown', e=>{ e.preventDefault(); e.stopPropagation();
+      const c = e.target.closest('[data-c]'), d = e.target.closest('[data-v]');
+      if(d) return setVal(d.dataset.v);
+      if(!c) return; const k = c.dataset.c;
+      if(k==='p'){ vm--; if(vm<0){ vm = 11; vy--; } draw(); } else if(k==='n'){ vm++; if(vm>11){ vm = 0; vy++; } draw(); }
+      else if(k==='t') setVal(iso(new Date())); else if(k==='x') setVal(''); }); }
+  /* tarih kutusu her dilde gg.aa.yyyy görünür (tarayıcının diline bakmaz); asıl değer gizli kutuda yyyy-aa-gg kalır */
+  const VD = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+  const show = v => /^\d{4}-\d{2}-\d{2}$/.test(v||'') ? v.slice(8,10)+'.'+v.slice(5,7)+'.'+v.slice(0,4) : '';
+  const ph = () => lang()==='de' ? 'TT.MM.JJJJ' : 'gg.aa.yyyy';
+  function wrap(el){ if(el.__npd || !el.parentNode) return; const d = document.createElement('input'); d.type = 'text'; d.readOnly = true; d.className = el.className; d.setAttribute('style', (el.getAttribute('style')||'') + ';cursor:pointer'); d.setAttribute('data-npdate','1'); d.setAttribute('translate','no');
+    d.placeholder = ph(); VD.set.call(d, show(VD.get.call(el))); d.disabled = el.disabled; el.__npd = d; el.style.display = 'none'; el.parentNode.insertBefore(d, el.nextSibling);
+    Object.defineProperty(el, 'value', {configurable:true, get(){ return VD.get.call(el); }, set(v){ VD.set.call(el, v); VD.set.call(d, show(VD.get.call(el))); }});
+    d.addEventListener('click', ()=>{ if(!el.disabled) openFor(el, d); });
+    d.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' ' || e.key==='ArrowDown'){ e.preventDefault(); openFor(el, d); } else if((e.key==='Delete' || e.key==='Backspace') && !el.disabled){ e.preventDefault(); inp = el; setVal(''); } }); }
+  const scan = root => { (root.querySelectorAll ? root.querySelectorAll('input[type=date]') : []).forEach(wrap); if(root.matches && root.matches('input[type=date]')) wrap(root); };
+  new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType===1) scan(n); }))).observe(document.documentElement, {childList:true, subtree:true});
+  document.addEventListener('DOMContentLoaded', ()=>scan(document));
+  new MutationObserver(()=>document.querySelectorAll('input[data-npdate]').forEach(d=>{ d.placeholder = ph(); })).observe(document.documentElement, {attributes:true, attributeFilter:['lang']});
+  document.addEventListener('click', e=>{ if(box && !box.contains(e.target) && !(e.target.matches && e.target.matches('input[data-npdate]'))) close(); }, true);
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && box){ close(); e.stopPropagation(); }  }, true);
+  window.addEventListener('scroll', e=>{ if(box && !box.contains(e.target)) close(); }, true); window.addEventListener('resize', close);
+})();
+</script>
 </head>
 <body class="locked">
 <div id="login">

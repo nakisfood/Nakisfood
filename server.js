@@ -143,9 +143,11 @@ app.use((req, res, next) => {
 const canWrite = (req, res) => { if (req.user.ro) { res.status(403).json({ code: 'permission_denied' }); return false; } return true; };
 
 // sürüm: index.html + shim.js içeriğinden; aynı kod yeniden başlarsa değişmez
-const APP_VER = (() => { try { const h = crypto.createHash('sha1'); ['index.html', 'shim.js'].forEach(f => h.update(fs.readFileSync(findFile('public', f)))); return h.digest('hex').slice(0, 12); } catch (e) { return String(Date.now()); } })();
+const APP_VER = (() => { try { const h = crypto.createHash('sha1'); ['index.html', 'shim.js', 'degisiklikler.json'].forEach(f => { try { h.update(fs.readFileSync(findFile('public', f))); } catch (e) { } }); return h.digest('hex').slice(0, 12); } catch (e) { return String(Date.now()); } })();
 const APP_AT = new Date().toISOString();
-app.get('/api/version', (req, res) => { res.setHeader('Cache-Control', 'no-store'); res.json({ v: APP_VER, at: APP_AT }); });
+function readNotes() { try { const v = JSON.parse(fs.readFileSync(findFile('public', 'degisiklikler.json'), 'utf8')); return Array.isArray(v) ? v.slice(0, 30) : []; } catch (e) { return []; } }
+const APP_NOTES = readNotes();
+app.get('/api/version', (req, res) => { res.setHeader('Cache-Control', 'no-store'); res.json({ v: APP_VER, at: APP_AT, notes: APP_NOTES }); });
 app.get('/api/me', (req, res) => res.json({ u: req.user.u, ro: req.user.ro }));
 
 app.get('/api/col', async (req, res) => {

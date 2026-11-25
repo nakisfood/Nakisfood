@@ -1,0 +1,32 @@
+[
+ {
+  "id": "2026-11-25 19:00",
+  "tr": "Dil: tarih alanları ve takvim artık seçilen dilde (TR/DE); Chrome'un çeviri önerisi kapatıldı.",
+  "de": "Sprache: Datumsfelder und Kalender jetzt in der gewählten Sprache (TR/DE); Chrome-Übersetzungsvorschlag deaktiviert."
+ },
+ {
+  "id": "2026-11-25 18:30",
+  "tr": "Güncelleme bildirimi: yeni sürüm gelince yenilemeden önce sorar ve neyin değiştiğini kısa notla gösterir.",
+  "de": "Update-Hinweis: Vor dem Neuladen wird gefragt und kurz angezeigt, was sich geändert hat."
+ },
+ {
+  "id": "2026-11-25 18:20",
+  "tr": "Sol menü: her bölüm başlığına ikon eklendi.",
+  "de": "Linkes Menü: Jede Bereichsüberschrift hat jetzt ein Symbol."
+ },
+ {
+  "id": "2026-11-25 18:10",
+  "tr": "Fatura karşılaştırma: faturadaki fiyat (Vakıf, Market …) otomatik bulunur; alttaki açıklama sadeleşti.",
+  "de": "Rechnungsvergleich: Der Preis auf der Rechnung (Vakıf, Market …) wird automatisch erkannt; Zusammenfassung vereinfacht."
+ },
+ {
+  "id": "2026-11-25 17:50",
+  "tr": "Fatura karşılaştırma: «Faturadaki fiyat» müşteri başına hatırlanır.",
+  "de": "Rechnungsvergleich: «Preis auf der Rechnung» wird je Kunde gespeichert."
+ },
+ {
+  "id": "2026-11-25 17:45",
+  "tr": "Sol menü: Müşteriler pembe, Diğer mavi renk.",
+  "de": "Linkes Menü: Kunden rosa, Sonstiges blau."
+ }
+]
