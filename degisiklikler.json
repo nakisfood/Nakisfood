@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-26 01:15",
+  "tr": "Özel kullanıcı: NAKIS FOOD logosuna basınca özel ana sayfa açılır (boş sayfa sorunu giderildi). Başlık ortada.",
+  "de": "Spezieller Benutzer: Klick auf das NAKIS-FOOD-Logo öffnet die eigene Startseite (leere Seite behoben). Titel zentriert."
+ },
+ {
   "id": "2026-11-26 00:55",
   "tr": "Özel kullanıcılara gönder: gönderilmiş ve değişmemişse sadece «✔ Gönderildi» görünür. Fiyat (veya afiş) değişince turuncu «⚠ Fiyat değişti – yeniden gönder» butonu çıkar.",
   "de": "An spezielle Benutzer senden: unverändert nur «✔ Gesendet». Bei Preis- (oder Plakat-)änderung orangefarbener Knopf «⚠ Preise geändert – erneut senden»."
