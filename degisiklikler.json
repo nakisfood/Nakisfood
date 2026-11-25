@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-25 23:45",
+  "tr": "Özel kullanıcılar: fiyat listeleri ve afişler artık ayrı dosyalar. Yönetim → Özel Kullanıcılar'dan PDF/resim yükleyin ya da Hazır Kataloglar ve Afişler'deki «📤 Özel kullanıcılara gönder» ile tek tıkla gönderin. Özel kullanıcı girişinde kendi ana sayfasının bazen açılmaması düzeltildi.",
+  "de": "Spezielle Benutzer: Preislisten und Plakate sind jetzt eigene Dateien. Unter Verwaltung → Spezielle Benutzer hochladen oder mit «📤 An spezielle Benutzer senden» in Fertigen Katalogen und Plakaten senden. Fehler behoben: eigene Startseite öffnete sich teils nicht."
+ },
+ {
+  "id": "2026-11-25 23:20",
+  "tr": "Yönetim → yeni «Özel Kullanıcılar» ekranı: özel kullanıcı ekle/şifre/sil, fiyat listeleri ve afişleri tek yerden yayınla. «Şube Vakıf-Market» artık tüm kullanıcılarda menüde. Kullanıcı yetkilerinin yeniden açılışta silinmesi hatası düzeltildi.",
+  "de": "Verwaltung → neue Ansicht «Spezielle Benutzer»: Benutzer anlegen/Passwort/löschen, Preislisten und Plakate zentral veröffentlichen. «Filiale Vakıf-Market» jetzt bei allen Benutzern im Menü. Fehler behoben: Benutzerrechte gingen beim Neuladen verloren."
+ },
+ {
   "id": "2026-11-25 23:00",
   "tr": "Özel kullanıcılar: Kullanıcılar → «Özel kullanıcı» yetkisi. Bu kişi girince kendi ana sayfasını görür: Şube Vakıf-Market Karşılaştırma, Ürün Fiyat Listeleri, Afişler (sadece bakar/indirir). Hazır Kataloglar ve Afişler'de yeni «Yayınla» anahtarı.",
   "de": "Spezielle Benutzer: Recht «Spezieller Benutzer». Sieht eine eigene Startseite: Filial-Vergleich, Artikel-Preislisten, Plakate (nur ansehen/herunterladen). Neuer Schalter «Veröffentlichen» bei Fertigen Katalogen und Plakaten."
