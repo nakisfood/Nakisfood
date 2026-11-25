@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-26 04:25",
+  "tr": "Özel kullanıcı: ön izlemede «Excel indir» ve «PDF oluştur» artık çalışıyor.",
+  "de": "Spezieller Benutzer: «Excel herunterladen» und «PDF erstellen» in der Vorschau funktionieren jetzt."
+ },
+ {
+  "id": "2026-11-26 04:05",
+  "tr": "Şube karşılaştırma: özel kullanıcı kendi kayıtlı karşılaştırmasını görüntüleyebilir ve silebilir (düzenleyemez).",
+  "de": "Filialvergleich: Spezieller Benutzer kann eigene gespeicherte Vergleiche ansehen und löschen (nicht bearbeiten)."
+ },
+ {
   "id": "2026-11-26 03:50",
   "tr": "Şube karşılaştırma: başka kullanıcının (ör. admin) kaydettiği fatura özel kullanıcı tarafından yeniden karşılaştırılıp kendi adına kaydedilebilir.",
   "de": "Filialvergleich: Eine von einem anderen Benutzer (z. B. Admin) gespeicherte Rechnung kann vom speziellen Benutzer neu verglichen und gespeichert werden."
