@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-25 23:00",
+  "tr": "Özel kullanıcılar: Kullanıcılar → «Özel kullanıcı» yetkisi. Bu kişi girince kendi ana sayfasını görür: Şube Vakıf-Market Karşılaştırma, Ürün Fiyat Listeleri, Afişler (sadece bakar/indirir). Hazır Kataloglar ve Afişler'de yeni «Yayınla» anahtarı.",
+  "de": "Spezielle Benutzer: Recht «Spezieller Benutzer». Sieht eine eigene Startseite: Filial-Vergleich, Artikel-Preislisten, Plakate (nur ansehen/herunterladen). Neuer Schalter «Veröffentlichen» bei Fertigen Katalogen und Plakaten."
+ },
+ {
   "id": "2026-11-25 22:35",
   "tr": "Kâr özeti artık ayrıntılı: Ürünlerden kazancınız − Nakliye (gider) = Sonuç (net kâr); leergut hesaba katılmaz.",
   "de": "Gewinnübersicht jetzt detailliert: Gewinn aus den Artikeln − Fracht (Kosten) = Ergebnis (Nettogewinn); Leergut nicht berücksichtigt."
