@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-25 20:15",
+  "tr": "Şube Vakıf-Market: sade ekran – sadece fatura yükle; Vakıf↔Market sabit; resim sütunu; Fark ve Kâr € sütunları kaldırıldı; adımlar arası «Devam et», sonda «Kaydet ve bitir»; kayıtlılar kilitli (Önizle, PDF, admin için Sil).",
+  "de": "Filiale Vakıf-Market: schlanke Ansicht – nur Rechnung hochladen; Vakıf↔Market fest; Bildspalte; Spalten Differenz und Gewinn € entfernt; «Weiter» zwischen den Schritten, am Ende «Speichern und beenden»; gespeicherte gesperrt (Vorschau, PDF, Löschen nur Admin)."
+ },
+ {
   "id": "2026-11-25 20:00",
   "tr": "Müşteriler → yeni «Şube Vakıf-Market Fiyat Karşılaştırma»: Fiyat Karşılaştırma ile aynı seçenekler, Vakıf ve Market hazır seçili gelir. Fiyat Karşılaştırma'daki şablon butonu kaldırıldı.",
   "de": "Kunden → neu «Filiale Vakıf-Market Preisvergleich»: gleiche Optionen wie Preisvergleich, Vakıf und Market sind vorausgewählt. Vorlagen-Schaltfläche im Preisvergleich entfernt."
