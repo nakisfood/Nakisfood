@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-26 02:10",
+  "tr": "Özel kullanıcılar: fiyat listeleri ve afişler klasörlü. Gönderirken klasör sorulur; Yönetim → Özel Kullanıcılar’da klasör ekle / sırala / sil ve dosya taşı.",
+  "de": "Spezielle Benutzer: Preislisten und Plakate in Ordnern. Beim Senden wird der Ordner abgefragt; Ordner verwalten und Dateien verschieben unter Verwaltung → Spezielle Benutzer."
+ },
+ {
+  "id": "2026-11-26 01:35",
+  "tr": "Özel kullanıcı: alttaki «← Ana sayfa» butonu ortada ve turkuaz. Sürüm yazısı sadece admin’de görünür.",
+  "de": "Spezieller Benutzer: Knopf «← Startseite» unten mittig und türkis. Versionsanzeige nur für Admin."
+ },
+ {
   "id": "2026-11-26 01:15",
   "tr": "Özel kullanıcı: NAKIS FOOD logosuna basınca özel ana sayfa açılır (boş sayfa sorunu giderildi). Başlık ortada.",
   "de": "Spezieller Benutzer: Klick auf das NAKIS-FOOD-Logo öffnet die eigene Startseite (leere Seite behoben). Titel zentriert."

@@ -133,6 +133,8 @@
     let b = document.getElementById('npVer');
     if (!b) { b = document.createElement('div'); b.id = 'npVer'; b.style.cssText = 'position:fixed;right:8px;bottom:6px;z-index:30;font:11px system-ui,sans-serif;color:#8a94a3;background:rgba(255,255,255,.85);padding:2px 7px;border-radius:6px;pointer-events:none'; document.body.appendChild(b); }
     b.textContent = (de() ? 'Version: ' : 'Sürüm: ') + fmt(at);
+    const adm = () => { try { return typeof me !== 'undefined' && !!me && String(me.u || '').trim().toLowerCase() === 'admin'; } catch (e) { return false; } };
+    const vis = () => { b.style.display = adm() ? '' : 'none'; }; vis(); if (!b.__t) b.__t = setInterval(vis, 1000);
   }
   const newNotes = notes => { const s = lsG(SEEN_ID) || ''; const n = (notes || []).filter(x => x && x.id && (!s || String(x.id) > s)); return n.length ? n.slice(0, 6) : (s ? [] : (notes || []).slice(0, 1)); };
   function card(title, notes, btns) {
