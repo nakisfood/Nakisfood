@@ -6663,7 +6663,7 @@ function openCompare(){
       if(t.dataset.cmx){ CMP.x[t.dataset.cmx] = t.checked; cmpSaveCfg(); TOOL.render(); return; }
       if(t.dataset.cm==='base'){ CMP.base = t.value; cmpOrder(); if(CMP.cust.trim()) cmpCustLv(CMP.cust, CMP.base); cmpSaveCfg(); TOOL.render(); return; }
       if(t.dataset.cm==='only'){ CMP.onlySel = t.checked; TOOL.render(); return; }
-      if(t.dataset.cm==='fbl'){ CMP.fbl = t.value; const cn = String(CMP.cust||'').trim() || (CMP.fat && CMP.fat.musteri) || ''; if(cn && !window.NP_RO) cmpFblMem(cn, CMP.fbl); TOOL.render(); return; }
+      if(t.dataset.cm==='fbl'){ CMP.fbl = t.value; if(!window.NP_RO){ [String(CMP.cust||'').trim(), CMP.fat && CMP.fat.musteri].filter(Boolean).forEach(cn=>cmpFblMem(cn, CMP.fbl)); } TOOL.render(); return; }
       if(t.dataset.cm==='cl'){ CMP.cl = t.value; cmpSaveCfg(); cmpAnReset(); TOOL.render(); return; }
       if(t.dataset.ekm!=null && CMP.fat){ return; }
       if(t.dataset.cpx!=null && CMP.fat) return;   /* kontrol: kutudan çıkınca (cmpCpxCheck) */
@@ -6729,7 +6729,7 @@ function cmpFatApply(inv){ cmpFatClear(); let rows = []; try{ rows = invCalc(inv
   CMP.step = 1; CMP.fbl = '';
   CMP.fat = {no:inv.no||'', tarih:inv.tarih||'', musteri:inv.musteri||'', dosya:inv.dosya||'', n, miss, inv, ek, skipN};
   if(!CMP.lvs.includes('fat')) CMP.lvs = ['fat', ...CMP.lvs]; CMP.base = 'fat'; if(CMP.lvs.length<2) CMP.lvs.push('1');
-  if(inv.musteri && !String(CMP.cust||'').trim()) CMP.cust = inv.musteri; CMP.fbl = String(CMP.cust||'').trim() ? cmpFblMem(CMP.cust) : cmpFblMem(inv.musteri); CMP.onlySel = true; CMP.f = Object.assign({}, CMP.f, {akt:'hepsi', tpl:'', q:''}); cmpOrder(); TOOL.render(); }
+  if(inv.musteri && !String(CMP.cust||'').trim()) CMP.cust = inv.musteri; CMP.fbl = cmpFblMem(inv.musteri) || cmpFblMem(CMP.cust); CMP.onlySel = true; CMP.f = Object.assign({}, CMP.f, {akt:'hepsi', tpl:'', q:''}); cmpOrder(); TOOL.render(); }
 /* faturadaki masraf satırları (nakliye, leergut…): her biri ayrı satır, tutar elle değiştirilebilir, tüm fiyatlara aynı eklenir */
 const cmpEkAmt = e => { const v = CMP.fatX && CMP.fatX.t[e.key]; return v!=null && String(v).trim()!=='' ? (num(v)||0) : e.t0; };
 const cmpEkOn = e => !(CMP.fatX && CMP.fatX.off[e.key]);
