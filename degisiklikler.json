@@ -1,5 +1,25 @@
 [
  {
+  "id": "2026-11-26 03:50",
+  "tr": "Şube karşılaştırma: başka kullanıcının (ör. admin) kaydettiği fatura özel kullanıcı tarafından yeniden karşılaştırılıp kendi adına kaydedilebilir.",
+  "de": "Filialvergleich: Eine von einem anderen Benutzer (z. B. Admin) gespeicherte Rechnung kann vom speziellen Benutzer neu verglichen und gespeichert werden."
+ },
+ {
+  "id": "2026-11-26 03:35",
+  "tr": "Tüm pencerelerde alt çubuğun ortasında turkuaz «← Geri» ve «⌂ Ana sayfa» butonları.",
+  "de": "In allen Fenstern unten mittig türkise Knöpfe «← Zurück» und «⌂ Startseite»."
+ },
+ {
+  "id": "2026-11-26 03:15",
+  "tr": "Özel kullanıcı ana sayfası: Afişler ikonu değişti (📢).",
+  "de": "Startseite spezieller Benutzer: neues Plakat-Symbol (📢)."
+ },
+ {
+  "id": "2026-11-26 03:05",
+  "tr": "Afişler ve Hazır Kataloglar: «📤 Toplu gönder» – seç, klasörü bir kez seç, hepsini özel kullanıcılara gönder (değişmeyenler atlanır).",
+  "de": "Plakate und Fertige Kataloge: «📤 Sammelversand» – auswählen, Ordner einmal wählen, alle an spezielle Benutzer senden (unveränderte werden übersprungen)."
+ },
+ {
   "id": "2026-11-26 02:40",
   "tr": "Özel Kullanıcılar → Fiyat Listeleri / Afişler: arama, klasör ve durum filtresi; toplu seç → klasöre taşı, yayınla, yayından kaldır, sil. «Diğer» klasörü kaldırıldı.",
   "de": "Spezielle Benutzer → Preislisten / Plakate: Suche, Ordner- und Statusfilter; Mehrfachauswahl → verschieben, veröffentlichen, aufheben, löschen. Ordner «Sonstiges» entfernt."
