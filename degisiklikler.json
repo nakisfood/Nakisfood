@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-25 22:10",
+  "tr": "Şube: 2 adım – 1. Alış karşılaştırması, 2. Kâr karşılaştırması (son satış fiyatı, Vakıf ile kâr, Market ile kâr). Leergut tablolarda «iade» olarak görünür, kârdan düşülmez.",
+  "de": "Filiale: 2 Schritte – 1. Einkaufsvergleich, 2. Gewinnvergleich (Endpreis, Gewinn mit Vakıf, Gewinn mit Market). Leergut erscheint als «Rückgabe» und wird nicht vom Gewinn abgezogen."
+ },
+ {
   "id": "2026-11-25 21:55",
   "tr": "Tüm pencerelerde geri butonu artık altta, diğer butonların yanında, koyu lacivert ve yazılı «← Geri»; üstteki küçük ok kaldırıldı.",
   "de": "In allen Fenstern ist der Zurück-Knopf jetzt unten neben den anderen Knöpfen, dunkelblau mit Text «← Zurück»; kleiner Pfeil oben entfernt."

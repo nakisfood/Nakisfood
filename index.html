@@ -6885,7 +6885,8 @@ function cmpCustData(){ const F = CMP.fat; if(!F) return null; let rows = []; tr
     aT1, caT1, totF: aT1 + ekT, totM: caT1 + ekTM, sT3, caT, ck, cm: ck!=null && caT+ekTMp ? ck/(caT+ekTMp)*100 : null,
     k4, m4: k4!=null && a4 ? k4/a4*100 : null, d: ck!=null && k4!=null ? ck-k4 : null}; }
 function cmpCustCols(D, st){ const C0 = cmpCustCols0(D, st); if(!CMP.sube) return C0;
-  const C = C0.filter(c=>!['df','d','k','ck'].includes(c.k)), i = C.findIndex(c=>c.k==='ad');
+  const drop = st===4 ? ['df','d'] : ['df','d','k','ck'], C = C0.filter(c=>!drop.includes(c.k)), i = C.findIndex(c=>c.k==='ad');
+  if(st===4){ const j = C.findIndex(c=>c.k==='sT'); C.splice(j>=0 ? j : C.length, 0, {k:'sn', h:tr('Son satış KDV hariç'), v:x=>x.sn, e:1}); }
   C.splice(i>=0 ? i : 2, 0, {k:'img', h:tr('Resim'), v:x=>x.p && x.p.img || '', f:x=>x.p && x.p.img ? `<img src="${esc(x.p.img)}" alt="" style="height:38px;max-width:60px;object-fit:contain;display:block;margin:auto">` : ''});
   return C; }
 function cmpCustCols0(D, st){ const L = D.L, ln = L ? cmpClLab(L) : '', fl = cmpFatLab();
@@ -6940,15 +6941,16 @@ function cmpCustTable(D, st, doc){ const C = cmpCustCols(D, st), ln = D.L ? cmpC
   const body = D.rows.map(x=>`<tr${st>1 && ((st===3?x.ck:x.k)!=null) && (st===3?x.ck:x.k)<0?' class="closs"':''}>${C.map(c=>cell(c,x)).join('')}</tr>`).join('');
   const f0 = C.findIndex(c=>['aT','cp','sT','buy'].includes(c.k) && c.k!=='buy') , fr = (lab, vals, cls) => `<tr class="${cls}"><td colspan="${f0}" class="num">${lab}</td>${C.slice(f0).map(c=>`<td class="num">${vals[c.k]??''}</td>`).join('')}</tr>`;
   const tag = `<span class="ektag">${esc(tr('Masraf'))}</span>`, mIn = e => doc || window.NP_RO || e.leer ? fmtE(e.tm) + (e.leer && !doc ? ` <span class="na" style="font-size:11px" title="${esc(tr('Leergut her iki tarafta aynıdır'))}">🔒</span>` : '') : `<input class="skin" data-ekm="${esc(e.key)}" value="${esc(CMP.fatX.mt[e.key] ?? '')}" placeholder="0,00" inputmode="decimal" style="width:84px;text-align:right" title="${esc(tr('Bu fiyatla alınca nakliye / leergut tutarını elle girin (yoksa boş bırakın)'))}">`;
+  const lg = `<span class="na" title="${esc(tr('Leergut iade edildiği için kârdan düşülmez'))}">${esc(tr('iade'))}</span>`, kv = (e, v) => e.leer ? lg : cmpSg(-v);
   const tb = (foot) => `<table class="ctab"><thead>${head}</thead><tbody>${body}</tbody><tfoot>${foot}</tfoot></table>`;
   if(st===1){ const df = D.L ? D.totM - D.totF : null;
     return tb(D.ek.map(e=>fr(`${esc(e.ad)} ${tag}`, {aT:fmtE(e.t), caT:D.L?mIn(e):'', df:D.L?cmpSg(e.tm-e.t):''}, 'cfr cek')).join('')
       + fr(`<b>${esc(tr('Toplam'))}</b>`, {aT:`<b>${fmtE(D.totF + (D.aT - D.aT1))}</b>`, caT:D.L?`<b>${fmtE(D.totM + (D.aT - D.aT1))}</b>`:'', df:D.L?`<b>${cmpSg(df)}</b>`:''}, 'cfr ctot')); }
-  if(st===2) return tb(D.ek.map(e=>fr(`${esc(e.ad)} ${tag}`, {aT:fmtE(e.t), k:cmpSg(-e.t)}, 'cfr cek')).join('')
+  if(st===2) return tb(D.ek.map(e=>fr(`${esc(e.ad)} ${tag}`, {aT:fmtE(e.t), k:kv(e, e.t)}, 'cfr cek')).join('')
     + fr(`<b>${esc(tr('Toplam'))}</b>`, {aT:`<b>${fmtE(D.aT+D.ekT)}</b>`, sT:`<b>${fmtE(D.sT)}</b>`, k:`<b>${cmpSg(D.k)}</b>`, m:cmpPill(D.m)}, 'cfr ctot'));
-  if(st===3) return tb(D.ek.map(e=>fr(`${esc(e.ad)} ${tag}`, {aT:fmtE(e.tm), k:cmpSg(-e.tm)}, 'cfr cek')).join('')
+  if(st===3) return tb(D.ek.map(e=>fr(`${esc(e.ad)} ${tag}`, {aT:fmtE(e.tm), k:kv(e, e.tm)}, 'cfr cek')).join('')
     + fr(`<b>${esc(tr('Toplam'))}</b>`, {aT:`<b>${fmtE(D.caT+D.ekTM)}</b>`, sT:`<b>${fmtE(D.sT3)}</b>`, k:`<b>${cmpSg(D.ck)}</b>`, m:cmpPill(D.cm)}, 'cfr ctot'));
-  return tb(D.ek.map(e=>fr(`${esc(e.ad)} ${tag}`, {k:cmpSg(-e.t), ck:cmpSg(-e.tm), d:cmpSg(e.t-e.tm)}, 'cfr cek')).join('')
+  return tb(D.ek.map(e=>fr(`${esc(e.ad)} ${tag}`, {k:kv(e, e.t), ck:kv(e, e.tm), d:e.leer ? '' : cmpSg(e.t-e.tm)}, 'cfr cek')).join('')
     + fr(`<b>${esc(tr('Toplam'))}</b>`, {sT:`<b>${fmtE(D.sT3)}</b>`, k:`<b>${cmpSg(D.k4)}</b>`, m:cmpPill(D.m4), ck:`<b>${cmpSg(D.ck)}</b>`, cm:cmpPill(D.cm), d:`<b>${cmpSg(D.d)}</b>`}, 'cfr ctot')); }
 const CMP_CSS = `.ctiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 12px}.ctile{border:1px solid #e3e7ee;border-left:4px solid #94a3b8;border-radius:12px;padding:10px 12px;background:#fff}.ctile b{display:block;font-size:19px}.ctile span{font-size:12px;color:#64748b}.ctile.ok{border-left-color:#16a34a}.ctile.bad{border-left-color:#dc2626}.ctile.warn{border-left-color:#d97706}
   .ctab{border-collapse:collapse;width:100%;font-size:12.5px}.ctab th{background:#f3f5f9;font-size:11px;text-align:left;padding:6px 6px;border-bottom:1px solid #dfe4ec;vertical-align:bottom}.ctab th.num,.ctab td.num{text-align:right;white-space:nowrap}.ctab td{padding:5px 6px;border-bottom:1px solid #eef1f5}
@@ -6979,18 +6981,18 @@ function cmpSubeBody(){ const V = cmpLvFind(/vak/i) || '1', M = cmpLvFind(/marke
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px"><div style="font-weight:700;font-size:15px">🔒 ${esc(tr('Kayıtlı karşılaştırmalar'))} (${L.length})</div><span class="grow"></span>${!subeOnly() || can('subeara') ? `<input id="subeQ" data-subeq value="${esc(CMP.subeQ||'')}" placeholder="🔎 ${esc(tr('Ara: fatura no, müşteri, tarih…'))}" style="width:280px;padding:6px 10px;border:1px solid #cfd6de;border-radius:8px">` : ''}</div>
       ${L.length ? `<table class="sbl"><tr><th>${esc(tr('Fatura no'))}</th><th>${esc(tr('Tarih'))}</th><th>${esc(tr('Müşteri'))}</th><th>${esc(tr('Kaydedildi'))}</th><th></th></tr>${L.map(f=>{ const id = esc(f.id||f.no); return `<tr data-subeopen="${id}"><td><b>${esc(f.no||f.dosya||'')}</b></td><td>${f.tarih?esc(deDate(f.tarih)):''}</td><td>${esc(f.musteri||'')}</td><td>${esc(subeDT(f.cmpAn.snap.at))}${f.cmpAn.by?' · '+esc(f.cmpAn.by):''}</td>
         <td style="text-align:right;white-space:nowrap"><button data-subeprev="${id}">📑 ${esc(tr('Tüm rapor'))}</button> <button data-subepdf="${id}">📄 PDF</button>${subeAdm()?` <button data-subedelr="${id}" style="color:#c62828">🗑 ${esc(tr('Sil'))}</button>`:''}</td></tr>`; }).join('')}</table>` : `<div class="na">${esc(tr(CMP.subeQ ? 'Aramaya uyan kayıt yok.' : 'Henüz kayıtlı karşılaştırma yok.'))}</div>`}</div>`; }
-  CMP.fbl = V; CMP.cl = M; if(![1,2,4].includes(CMP.step)) CMP.step = 1;
+  CMP.fbl = V; CMP.cl = M; if(CMP.step===2) CMP.step = 4; if(![1,4].includes(CMP.step)) CMP.step = 1;
   const D = cmpCustData(), st = cmpStep(), fz = cmpFrozen();
-  const tab = (n, lab) => `<button data-cstep="${n}" class="${st===n?'primary':''}" style="border-radius:999px;font-weight:600">${n===4?3:n}. ${esc(tr(lab))}</button>`;
+  const tab = (n, lab) => `<button data-cstep="${n}" class="${st===n?'primary':''}" style="border-radius:999px;font-weight:600">${n===4?2:n}. ${esc(tr(lab))}</button>`;
   return css + `<div class="tbar" style="gap:10px">📄 <b>${esc(CMP.fat.no||CMP.fat.dosya||'')}</b><span class="na">${CMP.fat.tarih?esc(deDate(CMP.fat.tarih)):''}${CMP.fat.musteri?' · '+esc(CMP.fat.musteri):''}</span>
       ${fz ? `<span style="background:#eef6ff;border:1px solid #cfe0f4;border-radius:8px;padding:3px 10px;font-size:12.5px">🔒 ${esc(tr('Kayıtlı karşılaştırma'))} · ${esc(subeDT(CMP.fat.inv.cmpAn.snap.at))}</span>` : ''}</div>
-    <div class="tbar" style="gap:8px">${tab(1,'Alış karşılaştırması')}<span class="na">→</span>${tab(2,'Satış kârı')}<span class="na">→</span>${tab(4,'Yan yana')}</div>
+    <div class="tbar" style="gap:8px">${tab(1,'Alış karşılaştırması')}<span class="na">→</span>${tab(4,'Kâr karşılaştırması')}</div>
     ${cmpCustTiles(D, st)}${cmpCustTable(D, st, true)}${cmpVerdict(D, st)}`; }
 function cmpSubeFoot(){ const F = $('toolFoot'); if(!F) return;
   if(!CMP.fat){ F.innerHTML = subeOnly() ? '' : `<span class="grow"></span><button data-ta="cancel">${esc(tr('Kapat'))}</button>`; return; }
-  const st = cmpStep(), fz = cmpFrozen(), nx = st===1 ? 2 : st===2 ? 4 : 0;
+  const st = cmpStep(), fz = cmpFrozen(), nx = st===1 ? 4 : 0;
   F.innerHTML = `${fz && subeAdm() ? `<button data-ta="subedel" style="color:#c62828">🗑 ${esc(tr('Sil'))}</button>` : ''}<span class="grow"></span><button class="sbb sbn" data-ta="subeback">← ${esc(tr(fz ? 'Listeye dön' : 'Vazgeç'))}</button>
-    <button class="sbb sbp" data-ta="cpdf" title="${esc(tr('Sadece bu adım'))}">📄 PDF</button><button class="sbb sbx" data-ta="subexls" title="${esc(tr('Sadece bu adım'))}">⬇ Excel</button>${fz || st===4 ? `<button class="sbb sba" data-ta="subeall" title="${esc(tr('3 adım tek belgede'))}">📑 ${esc(tr('Tüm rapor (3 adım)'))}</button>` : ''}
+    <button class="sbb sbp" data-ta="cpdf" title="${esc(tr('Sadece bu adım'))}">📄 PDF</button><button class="sbb sbx" data-ta="subexls" title="${esc(tr('Sadece bu adım'))}">⬇ Excel</button>${fz || st===4 ? `<button class="sbb sba" data-ta="subeall" title="${esc(tr('2 adım tek belgede'))}">📑 ${esc(tr('Tüm rapor'))}</button>` : ''}
     ${fz || window.NP_RO ? '' : nx ? `<button class="primary" data-cstep="${nx}">${esc(tr('Devam et'))} →</button>` : `<button class="primary" data-ta="subesave">💾 ${esc(tr('Kaydet ve bitir'))}</button>`}`; }
 function subeReset(){ cmpFatClear(); CMP.step = 1; TOOL.render(); const b = $('toolBody'); if(b) b.scrollTop = 0; }
 function cmpTplOpen(){ CMP.tplPrev = {cl:CMP.cl, fbl:CMP.fbl}; CMP.tpl = 'vm'; cmpFatClear(); TOOL.render(); }
@@ -7038,7 +7040,7 @@ function cmpCustHtml(){ const D = cmpCustData(), F = CMP.fat, st = cmpStep(), lo
     .hd{display:flex;align-items:center;gap:16px;border-bottom:3px solid #b5121b;padding-bottom:8px;margin-bottom:12px}.hd img{height:48px}.hd h1{margin:0;font-size:19px;color:#b5121b}.hd .m{color:#555;font-size:10pt;margin-top:3px}${CMP_CSS}.ctab{font-size:8.5pt}.ctile b{font-size:15px}
     @media print{.ctab tr{break-inside:avoid}}</style></head><body>
     <div class="hd">${logo?`<img src="${logo}">`:''}<div><h1>${esc(CMP.sube ? tr('Şube Vakıf-Market Fiyat Karşılaştırma') : cmpStepTitle())}</h1><div class="m">${esc([F.no, F.tarih?deDate(F.tarih):'', CMP.cust||F.musteri].filter(Boolean).join(' · '))}${D.L && st!==2 ? ' · '+esc(tr('Karşılaştırma'))+': '+esc(cmpClLab(D.L)) : ''}</div></div></div>
-    ${CMP.sube ? (CMP.subeAll ? [1,2,4] : [st]).map((n,i)=>`<div style="${i?'margin-top:22px;break-before:page;page-break-before:always':''}"><h2 style="font-size:15px;color:#b5121b;margin:0 0 8px;border-bottom:1px solid #f0c9cc;padding-bottom:4px">${n===4?3:n}. ${esc(cmpStepTitle(n))}</h2>${cmpCustTiles(D, n)}${cmpCustTable(D, n, true)}${cmpVerdict(D, n)}</div>`).join('') : ''}
+    ${CMP.sube ? (CMP.subeAll ? [1,4] : [st===2?4:st]).map((n,i)=>`<div style="${i?'margin-top:22px;break-before:page;page-break-before:always':''}"><h2 style="font-size:15px;color:#b5121b;margin:0 0 8px;border-bottom:1px solid #f0c9cc;padding-bottom:4px">${n===4?2:n}. ${esc(n===4 ? tr('Kâr karşılaştırması') + ': ' + cmpFatLab() + ' / ' + cmpClLab(cmpCl()||cmpClDef()) : cmpStepTitle(n))}</h2>${cmpCustTiles(D, n)}${cmpCustTable(D, n, true)}${cmpVerdict(D, n)}</div>`).join('') : ''}
     ${CMP.sube ? '' : `${cmpCustTiles(D, st)}${cmpCustTable(D, st, true)}`}${!CMP.sube && D.rows.some(x=>x.ed) && st!==2 ? `<p style="font-size:8.5pt;color:#8a5a00">✏ ${esc(tr('İşaretli fiyatlar bu analiz için elle düzenlendi.'))}</p>` : ''}${CMP.sube ? '' : cmpVerdict(D, st)}
     ${CMP.sube?'':`<p style="color:#666;font-size:8.5pt">${esc(cmpNote(st))}</p>`}</body></html>`; }
 function cmpCustPreview(){ openPreview({title: (CMP.sube ? tr('Şube Vakıf-Market Fiyat Karşılaştırma') : cmpStepTitle()) + ' – ' + tr('Ön İzleme'), info: `${CMP.fat.no||''}`, html: cmpCustHtml(), xlsx: ()=>cmpCustXlsx(), pdf: ()=>{ try{ $('prevFrame').contentWindow.print(); }catch(e){} }, backLabel:'Geri', back: ()=>{} }); }
@@ -7047,9 +7049,9 @@ function cmpCustXlsx(){ const D = cmpCustData(), st = cmpStep(), C = cmpCustCols
   const rows = D.rows.map(x=>C.map(c=>{ const v = c.v(x); return c.p ? pc(v) : rd(v, c.k); })), ekRow = vals => C.map(c=>c.k==='ad' ? vals.ad : rd(vals[c.k] ?? '', c.k));
   let T;
   if(st===1){ D.ek.forEach(e=>rows.push(ekRow({ad:e.ad+' ('+tr('Masraf')+')', aT:e.t, caT:D.L?e.tm:'', df:D.L?e.tm-e.t:''}))); T = {aT:D.totF+(D.aT-D.aT1), caT:D.L?D.totM+(D.aT-D.aT1):'', df:D.L?D.totM-D.totF:''}; }
-  else if(st===2){ D.ek.forEach(e=>rows.push(ekRow({ad:e.ad+' ('+tr('Masraf')+')', aT:e.t, k:-e.t}))); T = {aT:D.aT+D.ekT, sT:D.sT, k:D.k, m:pc(D.m)}; }
-  else if(st===3){ D.ek.forEach(e=>rows.push(ekRow({ad:e.ad+' ('+tr('Masraf')+')', aT:e.tm, k:-e.tm}))); T = {aT:D.caT+D.ekTM, sT:D.sT3, k:D.ck, m:pc(D.cm)}; }
-  else { D.ek.forEach(e=>rows.push(ekRow({ad:e.ad+' ('+tr('Masraf')+')', k:-e.t, ck:-e.tm, d:e.t-e.tm}))); T = {sT:D.sT3, k:D.k4, m:pc(D.m4), ck:D.ck, cm:pc(D.cm), d:D.d}; }
+  else if(st===2){ D.ek.forEach(e=>rows.push(ekRow({ad:e.ad+' ('+tr('Masraf')+')', aT:e.t, k:e.leer ? '' : -e.t}))); T = {aT:D.aT+D.ekT, sT:D.sT, k:D.k, m:pc(D.m)}; }
+  else if(st===3){ D.ek.forEach(e=>rows.push(ekRow({ad:e.ad+' ('+tr('Masraf')+')', aT:e.tm, k:e.leer ? '' : -e.tm}))); T = {aT:D.caT+D.ekTM, sT:D.sT3, k:D.ck, m:pc(D.cm)}; }
+  else { D.ek.forEach(e=>rows.push(ekRow({ad:e.ad+' ('+tr('Masraf')+')', k:e.leer ? '' : -e.t, ck:e.leer ? '' : -e.tm, d:e.leer ? '' : e.t-e.tm}))); T = {sT:D.sT3, k:D.k4, m:pc(D.m4), ck:D.ck, cm:pc(D.cm), d:D.d}; }
   rows.push(C.map(c=>c.k==='ad' ? tr('Toplam') : rd(T[c.k] ?? '', c.k)));
   const vd = (cmpVerdict(D, st).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()); if(vd) rows.push([], [vd]);
   npXlsx(cmpStepTitle() + ' – ' + (CMP.fat.no||''), C.map(c=>c.h), rows, (['','Alis_karsilastirma_','Satis_kari_fatura_','Satis_kari_secilen_','Yan_yana_'][st]) + (CMP.fat.no||'fatura')); }
