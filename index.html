@@ -1171,6 +1171,9 @@ html.pw-tam #karRepBox{max-width:none!important;padding-left:8px!important;paddi
 </style>
 <style id="npCalCss">
 input[type=date]::-webkit-calendar-picker-indicator{display:none}
+.overlay.npbkon .mhead .wback{display:none!important}
+.mfoot .npnav, #karBack{background:#1e3a5f!important;color:#fff!important;border:0!important;font-weight:800!important;border-radius:9px!important;padding:8px 16px!important}
+.mfoot .npnav:hover, #karBack:hover{filter:brightness(1.15)}
 .pvb{font-size:15px!important;font-weight:800!important;padding:10px 22px!important;border-radius:10px!important;border:0!important;cursor:pointer}
 .pvg{background:#1e3a5f!important;color:#fff!important}.pvx{background:#1a7f3c!important;color:#fff!important}.pvp{background:#c4252d!important;color:#fff!important}
 .pvb:hover{filter:brightness(1.07)}.pvx[hidden],.pvp[hidden]{display:none!important}
@@ -6975,7 +6978,7 @@ function cmpSubeBody(){ const V = cmpLvFind(/vak/i) || '1', M = cmpLvFind(/marke
         ${window.NP_RO ? '' : `<button class="primary" data-ta="fatup" style="font-size:16px;padding:12px 26px">⬆ ${esc(tr('Fatura yükle (PDF)'))}</button>`}</div>
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px"><div style="font-weight:700;font-size:15px">🔒 ${esc(tr('Kayıtlı karşılaştırmalar'))} (${L.length})</div><span class="grow"></span>${!subeOnly() || can('subeara') ? `<input id="subeQ" data-subeq value="${esc(CMP.subeQ||'')}" placeholder="🔎 ${esc(tr('Ara: fatura no, müşteri, tarih…'))}" style="width:280px;padding:6px 10px;border:1px solid #cfd6de;border-radius:8px">` : ''}</div>
       ${L.length ? `<table class="sbl"><tr><th>${esc(tr('Fatura no'))}</th><th>${esc(tr('Tarih'))}</th><th>${esc(tr('Müşteri'))}</th><th>${esc(tr('Kaydedildi'))}</th><th></th></tr>${L.map(f=>{ const id = esc(f.id||f.no); return `<tr data-subeopen="${id}"><td><b>${esc(f.no||f.dosya||'')}</b></td><td>${f.tarih?esc(deDate(f.tarih)):''}</td><td>${esc(f.musteri||'')}</td><td>${esc(subeDT(f.cmpAn.snap.at))}${f.cmpAn.by?' · '+esc(f.cmpAn.by):''}</td>
-        <td style="text-align:right;white-space:nowrap"><button data-subeprev="${id}">👁 ${esc(tr('Önizle'))}</button> <button data-subepdf="${id}">📄 PDF</button>${subeAdm()?` <button data-subedelr="${id}" style="color:#c62828">🗑 ${esc(tr('Sil'))}</button>`:''}</td></tr>`; }).join('')}</table>` : `<div class="na">${esc(tr(CMP.subeQ ? 'Aramaya uyan kayıt yok.' : 'Henüz kayıtlı karşılaştırma yok.'))}</div>`}</div>`; }
+        <td style="text-align:right;white-space:nowrap"><button data-subeprev="${id}">📑 ${esc(tr('Tüm rapor'))}</button> <button data-subepdf="${id}">📄 PDF</button>${subeAdm()?` <button data-subedelr="${id}" style="color:#c62828">🗑 ${esc(tr('Sil'))}</button>`:''}</td></tr>`; }).join('')}</table>` : `<div class="na">${esc(tr(CMP.subeQ ? 'Aramaya uyan kayıt yok.' : 'Henüz kayıtlı karşılaştırma yok.'))}</div>`}</div>`; }
   CMP.fbl = V; CMP.cl = M; if(![1,2,4].includes(CMP.step)) CMP.step = 1;
   const D = cmpCustData(), st = cmpStep(), fz = cmpFrozen();
   const tab = (n, lab) => `<button data-cstep="${n}" class="${st===n?'primary':''}" style="border-radius:999px;font-weight:600">${n===4?3:n}. ${esc(tr(lab))}</button>`;
@@ -6987,7 +6990,7 @@ function cmpSubeFoot(){ const F = $('toolFoot'); if(!F) return;
   if(!CMP.fat){ F.innerHTML = subeOnly() ? '' : `<span class="grow"></span><button data-ta="cancel">${esc(tr('Kapat'))}</button>`; return; }
   const st = cmpStep(), fz = cmpFrozen(), nx = st===1 ? 2 : st===2 ? 4 : 0;
   F.innerHTML = `${fz && subeAdm() ? `<button data-ta="subedel" style="color:#c62828">🗑 ${esc(tr('Sil'))}</button>` : ''}<span class="grow"></span><button class="sbb sbn" data-ta="subeback">← ${esc(tr(fz ? 'Listeye dön' : 'Vazgeç'))}</button>
-    <button class="sbb sbv" data-ta="prev" title="${esc(tr('Sadece bu adım'))}">👁 ${esc(tr('Önizle'))}</button><button class="sbb sbp" data-ta="cpdf" title="${esc(tr('Sadece bu adım'))}">📄 PDF</button><button class="sbb sbx" data-ta="subexls" title="${esc(tr('Sadece bu adım'))}">⬇ Excel</button><button class="sbb sba" data-ta="subeall" title="${esc(tr('3 adım tek belgede'))}">📑 ${esc(tr('Tüm rapor (3 adım)'))}</button>
+    <button class="sbb sbp" data-ta="cpdf" title="${esc(tr('Sadece bu adım'))}">📄 PDF</button><button class="sbb sbx" data-ta="subexls" title="${esc(tr('Sadece bu adım'))}">⬇ Excel</button>${fz || st===4 ? `<button class="sbb sba" data-ta="subeall" title="${esc(tr('3 adım tek belgede'))}">📑 ${esc(tr('Tüm rapor (3 adım)'))}</button>` : ''}
     ${fz || window.NP_RO ? '' : nx ? `<button class="primary" data-cstep="${nx}">${esc(tr('Devam et'))} →</button>` : `<button class="primary" data-ta="subesave">💾 ${esc(tr('Kaydet ve bitir'))}</button>`}`; }
 function subeReset(){ cmpFatClear(); CMP.step = 1; TOOL.render(); const b = $('toolBody'); if(b) b.scrollTop = 0; }
 function cmpTplOpen(){ CMP.tplPrev = {cl:CMP.cl, fbl:CMP.fbl}; CMP.tpl = 'vm'; cmpFatClear(); TOOL.render(); }
@@ -10579,6 +10582,20 @@ i18nAdd({
     if((e.ctrlKey || e.metaKey) && (e.key==='k' || e.key==='K')){ e.preventDefault(); e.stopImmediatePropagation(); if(document.body.classList.contains('subeara')){ const q = document.getElementById('subeQ'); if(q) q.focus(); } } }, true);
   document.addEventListener('click', e=>{ if(!document.body.classList.contains('subeonly')) return; const g = e.target.closest && e.target.closest('#gsBox'); if(!g) return; e.preventDefault(); e.stopImmediatePropagation();
     if(CMP.fat){ cmpFatClear(); CMP.step = 1; TOOL.render(); } setTimeout(()=>{ const q = document.getElementById('subeQ'); if(q) q.focus(); }, 50); }, true);
+  /* 25.11.: Geri butonu her pencerede altta, koyu lacivert ve yazılı (üstteki küçük «←» gizlenir) */
+  (function(){
+    const fix = ov => { try{ const modal = ov.querySelector('.modal'), hb = ov.querySelector('.mhead .wback'); if(!modal || !hb) return; let f = modal.querySelector(':scope > .mfoot'); if(!f) return;
+        const own = [...f.querySelectorAll('button')].filter(b=>/^\s*←/.test(b.textContent) && !b.classList.contains('npbk'));
+        own.forEach(b=>b.classList.add('npnav'));
+        let nb = f.querySelector('button.npbk');
+        if(own.length){ if(nb) nb.remove(); ov.classList.add('npbkon'); return; }
+        if(!nb){ nb = document.createElement('button'); nb.type = 'button'; nb.className = 'npbk npnav'; nb.textContent = '← ' + tr('Geri'); nb.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); hb.click(); });
+          const kids = [...f.children], gi = kids.findIndex(k=>k.classList && k.classList.contains('grow')), tgt = kids.slice(gi+1).find(k=>k.tagName==='BUTTON') || kids.find(k=>k.tagName==='BUTTON'); if(tgt) tgt.before(nb); else f.append(nb); }
+        ov.classList.add('npbkon'); }catch(e){} };
+    const all = () => document.querySelectorAll('.overlay').forEach(fix);
+    let t = null; new MutationObserver(()=>{ clearTimeout(t); t = setTimeout(all, 30); }).observe(document.body, {childList:true, subtree:true, attributes:true, attributeFilter:['class']});
+    setTimeout(all, 500);
+  })();
   /* 25.11.: Railway'e taşıma – tam yedek (sadece admin, sadece Claude sürümünde) */
   window.npFullExport = async function(){ if(window.NP_RAILWAY) return;
     const de = (typeof LANG!=='undefined' && LANG==='de');

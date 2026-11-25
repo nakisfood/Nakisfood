@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-25 21:55",
+  "tr": "Tüm pencerelerde geri butonu artık altta, diğer butonların yanında, koyu lacivert ve yazılı «← Geri»; üstteki küçük ok kaldırıldı.",
+  "de": "In allen Fenstern ist der Zurück-Knopf jetzt unten neben den anderen Knöpfen, dunkelblau mit Text «← Zurück»; kleiner Pfeil oben entfernt."
+ },
+ {
+  "id": "2026-11-25 21:45",
+  "tr": "Şube: «Önizle» kaldırıldı; «Tüm rapor (3 adım)» sadece 3. adımda ve kayıtlı karşılaştırmalarda görünür. Listede «Tüm rapor».",
+  "de": "Filiale: «Vorschau» entfernt; «Gesamtbericht (3 Schritte)» nur im 3. Schritt und bei gespeicherten Vergleichen. In der Liste «Gesamtbericht»."
+ },
+ {
   "id": "2026-11-25 21:35",
   "tr": "Önizleme ve Şube ekranı: «Geri / Vazgeç / Listeye dön» koyu lacivert ve belirgin; tüm butonlar sağ altta yan yana.",
   "de": "Vorschau und Filial-Ansicht: «Zurück / Abbrechen / Zur Liste» dunkelblau und deutlich; alle Knöpfe unten rechts nebeneinander."
