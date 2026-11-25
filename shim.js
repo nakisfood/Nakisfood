@@ -19,19 +19,48 @@
   const P = p => encodeURIComponent(p);
   const snap = (id, data) => ({ id, exists: data !== undefined, data: () => data });
 
+  /* Hız 1: açılışta tüm veri tek istekte gelir; ilk yükleme bitene kadar okumalar buradan yapılır */
+  let cache = null, cacheP = null;
+  const kids = new Map();
+  function loadDump() {
+    if (!cacheP) cacheP = req('GET', '/api/dump').then(r => { cache = new Map(r.docs);
+      r.docs.forEach(([p]) => { const par = p.split('/').slice(0, -1).join('/'); if (!kids.has(par)) kids.set(par, []); kids.get(par).push(p); });
+      return cache; }).catch(() => { cache = null; return null; });
+    return cacheP;
+  }
+  const dropCache = () => { cache = null; kids.clear(); cacheP = Promise.resolve(null); };
+
+  /* Hız 2: yazmalar biriktirilip tek istekte gönderilir */
+  let queue = [], qTimer = null;
+  function enqueue(op) { return new Promise((res, rej) => { queue.push(Object.assign(op, { res, rej })); if (cache) dropCache();
+      const big = queue.length >= 400; clearTimeout(qTimer); qTimer = setTimeout(flushQ, big ? 0 : 30); }); }
+  async function flushQ() {
+    const all = queue; queue = [];
+    while (all.length) { const part = []; let size = 0;
+      while (all.length && part.length < 400 && size < 8e6) { const o = all.shift(); part.push(o); size += o.data ? JSON.stringify(o.data).length : 50; }
+      try { await req('POST', '/api/batch', { ops: part.map(o => ({ op: o.op, path: o.path, data: o.data })) }); part.forEach(o => o.res()); }
+      catch (e) { part.forEach(o => o.rej(e)); } }
+  }
+
   function doc(path) {
     return {
       id: path.split('/').pop(),
-      async get() { const r = await req('GET', '/api/doc?path=' + P(path)); return snap(path.split('/').pop(), r.exists ? r.data : undefined); },
-      async set(data) { await req('PUT', '/api/doc?path=' + P(path), data); },
-      async delete() { await req('DELETE', '/api/doc?path=' + P(path)); },
+      async get() {
+        if (cache) return snap(path.split('/').pop(), cache.get(path));
+        const r = await req('GET', '/api/doc?path=' + P(path)); return snap(path.split('/').pop(), r.exists ? r.data : undefined); },
+      set(data) { return enqueue({ op: 'set', path, data }); },
+      delete() { return enqueue({ op: 'del', path }); },
     };
   }
   function collection(path) {
     return {
-      async get() { const r = await req('GET', '/api/col?path=' + P(path)); const docs = r.docs.map(d => snap(d.id, d.data)); return { docs, size: docs.length, empty: !docs.length }; },
+      async get() {
+        if (path === 'kv' && !cacheP) await loadDump();
+        if (cache) { const docs = (kids.get(path) || []).map(p => snap(p.split('/').pop(), cache.get(p))); return { docs, size: docs.length, empty: !docs.length }; }
+        const r = await req('GET', '/api/col?path=' + P(path)); const docs = r.docs.map(d => snap(d.id, d.data)); return { docs, size: docs.length, empty: !docs.length }; },
       doc: id => doc(path + '/' + id),
       onSnapshot(cb, onErr) { // diğer kullanıcıların değişiklikleri: birkaç saniyede bir sorulur
+        dropCache(); // ilk yükleme bitti: bundan sonra her okuma sunucudan
         let since = 0, stop = false, t = null;
         const tick = async () => {
           if (stop) return;

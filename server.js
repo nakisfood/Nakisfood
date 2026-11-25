@@ -156,6 +156,21 @@ app.get('/api/changes', async (req, res) => { // onSnapshot yerine: belirli bir 
   const r = await pool.query('SELECT COALESCE(MAX(rev),0)::text AS m FROM docs');
   res.json({ rev: Number(r.rows[0].m), docs: q.rows.map(x => ({ id: x.path.split('/').pop(), data: JSON.parse(x.data) })) });
 });
+app.get('/api/dump', async (req, res) => { // açılışta tüm veriyi tek seferde (resimler dosyada olduğu için küçük)
+  const q = await pool.query("SELECT path, data FROM docs WHERE path LIKE 'kv/%'");
+  res.json({ docs: q.rows.map(r => [r.path, JSON.parse(r.data)]) });
+});
+app.post('/api/batch', express.json({ limit: '60mb' }), async (req, res) => { // çok sayıda kayıt tek istekte
+  if (!canWrite(req, res)) return;
+  const ops = req.body && req.body.ops; if (!Array.isArray(ops) || ops.length > 2000) return res.status(400).json({ code: 'invalid_argument' });
+  for (const o of ops) { o.path = cleanPath(o.path); if (!o.path || (o.op === 'set' && (!o.data || typeof o.data !== 'object'))) return res.status(400).json({ code: 'invalid_argument' }); }
+  const client = await pool.connect();
+  try { await client.query('BEGIN');
+    for (const o of ops) { if (o.op === 'del') await client.query('DELETE FROM docs WHERE path=$1', [o.path]); else await putDoc(client, o.path, o.data, req.user.u); }
+    await client.query('COMMIT'); res.json({ ok: true, n: ops.length });
+  } catch (e) { await client.query('ROLLBACK').catch(() => { }); console.error(e); res.status(500).json({ code: 'unavailable' }); }
+  finally { client.release(); }
+});
 app.get('/api/doc', async (req, res) => {
   const p = cleanPath(req.query.path); if (!p) return res.status(400).json({ code: 'invalid_argument' });
   const q = await pool.query('SELECT data FROM docs WHERE path=$1', [p]);
