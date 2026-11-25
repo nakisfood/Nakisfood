@@ -27,6 +27,8 @@
 #npPrint .h button{font:inherit;padding:6px 14px;border-radius:7px;border:1px solid #cbd3db;background:#fff;cursor:pointer}
 #npPrint .h button.p{background:#c4252d;border-color:#c4252d;color:#fff;font-weight:600}
 #npPrint iframe{flex:1;border:0;width:100%}
+
+#sNav .sn-ic{display:inline-flex;width:16px;height:16px;margin-right:7px;vertical-align:-3px;flex:0 0 16px}#sNav .sn-ic svg{width:16px;height:16px;fill:currentColor}
 </style>
 <script id="npBoot">
 /* =====================================================================
@@ -6661,6 +6663,7 @@ function openCompare(){
       if(t.dataset.cmx){ CMP.x[t.dataset.cmx] = t.checked; cmpSaveCfg(); TOOL.render(); return; }
       if(t.dataset.cm==='base'){ CMP.base = t.value; cmpOrder(); if(CMP.cust.trim()) cmpCustLv(CMP.cust, CMP.base); cmpSaveCfg(); TOOL.render(); return; }
       if(t.dataset.cm==='only'){ CMP.onlySel = t.checked; TOOL.render(); return; }
+      if(t.dataset.cm==='fbl'){ CMP.fbl = t.value; TOOL.render(); return; }
       if(t.dataset.cm==='cl'){ CMP.cl = t.value; cmpSaveCfg(); cmpAnReset(); TOOL.render(); return; }
       if(t.dataset.ekm!=null && CMP.fat){ return; }
       if(t.dataset.cpx!=null && CMP.fat) return;   /* kontrol: kutudan çıkınca (cmpCpxCheck) */
@@ -6723,7 +6726,7 @@ function cmpFatApply(inv){ cmpFatClear(); let rows = []; try{ rows = invCalc(inv
     if(!seen.has(p.id)){ it.f = pr; it.u = puB(p); it.q = r.qty!=null ? String(Math.round(r.qty*1000)/1000).replace('.',',') : it.q; seen.add(p.id); n++; }
     else { it.q = String(Math.round(((num(it.q)||0) + (r.qty||0))*1000)/1000).replace('.',','); }
     CMP.sel.add(p.id); });
-  CMP.step = 1;
+  CMP.step = 1; CMP.fbl = '';
   CMP.fat = {no:inv.no||'', tarih:inv.tarih||'', musteri:inv.musteri||'', dosya:inv.dosya||'', n, miss, inv, ek, skipN};
   if(!CMP.lvs.includes('fat')) CMP.lvs = ['fat', ...CMP.lvs]; CMP.base = 'fat'; if(CMP.lvs.length<2) CMP.lvs.push('1');
   if(inv.musteri && !String(CMP.cust||'').trim()) CMP.cust = inv.musteri; CMP.onlySel = true; CMP.f = Object.assign({}, CMP.f, {akt:'hepsi', tpl:'', q:''}); cmpOrder(); TOOL.render(); }
@@ -6742,7 +6745,10 @@ function cmpFatBar(){ return `        <div class="tbar">${can('fatyukle') && !wi
 const cmpClDef = () => { for(let i=1;i<=6;i++) if(/market/i.test(lvName(i))) return String(i); return '1'; };
 const cmpCl = () => CMP.cl==null ? cmpClDef() : CMP.cl;
 const cmpClLab = l => l==='mof' ? tr('Müşteriye Özel Fiyat') : lvName(+l);
-const cmpFatLab = () => DL('Rechnung','fatura');
+const cmpFbl = () => (CMP.fat && CMP.fbl) ? cmpClLab(CMP.fbl) : '';   /* 25.11.: faturadaki fiyatın adı (Vakıf, Market …) */
+const cmpFatLab = () => cmpFbl() || DL('Rechnung','fatura');
+const cmpFatPH = () => cmpFbl() ? cmpFbl() + ' ' + tr('fiyatı') : tr('Alış fiyatı (fatura)');
+const cmpFatAH = () => cmpFbl() ? tr('Alış tutarı') + ' (' + cmpFbl() + ')' : tr('Alış tutarı (fatura)');
 /* seçilen fiyatta nakliye / leergut yok sayılır (0); kullanıcı elle girebilir */
 const cmpIsLeer = e => /leergut|pfand|leihgut|kiste|palette/i.test(e.ad||'');
 const cmpEkM = e => { if(cmpIsLeer(e)) return cmpEkAmt(e); const v = CMP.fatX && CMP.fatX.mt && CMP.fatX.mt[e.key]; return v!=null && String(v).trim()!=='' ? (num(v)||0) : 0; };
@@ -6772,11 +6778,11 @@ function cmpCustData(){ const F = CMP.fat; if(!F) return null; let rows = []; tr
 function cmpCustCols(D, st){ const L = D.L, ln = L ? cmpClLab(L) : '', fl = cmpFatLab();
   const c = [{k:'pos', h:tr('Pos'), v:x=>x.r.l.pos, n:1}, {k:'kod', h:tr('Artikel'), v:x=>x.r.l.kod||''}, {k:'ad', h:tr('Ürün'), v:x=>x.p.ad||x.r.l.ad, b:1},
     {k:'q', h:tr('Miktar'), v:x=>x.q, n:1, f:x=>fmtQ(x.q)+' '+esc(x.pe)}];
-  if(st===1){ c.push({k:'buy', h:tr('Alış fiyatı (fatura)'), v:x=>x.buy, e:1}); if(L) c.push({k:'cp', h:ln+' '+tr('fiyatı'), v:x=>x.cp, e:1, ed:1});
-    c.push({k:'aT', h:tr('Alış tutarı (fatura)'), v:x=>x.aT, e:1, b:1});
+  if(st===1){ c.push({k:'buy', h:cmpFatPH(), v:x=>x.buy, e:1}); if(L) c.push({k:'cp', h:ln+' '+tr('fiyatı'), v:x=>x.cp, e:1, ed:1});
+    c.push({k:'aT', h:cmpFatAH(), v:x=>x.aT, e:1, b:1});
     if(L) c.push({k:'caT', h:tr('Alış tutarı')+' ('+ln+')', v:x=>x.caT, e:1, b:1}, {k:'df', h:tr('Fark')+' ('+ln+' − '+fl+')', v:x=>x.caT!=null && x.aT!=null ? x.caT-x.aT : null, e:1, sg:1, b:1});
     return c; }
-  if(st===2){ c.push({k:'buy', h:tr('Alış fiyatı (fatura)'), v:x=>x.buy, e:1}, {k:'sb', h:tr('Son satış KDV dahil'), v:x=>x.sb, e:1, na:1}, {k:'sn', h:tr('Son satış KDV hariç'), v:x=>x.sn, e:1},
+  if(st===2){ c.push({k:'buy', h:cmpFatPH(), v:x=>x.buy, e:1}, {k:'sb', h:tr('Son satış KDV dahil'), v:x=>x.sb, e:1, na:1}, {k:'sn', h:tr('Son satış KDV hariç'), v:x=>x.sn, e:1},
     {k:'aT', h:tr('Alış tutarı'), v:x=>x.aT, e:1}, {k:'sT', h:tr('Satış tutarı (KDV hariç)'), v:x=>x.sT, e:1}, {k:'k', h:tr('Kâr €'), v:x=>x.k, e:1, sg:1, b:1}, {k:'m', h:tr('Kâr marjı'), v:x=>x.m, p:1}); return c; }
   if(st===3){ c.push({k:'cp', h:ln+' '+tr('fiyatı'), v:x=>x.cp, e:1}, {k:'sb', h:tr('Son satış KDV dahil'), v:x=>x.sb, e:1, na:1}, {k:'sn', h:tr('Son satış KDV hariç'), v:x=>x.sn, e:1},
     {k:'aT', h:tr('Alış tutarı')+' ('+ln+')', v:x=>x.caT, e:1}, {k:'sT', h:tr('Satış tutarı (KDV hariç)'), v:x=>x.sT, e:1}, {k:'k', h:tr('Kâr €'), v:x=>x.ck, e:1, sg:1, b:1}, {k:'m', h:tr('Kâr marjı'), v:x=>x.cm, p:1}); return c; }
@@ -6789,10 +6795,10 @@ const cmpPill = v => v==null ? '<span class="na">–</span>' : `<span class="cpi
 function cmpVerdict(D, st){ const ln = D.L ? cmpClLab(D.L) : '', E = v => fmtE(Math.abs(v)), box = (cls, ic, h, txt) => `<div class="cverd ${cls}"><div class="cvi">${ic}</div><div><b>${h}</b><div>${txt}</div></div></div>`;
   if(st===1){ if(!D.L) return '';
     const df = D.totM - D.totF, eq = Math.abs(df)<0.005;
-    const base = esc(tr('Faturadaki fiyatlarla ödediğiniz toplam (nakliye / leergut dahil)')) + `: <b>${fmtE(D.totF)}</b>. ` + esc(tr('Aynı ürünleri şu fiyattan alsaydınız')) + ` (${esc(ln)}): <b>${fmtE(D.totM)}</b>.`;
-    if(eq) return box('', '＝', esc(tr('Fatura ile seçilen fiyat aynı tutuyor.')), base);
-    return df>0 ? box('ok', '✔', `${esc(tr('Faturayla almanız daha kârlı'))}: ${E(df)} ${esc(tr('daha ucuz'))}`, base + ' ' + esc(tr('Yani fatura ile aldığınızda, seçilen fiyata göre bu kadar daha az ödediniz.')))
-      : box('bad', '!', `${esc(tr('Faturayla almanız daha pahalı'))}: ${E(df)} ${esc(tr('fazla ödendi'))}`, base + ' ' + esc(tr('Seçilen fiyattan alsaydınız bu kadar daha az öderdiniz.'))); }
+    const fb = cmpFbl(), base = esc(fb ? fb + ' ' + tr('fiyatlarıyla ödediğiniz toplam (nakliye / leergut dahil)') : tr('Faturadaki fiyatlarla ödediğiniz toplam (nakliye / leergut dahil)')) + `: <b>${fmtE(D.totF)}</b>. ` + esc(tr('Aynı ürünleri şu fiyattan alsaydınız')) + ` (${esc(ln)}): <b>${fmtE(D.totM)}</b>.`;
+    if(eq) return box('', '＝', esc(fb ? fb + ' ' + tr('ile seçilen fiyat aynı tutuyor.') : tr('Fatura ile seçilen fiyat aynı tutuyor.')), base);
+    return df>0 ? box('ok', '✔', `${esc(fb ? fb + ' ' + tr('ile almanız daha kârlı') : tr('Faturayla almanız daha kârlı'))}: ${E(df)} ${esc(tr('daha ucuz'))}`, base + ' ' + esc(fb ? fb + ' ' + tr('ile aldığınızda, seçilen fiyata göre bu kadar daha az ödediniz.') : tr('Yani fatura ile aldığınızda, seçilen fiyata göre bu kadar daha az ödediniz.')))
+      : box('bad', '!', `${esc(fb ? fb + ' ' + tr('ile almanız daha pahalı') : tr('Faturayla almanız daha pahalı'))}: ${E(df)} ${esc(tr('fazla ödendi'))}`, base + ' ' + esc(tr('Seçilen fiyattan alsaydınız bu kadar daha az öderdiniz.'))); }
   if(st===2){ const v = D.k; return box(v<0?'bad':'ok', v<0?'!':'€', `${esc(tr('Bu ürünleri son satış fiyatından satarsanız'))}: ${v<0?esc(tr('zarar')):esc(tr('kâr'))} ${E(v)} · ${esc(tr('marj'))} ${fmtP(D.m)}`,
       esc(tr('Hesap: satış tutarı (KDV hariç)')) + ` ${fmtE(D.sT)} − ` + esc(tr('faturadaki alış tutarı')) + ` ${fmtE(D.aOk)} − ` + esc(tr('nakliye / leergut')) + ` ${fmtE(D.ekT)}.`); }
   if(st===3){ const v = D.ck; if(v==null) return ''; return box(v<0?'bad':'ok', v<0?'!':'€', `${esc(ln)} ${esc(tr('fiyatından alıp son satış fiyatından satsaydınız'))}: ${v<0?esc(tr('zarar')):esc(tr('kâr'))} ${E(v)} · ${esc(tr('marj'))} ${fmtP(D.cm)}`,
@@ -6804,7 +6810,7 @@ function cmpVerdict(D, st){ const ln = D.L ? cmpClLab(D.L) : '', E = v => fmtE(M
 function cmpCustTiles(D, st){ const t = (v, l, cls) => `<div class="ctile ${cls||''}"><b>${v}</b><span>${esc(l)}</span></div>`, ln = D.L ? cmpClLab(D.L) : '', fl = cmpFatLab();
   const nx = st===1 ? D.miss : st===2 ? D.noSon+D.miss : D.noSon+D.miss+D.noCp, miss = t(String(nx), tr('Hesaba katılmayan satır'), nx?'warn':'ok');
   if(st===1){ const df = D.L ? D.totM - D.totF : null;
-    return `<div class="ctiles">${t(fmtE(D.totF), tr('Toplam ödenen (fatura)'))}${D.L?t(fmtE(D.totM), tr('Toplam')+' ('+ln+')')+t(cmpSg(df), df>0.004?tr('Fatura ile daha ucuz'):df<-0.004?tr('Fatura ile daha pahalı'):tr('Fark'), df>0.004?'ok':df<-0.004?'bad':''):''}${miss}</div>
+    return `<div class="ctiles">${t(fmtE(D.totF), cmpFbl() ? tr('Toplam ödenen')+' ('+cmpFbl()+')' : tr('Toplam ödenen (fatura)'))}${D.L?t(fmtE(D.totM), tr('Toplam')+' ('+ln+')')+t(cmpSg(df), df>0.004?(cmpFbl()?cmpFbl()+' '+tr('ile daha ucuz'):tr('Fatura ile daha ucuz')):df<-0.004?(cmpFbl()?cmpFbl()+' '+tr('ile daha pahalı'):tr('Fatura ile daha pahalı')):tr('Fark'), df>0.004?'ok':df<-0.004?'bad':''):''}${miss}</div>
       ${D.L && D.noCp ? `<div class="dnote">${D.noCp} ${esc(tr('üründe seçilen fiyat yok; karşılaştırmaya katılmadı.'))}</div>` : ''}`; }
   if(st===2) return `<div class="ctiles">${t(fmtE(D.aOk+D.ekT), tr('Alış (fatura) + nakliye / leergut'))}${t(fmtE(D.sT), tr('Satış değeri (son satış, KDV hariç)'))}${t(cmpSg(D.k), tr('Müşterinin kârı €'), D.k<0?'bad':'ok')}${t(fmtP(D.m), tr('Kâr marjı'))}${miss}</div>`;
   if(st===3) return `<div class="ctiles">${t(fmtE(D.caT+D.ekTM), tr('Alış')+' ('+ln+') + '+tr('nakliye / leergut'))}${t(fmtE(D.sT3), tr('Satış değeri (son satış, KDV hariç)'))}${t(cmpSg(D.ck), tr('Müşterinin kârı €')+' ('+ln+')', D.ck<0?'bad':'ok')}${t(fmtP(D.cm), tr('Kâr marjı'))}${miss}</div>`;
@@ -6846,7 +6852,8 @@ function cmpCustBody(custs){ const D = cmpCustData(), L = D.L, st = cmpStep(), A
   const canSave = !window.NP_RO;
   return `<style>${CMP_CSS}</style>
     <div class="tbar"><label>${esc(tr('Müşteri'))} <input data-cm="cust" list="cmpCL" value="${esc(CMP.cust)}" style="width:220px"></label><datalist id="cmpCL">${(custs||[]).map(s=>`<option value="${esc(s.c.ad)}"></option>`).join('')}</datalist>
-      ${st!==2?`<label><b>${esc(tr('Karşılaştırılacak fiyat'))}</b> <select data-cm="cl" style="border-color:#b5121b;font-weight:600">${st===1?`<option value="" ${!L?'selected':''}>${esc(tr('Karşılaştırma yok'))}</option>`:''}${[1,2,3,4,5,6].map(String).concat(['mof']).map(l=>`<option value="${l}" ${L===l?'selected':''}>${esc(cmpClLab(l))}</option>`).join('')}</select></label>`:''}</div>
+      ${CMP.fat?`<label><b>${esc(tr('Faturadaki fiyat'))}</b> <select data-cm="fbl" style="font-weight:600"><option value="" ${!CMP.fbl?'selected':''}>${esc(tr('Fatura'))}</option>${[1,2,3,4,5,6].map(String).concat(['mof']).map(l=>`<option value="${l}" ${CMP.fbl===l?'selected':''}>${esc(cmpClLab(l))}</option>`).join('')}</select></label>`:''}
+       ${st!==2?`<label><b>${esc(tr('Karşılaştırılacak fiyat'))}</b> <select data-cm="cl" style="border-color:#b5121b;font-weight:600">${st===1?`<option value="" ${!L?'selected':''}>${esc(tr('Karşılaştırma yok'))}</option>`:''}${[1,2,3,4,5,6].map(String).concat(['mof']).map(l=>`<option value="${l}" ${L===l?'selected':''}>${esc(cmpClLab(l))}</option>`).join('')}</select></label>`:''}</div>
     ${cmpFatBar()}
     <div class="tbar" style="gap:8px">${tab(1, tr('Alış karşılaştırması'))}<span class="na">→</span>${tab(2, tr('Satış kârı'))}<span class="na">→</span>${tab(4, tr('Yan yana'))}</div>
     ${cmpCustTiles(D, st)}
@@ -9710,6 +9717,9 @@ i18nAdd({
   const nav = document.createElement('aside'); nav.id = 'sNav';
   document.body.insertBefore(nav, document.querySelector('header').nextSibling);
   function secList(){ return safe(()=>homeSections(), []).map(([id,title,col,tiles,draft])=>({id, title, draft, tiles: tiles.filter(dlOk)})).filter(s=>s.tiles.length); }
+  /* 25.11.: Müşteriler bölümünde menü ikonları */
+  const SN_IC_SECS = ['mus'];
+  function snIc(sid, ic){ try{ if(!SN_IC_SECS.includes(sid) || !ic || typeof IC==='undefined' || !IC[ic]) return ''; return `<span class="sn-ic">${IC[ic]}</span>`; }catch(e){ return ''; } }
   function renderSide(){
     if(!me){ nav.innerHTML = ''; return; }
     snActs = [];
@@ -9723,7 +9733,7 @@ i18nAdd({
       const items = s.tiles.map(([ic,lab,,fn,bd])=>{ const n = bd && SN_WARN.includes(lab) ? safe(bd, 0) : 0; sum += n||0; snActs.push(fn); const k = s.id+'|'+lab;
         return `<button class="sn-i${snActive===k?' on':''}" style="--c:${SEC_C[s.id]||'#c4252d'}" data-sa="${snActs.length-1}" data-k="${esc(k)}" data-sid="${esc(lab)}" draggable="true" title="${esc(T('Sürükleyerek sıralayın'))}">${esc(T(lab))}${n?`<span class="sn-n r">${n}</span>`:''}</button>`; }).join('');
       const op = snOpen.has(s.id);
-      CH[s.id] = `<div class="sn-g${op?' open':''}" data-g="${s.id}" data-sid="${s.id}" draggable="true" data-grip-only="1"><button class="sn-h" style="--c:${SEC_C[s.id]||'#888'}" data-sg="${s.id}" data-grip="1"><span class="dot"></span>${esc(T(s.title))}${s.draft?`<span class="sn-draft">${esc(T('TASLAK'))}</span>`:''}${sum && !op?`<span class="sn-n">${sum}</span>`:''}<span class="chev">▶</span></button><div class="sn-b" data-sort="sec_${s.id}" data-sgrp="sec_${s.id}">${items}</div></div>`;
+      CH[s.id] = `<div class="sn-g${op?' open':''}" data-g="${s.id}" data-sid="${s.id}" draggable="true" data-grip-only="1"><button class="sn-h" style="--c:${SEC_C[s.id]||'#888'}" data-sg="${s.id}" data-grip="1"><span class="dot"></span>${snIc(s.id, s.id==='mus' ? 'users' : '')}${esc(T(s.title))}${s.draft?`<span class="sn-draft">${esc(T('TASLAK'))}</span>`:''}${sum && !op?`<span class="sn-n">${sum}</span>`:''}<span class="chev">▶</span></button><div class="sn-b" data-sort="sec_${s.id}" data-sgrp="sec_${s.id}">${items}</div></div>`;
     });
     { const all = ['home','dash', ...secs.map(s=>s.id)], sv = typeof dlGet==='function' ? dlGet('secs') : null; let ord = Array.isArray(sv) ? sv.filter(x=>all.includes(x)) : [];
       ['dash','home'].forEach(x=>{ if(!ord.includes(x)) ord.unshift(x); }); all.forEach(x=>{ if(!ord.includes(x)) ord.push(x); });
@@ -10531,7 +10541,7 @@ i18nAdd({"Başlığı siz yazın (boş bırakılırsa başlık olmaz)": "Titel s
 i18nAdd({"Başlık ve sıralama": "Titel und Sortierung"});
 i18nAdd({"Katalog sırası": "Katalogreihenfolge", "Fiyata göre sıralamada katalogdaki ilk fiyat kullanılır.": "Bei Preissortierung zählt der erste Katalogpreis.", "Devam": "Weiter"});
 i18nAdd({"Son Satış (KDV hariç)": "UVP (zzgl. MwSt.)"});
-i18nAdd({"Tam Yedek (Railway)": "Komplett-Sicherung (Railway)"}); i18nAdd({"Veri Aktarımı (Import)": "Datenübernahme (Import)"}); i18nAdd({"Afişte hangi fiyatlar görünsün?": "Welche Preise auf dem Plakat?", "Kampanya fiyatı her zaman büyük ve kırmızı yazılır.": "Der Aktionspreis wird immer groß und rot angezeigt.", "hangi fiyat?": "welcher Preis?", "İndirim rozeti (−%)": "Rabatt-Abzeichen (−%)", "Fiyatlar KDV dahil": "Preise inkl. MwSt.", "Eski fiyat için bir fiyat seçin.": "Für den alten Preis eine Preisstufe wählen.", "Eski fiyat (üstü çizili)": "Alter Preis (durchgestrichen)"});
+i18nAdd({"Tam Yedek (Railway)": "Komplett-Sicherung (Railway)"}); i18nAdd({"Faturadaki fiyat": "Preis auf der Rechnung", "Fatura": "Rechnung", "fiyatlarıyla ödediğiniz toplam (nakliye / leergut dahil)": "– so viel haben Sie insgesamt bezahlt (inkl. Fracht / Leergut)", "ile seçilen fiyat aynı tutuyor.": "und der gewählte Preis ergeben denselben Betrag.", "ile almanız daha kârlı": "– Einkauf günstiger", "ile almanız daha pahalı": "– Einkauf teurer", "ile aldığınızda, seçilen fiyata göre bu kadar daha az ödediniz.": "– so viel weniger haben Sie im Vergleich zum gewählten Preis bezahlt.", "Toplam ödenen": "Gesamt bezahlt", "ile daha ucuz": "günstiger", "ile daha pahalı": "teurer"}); i18nAdd({"Veri Aktarımı (Import)": "Datenübernahme (Import)"}); i18nAdd({"Afişte hangi fiyatlar görünsün?": "Welche Preise auf dem Plakat?", "Kampanya fiyatı her zaman büyük ve kırmızı yazılır.": "Der Aktionspreis wird immer groß und rot angezeigt.", "hangi fiyat?": "welcher Preis?", "İndirim rozeti (−%)": "Rabatt-Abzeichen (−%)", "Fiyatlar KDV dahil": "Preise inkl. MwSt.", "Eski fiyat için bir fiyat seçin.": "Für den alten Preis eine Preisstufe wählen.", "Eski fiyat (üstü çizili)": "Alter Preis (durchgestrichen)"});
 i18nAdd({"Afiş başlığı": "Plakattitel", "Afiş fiyatı (büyük, kırmızı)": "Plakatpreis (groß, rot)", "fiyat seçin": "Preis wählen", "Afiş fiyatı seçin.": "Plakatpreis wählen.", "Teklif fiyatı her zaman büyük ve kırmızı yazılır.": "Der Angebotspreis wird immer groß und rot angezeigt.", "Afiş için ürün yok.": "Keine Artikel für das Plakat.", "Seçilen fiyatta hiçbir ürünün fiyatı yok.": "Für den gewählten Preis hat kein Artikel einen Preis.", "Listede görünen ürünlerden afiş": "Plakat aus den angezeigten Artikeln", "Bu katalogdan afiş": "Plakat aus diesem Katalog", "Otomatik afiş": "Automatisches Plakat", "Fiyat Listesi": "Preisliste"});
 i18nAdd({"Afiş": "Plakat", "Kampanya afişi (A4)": "Aktionsplakat (A4)", "Afiş indirildi ve Afişler’e kaydedildi": "Plakat heruntergeladen und unter Plakate gespeichert", "Afiş indirildi": "Plakat heruntergeladen", "Önce kampanyaya ürün seçin.": "Zuerst Artikel für die Aktion wählen.", "Kampanyadan otomatik": "Automatisch aus Aktion"});
 i18nAdd({"Alış (fatura) + nakliye / leergut": "Einkauf (Rechnung) + Fracht / Leergut", "Aynı ürünleri aynı son satış fiyatından satarsa: faturadaki fiyatla ve seçilen fiyatla alınca kâr. Nakliye / Leergut her iki tarafta kendi tutarıyla düşülür.": "Gleicher Verkauf zum VK: Gewinn mit Rechnungspreis und mit gewähltem Preis. Fracht / Leergut werden jeweils mit dem eigenen Betrag abgezogen.", "Aynı ürünleri şu fiyattan alsaydınız": "Dieselben Artikel zu diesem Preis gekauft", "Bu fiyatla alınca nakliye / leergut tutarını elle girin (yoksa boş bırakın)": "Fracht / Leergut bei diesem Preis manuell eingeben (sonst leer lassen)", "Bu ürünleri son satış fiyatından satarsanız": "Wenn Sie diese Artikel zum VK verkaufen", "Bunları satarsanız ne kadar kazanırsınız?": "Wie viel verdienen Sie beim Verkauf?", "Devam et": "Weiter", "Fatura ile daha pahalı": "Mit Rechnung teurer", "Fatura ile daha ucuz": "Mit Rechnung günstiger", "Fatura ile daha çok kazanıyorsunuz": "Mit der Rechnung verdienen Sie mehr", "Fatura ile kârınız": "Ihr Gewinn mit Rechnung", "Fatura ile seçilen fiyat aynı tutuyor.": "Rechnung und gewählter Preis ergeben denselben Betrag.", "Faturadaki fiyatlarla seçilen fiyatın alış karşılaştırması. Seçilen fiyatta nakliye / leergut yoksa boş bırakın, varsa elle girin. Faturadaki miktar ve fiyatlar değiştirilemez.": "Einkaufsvergleich Rechnung gegen gewählten Preis. Fracht / Leergut beim gewählten Preis leer lassen oder manuell eingeben. Mengen und Preise der Rechnung sind nicht änderbar.", "Faturadaki fiyatlarla ödediğiniz toplam (nakliye / leergut dahil)": "Gezahlter Gesamtbetrag laut Rechnung (inkl. Fracht / Leergut)", "Faturayla almanız daha kârlı": "Einkauf laut Rechnung ist günstiger", "Faturayla almanız daha pahalı": "Einkauf laut Rechnung ist teurer", "Hesap: satış tutarı (KDV hariç)": "Rechnung: VK-Betrag (netto)", "Kaydedildi": "Gespeichert", "Kaydet ve devam et": "Speichern und weiter", "Seçilen fiyattan alsaydınız bu kadar daha az öderdiniz.": "Zum gewählten Preis hätten Sie so viel weniger bezahlt.", "Seçilen fiyattan alıp son satış fiyatından (KDV hariç) satarsa kâr. Seçilen fiyatta nakliye / leergut, 1. adımda girdiğiniz tutardır.": "Gewinn bei Einkauf zum gewählten Preis und Verkauf zum VK (netto). Fracht / Leergut = Betrag aus Schritt 1.", "Toplam ödenen (fatura)": "Gesamt bezahlt (Rechnung)", "Yani fatura ile aldığınızda, seçilen fiyata göre bu kadar daha az ödediniz.": "Mit der Rechnung haben Sie also so viel weniger bezahlt als zum gewählten Preis.", "alış tutarı": "EK-Betrag", "daha fazla kâr": "mehr Gewinn", "daha ucuz": "günstiger", "faturadaki alış tutarı": "EK-Betrag laut Rechnung", "fazla ödendi": "zu viel bezahlt", "fiyatından alıp son satış fiyatından satsaydınız": "– bei Einkauf zu diesem Preis und Verkauf zum VK", "ile alsaydınız daha çok kazanırdınız": "– damit hätten Sie mehr verdient", "ile kârınız": "– Ihr Gewinn", "kâr": "Gewinn", "marj": "Marge", "nakliye / leergut": "Fracht / Leergut", "zarar": "Verlust", "Önce önceki adımı kaydedin": "Zuerst den vorherigen Schritt speichern", "İkisinde de kâr aynı.": "Gewinn ist bei beiden gleich.", "İkisini yan yana göster": "Beide nebeneinander zeigen"});
