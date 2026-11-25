@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-26 00:30",
+  "tr": "Özel kullanıcılara gönder: değişiklik yoksa tekrar gönderilmez, «zaten gönderildi» uyarısı çıkar. Gönderilenlerde «✔ Gönderildi» etiketi.",
+  "de": "An spezielle Benutzer senden: ohne Änderung kein erneutes Senden, Hinweis «bereits gesendet». Gesendete zeigen «✔ Gesendet»."
+ },
+ {
   "id": "2026-11-26 00:05",
   "tr": "«Özel kullanıcılara gönder» butonları sadece admin ve kullanıcı yönetimi yetkisi olanlarda görünür.",
   "de": "Knöpfe «An spezielle Benutzer senden» nur für Admin und Benutzerverwaltung sichtbar."
