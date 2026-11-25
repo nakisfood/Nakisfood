@@ -1,0 +1,7 @@
+node_modules/
+data/
+.env
+*.log
+GONDER.bat
+TOKEN_GIR.bat
+TOKEN.txt
