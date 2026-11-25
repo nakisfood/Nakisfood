@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
+const findFile = (sub, name) => { const a = path.join(__dirname, sub, name); return fs.existsSync(a) ? a : path.join(__dirname, name); };
 const PORT = process.env.PORT || 3000;
 const DATA_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH || process.env.DATA_DIR || path.join(__dirname, 'data');
 const IMG_DIR = path.join(DATA_DIR, 'img');
@@ -141,6 +142,10 @@ app.use((req, res, next) => {
 });
 const canWrite = (req, res) => { if (req.user.ro) { res.status(403).json({ code: 'permission_denied' }); return false; } return true; };
 
+// sürüm: index.html + shim.js içeriğinden; aynı kod yeniden başlarsa değişmez
+const APP_VER = (() => { try { const h = crypto.createHash('sha1'); ['index.html', 'shim.js'].forEach(f => h.update(fs.readFileSync(findFile('public', f)))); return h.digest('hex').slice(0, 12); } catch (e) { return String(Date.now()); } })();
+const APP_AT = new Date().toISOString();
+app.get('/api/version', (req, res) => { res.setHeader('Cache-Control', 'no-store'); res.json({ v: APP_VER, at: APP_AT }); });
 app.get('/api/me', (req, res) => res.json({ u: req.user.u, ro: req.user.ro }));
 
 app.get('/api/col', async (req, res) => {
@@ -252,7 +257,6 @@ app.post('/api/import', express.json({ limit: '300mb' }), async (req, res) => {
 
 /* program */
 // dosyalar alt klasörde (public/, views/) ya da hepsi ana klasörde olabilir
-const findFile = (sub, name) => { const a = path.join(__dirname, sub, name); return fs.existsSync(a) ? a : path.join(__dirname, name); };
 app.get(['/', '/index.html'], (req, res) => { res.setHeader('Cache-Control', 'no-cache'); res.sendFile(findFile('public', 'index.html')); });
 app.get('/shim.js', (req, res) => { res.setHeader('Cache-Control', 'no-cache'); res.type('application/javascript').sendFile(findFile('public', 'shim.js')); });
 

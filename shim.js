@@ -110,3 +110,35 @@
     } else if (++tries > 600) clearInterval(hook);
   }, 500);
 })();
+
+/* Sürüm: yeni sürüm yayına girince üstte uyarı + sağ altta sürüm saati */
+(function () {
+  'use strict';
+  const de = () => { try { return (window.LANG || localStorage.getItem('np_lang') || document.documentElement.lang) === 'de'; } catch (e) { return false; } };
+  let cur = null, shown = false;
+  const fmt = iso => { try { return new Date(iso).toLocaleString('de-DE', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } };
+  function badge(at) {
+    let b = document.getElementById('npVer');
+    if (!b) { b = document.createElement('div'); b.id = 'npVer'; b.style.cssText = 'position:fixed;right:8px;bottom:6px;z-index:30;font:11px system-ui,sans-serif;color:#8a94a3;background:rgba(255,255,255,.85);padding:2px 7px;border-radius:6px;pointer-events:none'; document.body.appendChild(b); }
+    b.textContent = (de() ? 'Version: ' : 'Sürüm: ') + fmt(at);
+  }
+  function banner() {
+    if (shown) return; shown = true;
+    const d = document.createElement('div'); d.id = 'npNewVer';
+    d.style.cssText = 'position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2147483001;background:#1f6feb;color:#fff;font:600 14px system-ui,sans-serif;padding:10px 14px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.25);display:flex;gap:12px;align-items:center';
+    d.innerHTML = '<span>🔄 ' + (de() ? 'Neue Version ist bereit' : 'Yeni sürüm hazır') + '</span><button style="background:#fff;color:#1f6feb;border:0;border-radius:7px;padding:6px 12px;font-weight:700;cursor:pointer">' + (de() ? 'Neu laden' : 'Yenile') + '</button><button title="x" style="background:transparent;color:#fff;border:0;font-size:16px;cursor:pointer">✕</button>';
+    const [ok, x] = d.querySelectorAll('button');
+    ok.onclick = async () => { try { if (window.npSyncState) { for (let i = 0; i < 40 && (window.npSyncState().dirty.length || window.npSyncState().pushing); i++) await new Promise(r => setTimeout(r, 250)); } } catch (e) { } location.reload(); };
+    x.onclick = () => d.remove();
+    document.body.appendChild(d);
+  }
+  async function check() {
+    try {
+      const r = await fetch('/api/version', { credentials: 'same-origin', cache: 'no-store' }); if (!r.ok) return;
+      const j = await r.json();
+      if (cur == null) { cur = j.v; badge(j.at); } else if (j.v !== cur) banner();
+    } catch (e) { }
+  }
+  const start = () => { check(); setInterval(() => { if (!document.hidden) check(); }, 30000); document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); }); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
