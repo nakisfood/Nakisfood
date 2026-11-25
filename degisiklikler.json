@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-26 05:05",
+  "tr": "Özel kullanıcı fiyat listeleri: kartta yan yana «👁 Önizle · 📄 PDF · 📊 Excel» butonları.",
+  "de": "Preislisten (spezielle Benutzer): Knöpfe «👁 Vorschau · 📄 PDF · 📊 Excel» nebeneinander."
+ },
+ {
   "id": "2026-11-26 04:50",
   "tr": "Özel kullanıcı fiyat listeleri: İndir → PDF veya Excel sorulur (Excel gönderim anındaki fiyatlarla). PDF’te «Toplam» satırı artık her sayfada tekrar etmez, sadece tablonun sonunda.",
   "de": "Preislisten (spezielle Benutzer): Herunterladen → PDF oder Excel (Excel mit Preisen beim Senden). Im PDF erscheint «Summe» nur noch am Tabellenende, nicht auf jeder Seite."
