@@ -9731,6 +9731,11 @@ i18nAdd({
   /* 25.11.: Müşteriler bölümünde menü ikonları */
   const SN_IC_SECS = ['mus'];
   function snIc(sid, ic){ try{ if(!SN_IC_SECS.includes(sid) || !ic || typeof IC==='undefined' || !IC[ic]) return ''; return `<span class="sn-ic">${IC[ic]}</span>`; }catch(e){ return ''; } }
+  /* 25.11.: her bölüm başlığında ikon */
+  const SN_GEAR = '<svg viewBox="0 0 24 24"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3.3h-4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg>';
+  const SN_HIC = {mus:'users', prd:'box', fiyr:'invoice', ana:'chart', veri:['archive','xls'], yon:'@gear', diger:'grid', arac:'tag', uan:'trendUp', urt:'layers', stk:'cubes'};
+  function snHic(sid){ try{ let k = SN_HIC[sid]; if(!k) return ''; if(k==='@gear') return `<span class="sn-ic">${SN_GEAR}</span>`;
+      const ks = Array.isArray(k) ? k : [k], f = ks.find(x=>typeof IC!=='undefined' && IC[x]); return f ? `<span class="sn-ic">${IC[f]}</span>` : ''; }catch(e){ return ''; } }
   function renderSide(){
     if(!me){ nav.innerHTML = ''; return; }
     snActs = [];
@@ -9744,7 +9749,7 @@ i18nAdd({
       const items = s.tiles.map(([ic,lab,,fn,bd])=>{ const n = bd && SN_WARN.includes(lab) ? safe(bd, 0) : 0; sum += n||0; snActs.push(fn); const k = s.id+'|'+lab;
         return `<button class="sn-i${snActive===k?' on':''}" style="--c:${SEC_C[s.id]||'#c4252d'}" data-sa="${snActs.length-1}" data-k="${esc(k)}" data-sid="${esc(lab)}" draggable="true" title="${esc(T('Sürükleyerek sıralayın'))}">${esc(T(lab))}${n?`<span class="sn-n r">${n}</span>`:''}</button>`; }).join('');
       const op = snOpen.has(s.id);
-      CH[s.id] = `<div class="sn-g${op?' open':''}" data-g="${s.id}" data-sid="${s.id}" draggable="true" data-grip-only="1"><button class="sn-h" style="--c:${SEC_C[s.id]||'#888'}" data-sg="${s.id}" data-grip="1"><span class="dot"></span>${snIc(s.id, s.id==='mus' ? 'users' : '')}${esc(T(s.title))}${s.draft?`<span class="sn-draft">${esc(T('TASLAK'))}</span>`:''}${sum && !op?`<span class="sn-n">${sum}</span>`:''}<span class="chev">▶</span></button><div class="sn-b" data-sort="sec_${s.id}" data-sgrp="sec_${s.id}">${items}</div></div>`;
+      CH[s.id] = `<div class="sn-g${op?' open':''}" data-g="${s.id}" data-sid="${s.id}" draggable="true" data-grip-only="1"><button class="sn-h" style="--c:${SEC_C[s.id]||'#888'}" data-sg="${s.id}" data-grip="1"><span class="dot"></span>${snHic(s.id)}${esc(T(s.title))}${s.draft?`<span class="sn-draft">${esc(T('TASLAK'))}</span>`:''}${sum && !op?`<span class="sn-n">${sum}</span>`:''}<span class="chev">▶</span></button><div class="sn-b" data-sort="sec_${s.id}" data-sgrp="sec_${s.id}">${items}</div></div>`;
     });
     { const all = ['home','dash', ...secs.map(s=>s.id)], sv = typeof dlGet==='function' ? dlGet('secs') : null; let ord = Array.isArray(sv) ? sv.filter(x=>all.includes(x)) : [];
       ['dash','home'].forEach(x=>{ if(!ord.includes(x)) ord.unshift(x); }); all.forEach(x=>{ if(!ord.includes(x)) ord.push(x); });
