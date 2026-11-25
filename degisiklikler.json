@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-25 22:35",
+  "tr": "Kâr özeti artık ayrıntılı: Ürünlerden kazancınız − Nakliye (gider) = Sonuç (net kâr); leergut hesaba katılmaz.",
+  "de": "Gewinnübersicht jetzt detailliert: Gewinn aus den Artikeln − Fracht (Kosten) = Ergebnis (Nettogewinn); Leergut nicht berücksichtigt."
+ },
+ {
+  "id": "2026-11-25 22:25",
+  "tr": "Şube: 2. adım artık «Satış kârı (Vakıf)» – Vakıf fiyatıyla alıp müşteriye satınca kâr ve marj; Market yok, Kâr € sütunu var. Eksik Almanca çeviriler tamamlandı.",
+  "de": "Filiale: 2. Schritt jetzt «Verkaufsgewinn (Vakıf)» – Gewinn und Marge bei Einkauf zum Vakıf-Preis; ohne Market, mit Spalte Gewinn €. Fehlende deutsche Übersetzungen ergänzt."
+ },
+ {
   "id": "2026-11-25 22:10",
   "tr": "Şube: 2 adım – 1. Alış karşılaştırması, 2. Kâr karşılaştırması (son satış fiyatı, Vakıf ile kâr, Market ile kâr). Leergut tablolarda «iade» olarak görünür, kârdan düşülmez.",
   "de": "Filiale: 2 Schritte – 1. Einkaufsvergleich, 2. Gewinnvergleich (Endpreis, Gewinn mit Vakıf, Gewinn mit Market). Leergut erscheint als «Rückgabe» und wird nicht vom Gewinn abgezogen."
