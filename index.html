@@ -166,7 +166,7 @@
   window.print = function(){};
 
   /* ---------------- 3) GEMEINSAME DATEN ---------------- */
-  const SH = /^nakis_(urun_kar_v1|urun_kar_fiyat_adlari_v1|urun_kar_gruplar_v1|urun_kar_indirim_baz_v1|faturalar_v1|fatura_eslesme_v1|fatura_yeniden_v2|teklifler_v1|teklif_ayar_v1|musteriler_v1|musteri_gruplari_v1|musteri_fiyat_v1|sablonlar_v1|receteler_v1|uretimler_v1|kullanicilar_v1|degisiklik_log_v1|hedef_marj_v1|alis_reset_1|gecmis_reset_3|hepsi_aktif_1|ornek_kolonya_1|vakif_market_kopya_v1|koli_birim_2026_11_11|afisler_v1|afis_klasor_v1|hazir_katalog_v1|katalog_pdf_v1|kampanyalar_v1|yukleme_[A-Za-z0-9_]+)$/;
+  const SH = /^nakis_(urun_kar_v1|urun_kar_fiyat_adlari_v1|urun_kar_gruplar_v1|urun_kar_indirim_baz_v1|faturalar_v1|fatura_eslesme_v1|fatura_yeniden_v2|teklifler_v1|teklif_ayar_v1|musteriler_v1|musteri_gruplari_v1|musteri_fiyat_v1|fatura_fiyat_v1|sablonlar_v1|receteler_v1|uretimler_v1|kullanicilar_v1|degisiklik_log_v1|hedef_marj_v1|alis_reset_1|gecmis_reset_3|hepsi_aktif_1|ornek_kolonya_1|vakif_market_kopya_v1|koli_birim_2026_11_11|afisler_v1|afis_klasor_v1|hazir_katalog_v1|katalog_pdf_v1|kampanyalar_v1|yukleme_[A-Za-z0-9_]+)$/;
   const isSh = k => SH.test(String(k)); window.npIsSh = isSh;
   const RAW_SET = Storage.prototype.setItem, RAW_REM = Storage.prototype.removeItem, RAW_GET = Storage.prototype.getItem;
   const LS = (()=>{ try{ const s = window.localStorage; RAW_SET.call(s,'np_t','1'); RAW_REM.call(s,'np_t'); return s; }catch(e){ return null; } })();
@@ -250,7 +250,7 @@
   const pendRemote = new Map();   // key -> {m, diff}
   const KEYLAB = {nakis_kampanyalar_v1:['Kampanyalar','Aktionen'], nakis_urun_kar_v1:['Ürünler','Artikel'], nakis_urun_kar_gruplar_v1:['Ürün grupları','Warengruppen'], nakis_urun_kar_fiyat_adlari_v1:['Fiyat adları','Preisnamen'], nakis_urun_kar_indirim_baz_v1:['İndirim baz fiyatı','Rabattbasis'],
     nakis_faturalar_v1:['Faturalar','Rechnungen'], nakis_fatura_eslesme_v1:['Fatura eşleştirme','Rechnungszuordnung'], nakis_teklifler_v1:['Teklifler','Angebote'], nakis_teklif_ayar_v1:['Teklif ayarları','Angebotseinstellungen'], nakis_musteriler_v1:['Müşteriler','Kunden'],
-    nakis_musteri_gruplari_v1:['Müşteri grupları','Kundengruppen'], nakis_musteri_fiyat_v1:['Müşteri fiyatları','Kundenpreise'], nakis_sablonlar_v1:['Ürün şablonları','Artikelvorlagen'], nakis_receteler_v1:['Reçeteler','Rezepturen'], nakis_uretimler_v1:['Üretimler','Produktionen'],
+    nakis_musteri_gruplari_v1:['Müşteri grupları','Kundengruppen'], nakis_musteri_fiyat_v1:['Müşteri fiyatları','Kundenpreise'], nakis_fatura_fiyat_v1:['Faturadaki fiyat (müşteri)','Rechnungspreis (Kunde)'], nakis_sablonlar_v1:['Ürün şablonları','Artikelvorlagen'], nakis_receteler_v1:['Reçeteler','Rezepturen'], nakis_uretimler_v1:['Üretimler','Produktionen'],
     nakis_kullanicilar_v1:['Kullanıcılar','Benutzer'], nakis_degisiklik_log_v1:['Değişiklik kaydı','Änderungsprotokoll'], nakis_hedef_marj_v1:['Hedef marjlar','Zielmargen'], nakis_afisler_v1:['Afişler','Plakate'], nakis_afis_klasor_v1:['Afiş klasörleri','Plakat-Ordner'], nakis_hazir_katalog_v1:['Hazır kataloglar','Fertige Kataloge'], nakis_katalog_pdf_v1:['Yüklenen PDF kataloglar','Hochgeladene PDF-Kataloge']};
   const keyLab = k => { const l = KEYLAB[k]; return l ? l[L()==='de'?1:0] : k.replace(/^nakis_/,''); };
   const PF = {ad:['Ürün adı','Name'], stok:['Stok kodu','Art.-Nr.'], barkod:['Barkod','EAN'], grup:['Grup','Gruppe'], koli:['Koli içi','VE'], birim:['Birim','Einheit'], kdv:['KDV','MwSt.'], alis:['Alış','EK'], maliyet:['Maliyetli alış','Einstand'], son:['Son satış','Endpreis'], mof:['Müşteriye özel','Sonderpreis'], pasif:['Pasif','Passiv'], ted:['Tedarikçi','Lieferant'], stokMik:['Stok','Bestand'], minStok:['Min. stok','Min.'], maxStok:['Max. stok','Max.'], hedef:['Hedef fiyat','Zielpreis']};
@@ -6663,7 +6663,7 @@ function openCompare(){
       if(t.dataset.cmx){ CMP.x[t.dataset.cmx] = t.checked; cmpSaveCfg(); TOOL.render(); return; }
       if(t.dataset.cm==='base'){ CMP.base = t.value; cmpOrder(); if(CMP.cust.trim()) cmpCustLv(CMP.cust, CMP.base); cmpSaveCfg(); TOOL.render(); return; }
       if(t.dataset.cm==='only'){ CMP.onlySel = t.checked; TOOL.render(); return; }
-      if(t.dataset.cm==='fbl'){ CMP.fbl = t.value; TOOL.render(); return; }
+      if(t.dataset.cm==='fbl'){ CMP.fbl = t.value; const cn = String(CMP.cust||'').trim() || (CMP.fat && CMP.fat.musteri) || ''; if(cn && !window.NP_RO) cmpFblMem(cn, CMP.fbl); TOOL.render(); return; }
       if(t.dataset.cm==='cl'){ CMP.cl = t.value; cmpSaveCfg(); cmpAnReset(); TOOL.render(); return; }
       if(t.dataset.ekm!=null && CMP.fat){ return; }
       if(t.dataset.cpx!=null && CMP.fat) return;   /* kontrol: kutudan çıkınca (cmpCpxCheck) */
@@ -6672,7 +6672,7 @@ function openCompare(){
       if(t.dataset.fmatch!=null && CMP.fat){ const m = CMP.fat.miss[+t.dataset.fmatch], v = t.value.trim(); const p = products.find(x=>((x.stok?x.stok+' · ':'')+x.ad)===v); if(!m || !p) return;
         if(window.NP_RO){ return; }
         fMap[m.key] = p.id; delete CMP.fatX.force[m.key]; persistFMap(); const inv = CMP.fat.inv; if(inv) cmpFatApply(inv); return; }
-      if(t.dataset.cm==='cust'){ CMP.cust = t.value; const lv = cmpCustLv(CMP.cust); if(lv){ CMP.base = lv; cmpOrder(); } TOOL.render(); return; }
+      if(t.dataset.cm==='cust'){ CMP.cust = t.value; const lv = cmpCustLv(CMP.cust); if(lv){ CMP.base = lv; cmpOrder(); } if(CMP.fat) CMP.fbl = String(CMP.cust||'').trim() ? cmpFblMem(CMP.cust) : cmpFblMem(CMP.fat.musteri); TOOL.render(); return; }
       if(t.dataset.cmo || t.dataset.cmq || t.dataset.cmm){ cmpRefresh(); return; }
       if(t.dataset.tf && t.dataset.tf!=='q'){ CMP.f[t.dataset.tf] = t.value; TOOL.render(); }
     },
@@ -6729,7 +6729,7 @@ function cmpFatApply(inv){ cmpFatClear(); let rows = []; try{ rows = invCalc(inv
   CMP.step = 1; CMP.fbl = '';
   CMP.fat = {no:inv.no||'', tarih:inv.tarih||'', musteri:inv.musteri||'', dosya:inv.dosya||'', n, miss, inv, ek, skipN};
   if(!CMP.lvs.includes('fat')) CMP.lvs = ['fat', ...CMP.lvs]; CMP.base = 'fat'; if(CMP.lvs.length<2) CMP.lvs.push('1');
-  if(inv.musteri && !String(CMP.cust||'').trim()) CMP.cust = inv.musteri; CMP.onlySel = true; CMP.f = Object.assign({}, CMP.f, {akt:'hepsi', tpl:'', q:''}); cmpOrder(); TOOL.render(); }
+  if(inv.musteri && !String(CMP.cust||'').trim()) CMP.cust = inv.musteri; CMP.fbl = String(CMP.cust||'').trim() ? cmpFblMem(CMP.cust) : cmpFblMem(inv.musteri); CMP.onlySel = true; CMP.f = Object.assign({}, CMP.f, {akt:'hepsi', tpl:'', q:''}); cmpOrder(); TOOL.render(); }
 /* faturadaki masraf satırları (nakliye, leergut…): her biri ayrı satır, tutar elle değiştirilebilir, tüm fiyatlara aynı eklenir */
 const cmpEkAmt = e => { const v = CMP.fatX && CMP.fatX.t[e.key]; return v!=null && String(v).trim()!=='' ? (num(v)||0) : e.t0; };
 const cmpEkOn = e => !(CMP.fatX && CMP.fatX.off[e.key]);
@@ -6747,6 +6747,11 @@ const cmpCl = () => CMP.cl==null ? cmpClDef() : CMP.cl;
 const cmpClLab = l => l==='mof' ? tr('Müşteriye Özel Fiyat') : lvName(+l);
 const cmpFbl = () => (CMP.fat && CMP.fbl) ? cmpClLab(CMP.fbl) : '';   /* 25.11.: faturadaki fiyatın adı (Vakıf, Market …) */
 const cmpFatLab = () => cmpFbl() || DL('Rechnung','fatura');
+/* müşteri başına «Faturadaki fiyat» hatırlanır (ortak veri) */
+const KEY_FATFBL = 'nakis_fatura_fiyat_v1';
+function cmpFblMem(name, set){ const k = norm(String(name||'').trim()); if(!k) return ''; let m = {}; try{ m = JSON.parse(localStorage.getItem(KEY_FATFBL)||'{}')||{}; }catch(e){}
+  if(set!==undefined){ if(set) m[k] = set; else delete m[k]; try{ localStorage.setItem(KEY_FATFBL, JSON.stringify(m)); }catch(e){} return set; }
+  const v = m[k]; return v && ['1','2','3','4','5','6','mof'].includes(v) ? v : ''; }
 const cmpFatPH = () => cmpFbl() ? cmpFbl() + ' ' + tr('fiyatı') : tr('Alış fiyatı (fatura)');
 const cmpFatAH = () => cmpFbl() ? tr('Alış tutarı') + ' (' + cmpFbl() + ')' : tr('Alış tutarı (fatura)');
 /* seçilen fiyatta nakliye / leergut yok sayılır (0); kullanıcı elle girebilir */
