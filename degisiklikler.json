@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 18:25",
+  "tr": "Yan menü: ana sayfada açık; başka bir ekran açılınca kendiliğinden gizlenir, solda ince ≡ şeridi kalır — fareyle üstüne gelince açılır. Ürün listesi ve araçlardaki kalan tedarikçi filtreleri kaldırıldı.",
+  "de": "Seitenmenü: auf der Startseite offen; in anderen Ansichten automatisch ausgeblendet, links bleibt ein schmaler ≡-Streifen — mit der Maus darüber öffnet es sich. Verbliebene Lieferantenfilter entfernt."
+ },
+ {
   "id": "2026-11-27 18:13",
   "tr": "Düzeltme: admin başka bir bilgisayardan / tarayıcıdan girince bir geçiş işlemi tekrar çalışıp hazır kataloglara yazıyordu (değişiklik uyarısı buydu). Artık hiçbir bilgisayarda tekrar çalışmaz; etkilenen kataloglarda 3. fiyat seviyesi otomatik geri yazılır. Teklif sütun ayarları da yeni bilgisayarda ezilmez.",
   "de": "Fix: Wenn sich admin an einem anderen PC / Browser anmeldete, lief eine Umstellung erneut und schrieb in die fertigen Kataloge (daher der Änderungshinweis). Läuft jetzt auf keinem PC mehr erneut; in betroffenen Katalogen wird die 3. Preisstufe automatisch wiederhergestellt. Angebots-Spalteneinstellungen werden auf neuen PCs nicht mehr überschrieben."

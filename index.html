@@ -5541,7 +5541,6 @@ function filtProds(f){
 const filtBar = f => `<div class="tbar">
   <input data-tf="q" value="${esc(f.q||'')}" placeholder="${esc(tr('Ara: barkod, stok kodu, ürün adı…'))}" autocomplete="off" style="min-width:220px">
   <select data-tf="g">${grpOpts(f.g)}${msTail(f.g)}</select>
-  <select data-tf="t">${tedOpts(f.t)}${msTail(f.t)}</select>
   <select data-tf="akt"><option value="aktif" ${!f.akt||f.akt==='aktif'?'selected':''}>${esc(tr('Aktif ürünler'))}</option><option value="pasif" ${f.akt==='pasif'?'selected':''}>${esc(tr('Pasif ürünler'))}</option><option value="hepsi" ${f.akt==='hepsi'?'selected':''}>${esc(tr('Tüm ürünler (aktif + pasif)'))}</option></select>${tplSel(f)}</div>`;
 // fiyat / değer alanları (okuma, yazma, yetki)
 const VF = () => NPLV().map(i=>['f'+i, lvName(i)+' (KDV hariç)', 'f'+i]).concat([
@@ -10167,7 +10166,7 @@ i18nAdd({
       <div class="pkr pkg"><b>${esc(tr('Gruplar'))}</b><div><div class="pkbtn"><button type="button" data-pkg="__all">${esc(tr('Tümü'))}</button><button type="button" data-pkg="__clr">${esc(tr('Temizle'))}</button><span class="na">${esc(tr('Hiç grup seçmezseniz tüm gruplar gösterilir.'))}</span></div>
         <div class="pkchips">${grps.map(g=>`<label class="${PK.g.has(g)?'on':''}${cnt[g]?'':' z'}"><input type="checkbox" data-pkgc="${esc(g)}" ${PK.g.has(g)?'checked':''}> ${esc(g)} <small>${cnt[g]||0}</small></label>`).join('')}</div></div></div>
       <div class="pkr"><b>${esc(tr('Katalog'))}</b><select data-pkt="tpl"><option value="">${esc(tr('Tüm şablonlar'))}</option>${safe(()=>tplAll(), []).map(t=>`<option value="${esc(t.id)}" ${PK.tpl===t.id?'selected':''}>${esc(t.ad)}</option>`).join('')}</select>
-        <b style="margin-left:18px">${esc(tr('Tedarikçi'))}</b><select data-pkt="ted"><option value="">${esc(tr('Tüm tedarikçiler'))}</option>${tedO.map(o=>`<option value="${esc(o.value)}" ${PK.ted===o.value?'selected':''}>${esc(o.textContent)}</option>`).join('')}</select></div>
+        </div>
       <div class="pkr"><b>${esc(tr('Ara'))}</b><input data-pkt="q" value="${esc(PK.q)}" placeholder="${esc(tr('Barkod, stok kodu veya ürün adı'))}" style="flex:1;max-width:520px"></div>
       <div class="pkf"><span><b>${n}</b> ${esc(tr('ürün'))}</span><button type="button" class="primary" data-pkgo ${n?'':'disabled'}>${esc(tr(PK.g.size || PK.tpl || PK.ted || PK.q.trim() ? 'Listeyi göster' : 'Tüm ürünleri göster'))} →</button></div></div>`;
     if(focusQ){ const i = w.querySelector('[data-pkt="q"]'); if(i){ i.focus(); const L = i.value.length; i.setSelectionRange(L, L); } } }
@@ -12468,6 +12467,34 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     #npBasBox label{display:flex!important;flex-direction:column;gap:4px;font-weight:800;color:#0C447C;font-size:12px}#overlay label[hidden]{display:none!important}#npBasBox input{border:2px solid #185FA5!important;font-size:15px!important;font-weight:800;padding:5px 9px!important;background:#fff}
     @media (max-width:700px){#npBasBox{width:100%;min-width:0}}`; document.head.appendChild(st);
   setInterval(()=>{ const t = document.querySelector('#npBasBox [data-i18n-np]'); if(t){ const v = tr('Başlangıç değerleri'); if(t.textContent!==v) t.textContent = v; } }, 1000);
+})();
+</script>
+<script type="text/x-np">
+/* 27.11.: yan menü — ana sayfada açık; başka ekranda kendiliğinden gizlenir, soldaki ≡ şeridine gelince açılır */
+(function(){
+  const strip = document.createElement('div'); strip.id = 'snStrip'; strip.innerHTML = '<span>≡</span>'; document.body.appendChild(strip);
+  const st = document.createElement('style'); st.textContent = `
+  #snStrip{display:none;position:fixed;left:0;top:var(--hh,62px);bottom:0;width:16px;background:#1b2230;color:#c9d0dc;z-index:13;cursor:pointer;align-items:flex-start;justify-content:center;padding-top:14px;font-size:15px;border-right:1px solid #2c3548}
+  #snStrip:hover{background:#26304a;color:#fff}
+  @media (min-width:901px){
+    body.v49.sbauto:not(.locked):not(.subeonly) #snStrip{display:flex}
+    body.v49.sbauto{--sbw:16px}
+    body.v49.sbauto #sNav{transform:translateX(-100%);box-shadow:none}
+    body.v49.sbauto.snpeek #sNav{transform:none;box-shadow:8px 0 24px rgba(0,0,0,.25);z-index:2147482000}
+  }`;
+  document.head.appendChild(st);
+  const isWork = () => { const b = document.body; if(b.classList.contains('locked')) return false; return !b.classList.contains('home') || !!document.querySelector('.overlay.open'); };
+  let tm = null;
+  const upd = () => { const w = isWork(); document.body.classList.toggle('sbauto', w); if(!w) document.body.classList.remove('snpeek'); };
+  new MutationObserver(()=>{ if(tm) return; tm = setTimeout(()=>{ tm = null; upd(); }, 60); }).observe(document.body, {attributes:true, attributeFilter:['class'], subtree:true});
+  upd();
+  let hide = null;
+  const peek = on => { clearTimeout(hide); if(on){ document.body.classList.add('snpeek'); } else hide = setTimeout(()=>document.body.classList.remove('snpeek'), 250); };
+  strip.addEventListener('mouseenter', ()=>peek(true)); strip.addEventListener('click', ()=>peek(true));
+  const nav = document.getElementById('sNav');
+  if(nav){ nav.addEventListener('mouseenter', ()=>{ if(document.body.classList.contains('snpeek')) peek(true); }); nav.addEventListener('mouseleave', ()=>peek(false));
+    nav.addEventListener('click', e=>{ if(e.target.closest('a,button,[data-sa],[data-sid]') && !e.target.closest('[data-sg]')) setTimeout(()=>document.body.classList.remove('snpeek'), 50); }); }
+  strip.addEventListener('mouseleave', e=>{ if(!nav || !nav.contains(e.relatedTarget)) peek(false); });
 })();
 </script>
 </body>
