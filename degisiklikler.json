@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 16:44",
+  "tr": "Hedef marj kaldırıldı (ileride belirlenecek): Kâr hedefi takibi raporu ve hedef karşılaştırmaları çıkarıldı. Rapor panelinde gruplara göre sadece marj gösteriliyor.",
+  "de": "Zielmarge entfernt (wird später festgelegt): Gewinnziel-Verfolgung und Zielvergleiche entfernt. Die Berichts-Übersicht zeigt je Gruppe nur die Marge."
+ },
+ {
   "id": "2026-11-27 16:34",
   "tr": "Raporlardaki sol yan panel kaldırıldı; raporlar tam genişlikte, Geri ile rapor paneline dönülür. Aynı Fiyatlı Ürünler: A / B yerine fiyat adları (ör. Vakıf, Market) yazıyor.",
   "de": "Seitenleiste in den Berichten entfernt; Berichte in voller Breite, Zurück führt zur Berichts-Übersicht. Artikel mit gleichem Preis: statt A / B stehen die Preisnamen (z. B. Vakıf, Market)."
