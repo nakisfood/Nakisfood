@@ -1,5 +1,30 @@
 [
  {
+  "id": "2026-11-27 10:08",
+  "tr": "İade Formları (Adım 3–4): İade yapıldı + iade faturası (no, tutar, PDF), kullanıcıda fatura ve «güncelleme» uyarısı, form PDF/Excel, toplu Excel, iade sebepleri düzenleme.",
+  "de": "Retourenformulare (Schritt 3–4): Retoure erledigt + Retourenrechnung (Nr., Betrag, PDF), Rechnung und «Aktualisierung»-Hinweis beim Benutzer, PDF/Excel je Formular, Sammel-Excel, Retourengründe bearbeiten."
+ },
+ {
+  "id": "2026-11-27 10:05",
+  "tr": "İade Formları (Adım 2): admin listesi ve filtreler, İşleme al, Reddet, satır Kabul/Ret, düzeltme (kullanıcıya not olarak), form silme, menüde yeni form sayısı.",
+  "de": "Retourenformulare (Schritt 2): Admin-Liste mit Filtern, In Bearbeitung nehmen, Ablehnen, Zeilen annehmen/ablehnen, Korrekturen (als Hinweis für den Benutzer), Löschen, Zähler im Menü."
+ },
+ {
+  "id": "2026-11-27 10:01",
+  "tr": "İade Formu (Adım 1): özel kullanıcı iade formu doldurup gönderir, işleme alınana kadar düzeltebilir/silebilir; fotoğraf eklenebilir.",
+  "de": "Retourenformular (Schritt 1): Spezielle Benutzer füllen Formulare aus und senden sie; bis zur Bearbeitung änderbar/löschbar; Fotos möglich."
+ },
+ {
+  "id": "2026-11-27 09:52",
+  "tr": "Yönetim menüsüne «İade Formları» eklendi (hazırlanıyor).",
+  "de": "Menü Verwaltung: «Retourenformulare» hinzugefügt (in Vorbereitung)."
+ },
+ {
+  "id": "2026-11-27 09:49",
+  "tr": "Özel kullanıcı ana sayfası: yeni «↩️ İade Formu» kutusu (form hazırlanıyor).",
+  "de": "Startseite spezieller Benutzer: neue Kachel «↩️ Retourenformular» (in Vorbereitung)."
+ },
+ {
   "id": "2026-11-26 05:20",
   "tr": "Özel kullanıcı: fiyat listelerinde Excel butonu her zaman (eski listelerin Excel’i otomatik hazırlanır); afişlerde resim (JPG/PNG) ve PDF butonları.",
   "de": "Spezielle Benutzer: Excel-Knopf bei allen Preislisten (für ältere automatisch erstellt); Plakate als Bild (JPG/PNG) und PDF."
