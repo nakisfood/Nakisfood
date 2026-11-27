@@ -1,5 +1,20 @@
 [
  {
+  "id": "2026-11-27 13:13",
+  "tr": "«Veri Aktarımı (Import)» menüden kaldırıldı, import sayfası kapatıldı (taşıma tamamlandı).",
+  "de": "«Datenübernahme (Import)» aus dem Menü entfernt, Import-Seite deaktiviert (Umzug abgeschlossen)."
+ },
+ {
+  "id": "2026-11-27 13:11",
+  "tr": "Menü: Afişler «Ürünler» altına, Veri Aktarımı «Veri» altına taşındı; «Diğer» bölümü kaldırıldı.",
+  "de": "Menü: Plakate unter «Artikel», Datenübernahme unter «Daten»; Bereich «Sonstiges» entfernt."
+ },
+ {
+  "id": "2026-11-27 13:09",
+  "tr": "Alt çubukta Geri/Ana sayfa olan tüm pencerelerde gereksiz «Kapat» butonu kaldırıldı.",
+  "de": "Überflüssiger Knopf «Schließen» in allen Fenstern mit Zurück/Startseite entfernt."
+ },
+ {
   "id": "2026-11-27 11:47",
   "tr": "İade formu: her satırda belirgin «📷 Resim yükle» butonu geri geldi.",
   "de": "Retourenformular: deutlicher Knopf «📷 Bild hochladen» in jeder Zeile."

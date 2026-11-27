@@ -244,6 +244,8 @@ async function writeKey(client, key, raw, user) {
   for (let i = 0; i < parts.length; i++) await putDoc(client, `${base}/c/${i}`, { s: parts[i] }, user);
   await putDoc(client, base, { key, mode: 'blob', n: parts.length, nul: raw == null, v, by: 'import', u: user }, user);
 }
+/* 27.11.: tek seferlik veri aktarımı tamamlandı – import kapatıldı */
+app.all(['/import', '/api/import'], (req, res) => res.status(410).send('Veri aktarımı kapatıldı / Datenübernahme deaktiviert'));
 app.get('/import', (req, res) => { if (uKey(req.user.u) !== 'admin') return res.status(403).send('Sadece admin / Nur Admin'); res.type('html').send(IMPORT_HTML); });
 app.post('/api/import', express.json({ limit: '300mb' }), async (req, res) => {
   if (uKey(req.user.u) !== 'admin') return res.status(403).json({ code: 'permission_denied' });
