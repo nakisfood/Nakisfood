@@ -1,5 +1,20 @@
 [
  {
+  "id": "2026-11-27 21:53",
+  "tr": "serdar ve senol denetçi yapıldı (admin olarak ilk girişte bir kez, otomatik).",
+  "de": "serdar und senol als Prüfer festgelegt (einmalig automatisch bei der ersten Admin-Anmeldung)."
+ },
+ {
+  "id": "2026-11-27 21:51",
+  "tr": "Özel Kullanıcılar: yeni eklerken «👁 Denetçi olsun» seçeneği; Denetçi anahtarı satırda düzgün hizalandı. Özel kullanıcılar ana Kullanıcılar listesinde artık görünmüyor (sadece Özel Kullanıcılar'da yönetilir).",
+  "de": "Sonderbenutzer: beim Anlegen Option «👁 Als Prüfer»; Prüfer-Schalter korrekt in der Zeile. Sonderbenutzer erscheinen nicht mehr in der allgemeinen Benutzerliste (nur unter Sonderbenutzer verwaltet)."
+ },
+ {
+  "id": "2026-11-27 21:45",
+  "tr": "Program açılınca ana sayfa ve sol menü açık gelir; menü sadece ☰ ile kapanır / açılır.",
+  "de": "Beim Start erscheinen Startseite und offenes Seitenmenü; das Menü wird nur mit ☰ geschlossen / geöffnet."
+ },
+ {
   "id": "2026-11-27 21:41",
   "tr": "Yeni: Denetçi rolü (Özel Kullanıcılar → «👁 Denetçi» anahtarı). Denetçi bütün özel kullanıcıların iade formlarını ve şube karşılaştırmalarını sadece görür, değiştiremez, kendisi iade açamaz; her kayda «Yöneticiye not» yazabilir (sadece admin görür). Admin: Özel Kullanıcılar → «🔔 Bildirimler», kısa cevap, Formu aç, Okundu; notlar silinmez. Program açılınca yan menü kapalı gelir (☰ ile açılır).",
   "de": "Neu: Prüfer-Rolle (Sonderbenutzer → Schalter «👁 Prüfer»). Prüfer sehen alle Retourenformulare und Filialvergleiche nur an, können nichts ändern und keine Retoure anlegen; zu jedem Eintrag «Notiz an den Admin» (nur Admin sieht sie). Admin: Sonderbenutzer → «🔔 Meldungen», kurze Antwort, Formular öffnen, Gelesen; Notizen werden nicht gelöscht. Beim Start ist das Seitenmenü geschlossen (☰ öffnet)."
