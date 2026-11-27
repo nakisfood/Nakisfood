@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 19:17",
+  "tr": "Tur ve Sipariş Takibi: Dış piyasa önde, Dergah isteğe bağlı («Dergahları göster», açılışta kapalı) ve hiçbir sayım / rapora girmez. Her satır: aranmadıkça işlem yok → «Aranmadı»ya tıkla → durum + açıklama → 💾 Kaydet; kaydedilen satır ✎ Düzenle ile değişir, silinmez.",
+  "de": "Touren- und Bestellverfolgung: Externer Markt zuerst, Dergahs optional («Dergahs anzeigen», beim Öffnen aus) und ohne Zählung / Bericht. Jede Zeile: ohne Anruf keine Funktion → «Nicht angerufen» klicken → Status + Bemerkung → 💾 Speichern; gespeicherte Zeilen mit ✎ Bearbeiten ändern, kein Löschen."
+ },
+ {
   "id": "2026-11-27 19:06",
   "tr": "Tur ve Sipariş Takibi: Dergah ve Dış piyasa iki kategori, yan yana (her dergah yeri ayrı satır); sipariş durumu ancak «Arandı» sonrası seçilir; silme / taşıma / ekleme kaldırıldı, tur değişince «Tur planı yükle (Excel)» (işaretler korunur); hafta raporu — hafta bitince otomatik açılır, kaydedilir, düzeltilebilir, silinemez.",
   "de": "Touren- und Bestellverfolgung: Dergah und Externer Markt nebeneinander (jeder Dergah-Ort eine Zeile); Bestellstatus erst nach «Angerufen»; Löschen / Verschieben / Hinzufügen entfernt, Planänderung per «Tourenplan laden (Excel)» (Markierungen bleiben); Wochenbericht — öffnet sich bei Wochenabschluss, speicherbar, korrigierbar, nicht löschbar."
