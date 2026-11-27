@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 15:08",
+  "tr": "Hazır Kataloglar: fiyat seviyesi değişikliğinden sonra yanlış çıkan «fiyat değişti» uyarıları düzeltildi (eski karşılaştırma eski Toptan fiyatını kullanıyordu).",
+  "de": "Fertige Kataloge: falsche «Preis geändert»-Hinweise nach der Preisstufen-Umstellung behoben."
+ },
+ {
   "id": "2026-11-27 15:04",
   "tr": "Sadeleştirme: Excel’den İçe Aktar, Rapor (Excel/PDF) ve Excel’e Aktar menüden kalktı; Ürün Listesi’ne PDF/Excel (tüm alanlar dahil) ve kâr marjı aralığı filtresi eklendi; Ürün Listesi’nde altta Geri/Ana sayfa çubuğu; menüler sadece elle açılıp kapanır; sıralama sürükle-bırak; etiket ekranında teklif kısayolu kalktı.",
   "de": "Vereinfachung: Excel-Import, Bericht (Excel/PDF) und Excel-Export aus dem Menü entfernt; Artikelliste mit PDF/Excel (auch alle Felder) und Margen-Filter; Zurück/Startseite-Leiste in der Artikelliste; Menüs öffnen/schließen nur manuell; Sortieren per Drag & Drop; Angebots-Kurzlink im Etikettenfenster entfernt."
