@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 23:11",
+  "tr": "Şikayet, öneri ve notlarda Ş-0001 / Ö-0001 numaraları yerine yazan kişinin kullanıcı adı tam olarak gösteriliyor (her yerde).",
+  "de": "Bei Beschwerden, Vorschlägen und Notizen wird statt Ş-0001 / Ö-0001 überall der vollständige Benutzername des Verfassers angezeigt."
+ },
+ {
   "id": "2026-11-27 23:04",
   "tr": "Giriş sayfasında (portal.nakisfood.de/login) şifre kutusuna 👁 göster / gizle eklendi; giriş sayfası programdaki dil ayarını (TR/DE) kullanıyor.",
   "de": "Anmeldeseite (portal.nakisfood.de/login): 👁 Passwort anzeigen / verbergen; die Seite nutzt die Spracheinstellung des Programms (TR/DE)."
