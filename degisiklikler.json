@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-27 22:18",
+  "tr": "Yeni: Öneri Formu — şikayet formuyla aynı sistem (kategori hazır ya da elle, şube, ürün, açıklama, fotoğraf; denetçiler diğer kullanıcıların önerilerini görür). Admin: Bildirimler → 💡 Öneriler sekmesi; 🚨 lamba, İşleme al → Cevapla ve kapat.",
+  "de": "Neu: Vorschlagsformular — gleiches System wie Beschwerden (Kategorie vorgegeben oder frei, Filiale, Artikel, Beschreibung, Foto; Prüfer sehen Vorschläge der anderen). Admin: Meldungen → 💡 Vorschläge; 🚨-Licht, In Bearbeitung → Antworten und schließen."
+ },
+ {
+  "id": "2026-11-27 22:13",
+  "tr": "Yeni: Şikayet Formu — bütün özel kullanıcılar (b1–b7, denetçiler) ana sayfadan yöneticiye şikayet gönderir: kategori (hazır ya da elle), ilgili şube, ürün, açıklama, fotoğraf. Denetçiler diğer kullanıcıların şikayetlerini kendi alanında görür. Admin: Bildirimler → ⚠️ Şikayetler sekmesi, 🚨 lamba, İşleme al → Cevapla ve kapat; silinmez.",
+  "de": "Neu: Beschwerdeformular — alle Sonderbenutzer (b1–b7, Prüfer) senden Beschwerden an den Admin: Kategorie (vorgegeben oder frei), Filiale, Artikel, Beschreibung, Foto. Prüfer sehen die Beschwerden der anderen Benutzer. Admin: Meldungen → ⚠️ Beschwerden, 🚨-Licht, In Bearbeitung → Antworten und schließen; kein Löschen."
+ },
+ {
   "id": "2026-11-27 22:05",
   "tr": "Denetçi notları: üst çubukta yanıp sönen 🚨 lamba (yeni not varsa, tıklayınca Bildirimler açılır); notlar sayfa yenilemeden gelir; akış Yeni → 🛠 İşleme al → ↩ Cevapla ve kapat; denetçi notunu işleme alınana kadar düzenleyebilir. Denetçi listesinde «📝 Not yaz» ve formda not kutusuna götüren düğme. Özel kullanıcı ekranlarının hepsinde ← Geri ve ⌂ Ana sayfa.",
   "de": "Prüfer-Notizen: blinkendes 🚨-Licht oben bei neuen Notizen (Klick öffnet Meldungen); Notizen kommen ohne Neuladen; Ablauf Neu → 🛠 In Bearbeitung → ↩ Antworten und schließen; Prüfer kann die Notiz bis zur Übernahme bearbeiten. «📝 Notiz schreiben» in der Liste und Sprung-Button im Formular. Alle Sonderbenutzer-Ansichten mit ← Zurück und ⌂ Startseite."
