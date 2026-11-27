@@ -11229,8 +11229,8 @@ i18nAdd({
       /* 27.11.: Veri Aktarımı (Import) menüden kaldırıldı */
       return s; }; }
   /* 20.11.: program açılınca Ürün Listesi gelir */
-  { const _ss2 = startSession; startSession = function(){ const r = _ss2.apply(this, arguments); try{ if(window.npTplMig) window.npTplMig(); }catch(e){} try{ if(window.npTplOff) window.npTplOff(); }catch(e){} try{ if(window.npAddLokum) window.npAddLokum(); }catch(e){} setTimeout(()=>{ try{ if(window.npMarketCopy) window.npMarketCopy(); }catch(e){} }, 500); try{ if(window.npIqfImg) window.npIqfImg(); }catch(e){} try{ lossOnly = false; if($('fTed')) $('fTed').value = ''; showList(); if(window.npOpenPick) window.npOpenPick(); }catch(e){} return r; }; }
-  if(me && document.body.classList.contains('home')) safe(()=>{ lossOnly = false; showList(); if(window.npOpenPick) window.npOpenPick(); });
+  { const _ss2 = startSession; startSession = function(){ const r = _ss2.apply(this, arguments); try{ if(window.npTplMig) window.npTplMig(); }catch(e){} try{ if(window.npTplOff) window.npTplOff(); }catch(e){} try{ if(window.npAddLokum) window.npAddLokum(); }catch(e){} setTimeout(()=>{ try{ if(window.npMarketCopy) window.npMarketCopy(); }catch(e){} }, 500); try{ if(window.npIqfImg) window.npIqfImg(); }catch(e){} try{ lossOnly = false; if($('fTed')) $('fTed').value = ''; }catch(e){} /* 27.11.: açılışta ana sayfa kalır (Ürün Listesi'ne geçilmez) */ return r; }; }
+  /* 27.11.: açılışta ana sayfa kalır */
   /* 20.11.: eski şablonlar hazır kataloglara aktarılır (silinmez): kataloğu olmayan her şablon için "şablondan" bir katalog açılır */
   document.addEventListener('click', e=>{ const b = e.target.closest && e.target.closest('#toolBody [data-hktpl],#toolFoot [data-tohk]'); if(!b) return; e.preventDefault(); e.stopPropagation();
     if(b.dataset.hktpl!=null){ toolClose(true); setTimeout(()=>{ TE.id = null; TE.ask = null; openTpl(); }, 30); } else { toolClose(true); setTimeout(()=>openHK(), 30); } }, true);

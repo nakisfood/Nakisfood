@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 21:19",
+  "tr": "Program açılınca artık Ürün Listesi değil ana sayfa geliyor (sol menü açık; ☰ ile kapatılabilir, program hatırlar).",
+  "de": "Beim Öffnen erscheint jetzt die Startseite statt der Artikelliste (Seitenmenü offen; mit ☰ schließbar, wird gemerkt)."
+ },
+ {
   "id": "2026-11-27 20:28",
   "tr": "Tur takibi: müşteri adıyla arayınca bütün yılın turları (geçmiş ve gelecek) tarihleriyle listelenir; her tarihte arandı / sipariş durumu oradan girilebilir. Üstte özet: kaç tur, arandı, sipariş var / yok / bekliyor, son sipariş tarihi.",
   "de": "Tourenverfolgung: Suche nach Kundennamen listet alle Touren des Jahres (vergangen und künftig) mit Datum; Anruf / Bestellstatus direkt dort eingeben. Oben Zusammenfassung: Touren, angerufen, Bestellung ja / nein / offen, letzte Bestellung."
