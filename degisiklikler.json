@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-27 19:55",
+  "tr": "Tur takibi: durum filtresi düğmeler yerine açılır liste (programdaki diğer filtreler gibi).",
+  "de": "Tourenverfolgung: Statusfilter als Auswahlliste statt Schaltflächen (wie die übrigen Filter)."
+ },
+ {
+  "id": "2026-11-27 19:52",
+  "tr": "Tur takibi: sipariş durumu seçilmeden kaydedilmez; «Haber bekleniyor» satırında haber gelince → Var / → Yok ile devam; hafta raporu kaydedilince hafta kilitlenir, ✎ Düzenle ile açılır ve rapor tekrar kaydedilir; takvim 30.11.2026'dan geriye gitmez.",
+  "de": "Tourenverfolgung: ohne Bestellstatus kein Speichern; bei «Rückmeldung offen» → Ja / → Nein zum Fortsetzen; nach Speichern des Wochenberichts ist die Woche gesperrt, ✎ Bearbeiten öffnet sie, Bericht erneut speichern; Kalender geht nicht vor 30.11.2026 zurück."
+ },
+ {
   "id": "2026-11-27 19:17",
   "tr": "Tur ve Sipariş Takibi: Dış piyasa önde, Dergah isteğe bağlı («Dergahları göster», açılışta kapalı) ve hiçbir sayım / rapora girmez. Her satır: aranmadıkça işlem yok → «Aranmadı»ya tıkla → durum + açıklama → 💾 Kaydet; kaydedilen satır ✎ Düzenle ile değişir, silinmez.",
   "de": "Touren- und Bestellverfolgung: Externer Markt zuerst, Dergahs optional («Dergahs anzeigen», beim Öffnen aus) und ohne Zählung / Bericht. Jede Zeile: ohne Anruf keine Funktion → «Nicht angerufen» klicken → Status + Bemerkung → 💾 Speichern; gespeicherte Zeilen mit ✎ Bearbeiten ändern, kein Löschen."
