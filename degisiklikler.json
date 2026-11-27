@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-28 00:00",
+  "tr": "Özel Kullanıcılar: Afiş ve Fiyat Listeleri önce klasör kartları olarak gelir, tıklayınca klasörün dosyaları açılır (← Klasörler ile geri). Bildirim arşivi (Kapanan / Tümü) önce kullanıcı kartları olarak gelir, tıklayınca o kullanıcının kayıtları ayrı açılır.",
+  "de": "Spezialbenutzer: Plakate und Preislisten zeigen zuerst Ordnerkarten, ein Klick öffnet die Dateien (← Ordner zurück). Meldungsarchiv (Geschlossen / Alle) zeigt zuerst Benutzerkarten, ein Klick öffnet die Einträge dieses Benutzers."
+ },
+ {
   "id": "2026-11-27 23:24",
   "tr": "Özel Kullanıcılar: sekmeler tek satırda, tam genişlikte ve daha belirgin; Notlar/Şikayetler/Öneriler/Tüm bildirimler ana sekmelere taşındı; sekmeler fareyle sürüklenerek sıralanabilir (sıra hatırlanır).",
   "de": "Spezialbenutzer: Tabs in einer Zeile, volle Breite und deutlicher; Notizen/Beschwerden/Vorschläge/Alle Meldungen als Haupttabs; Reihenfolge per Maus ziehbar (wird gespeichert)."
