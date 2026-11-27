@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-27 23:24",
+  "tr": "Özel Kullanıcılar: sekmeler tek satırda, tam genişlikte ve daha belirgin; Notlar/Şikayetler/Öneriler/Tüm bildirimler ana sekmelere taşındı; sekmeler fareyle sürüklenerek sıralanabilir (sıra hatırlanır).",
+  "de": "Spezialbenutzer: Tabs in einer Zeile, volle Breite und deutlicher; Notizen/Beschwerden/Vorschläge/Alle Meldungen als Haupttabs; Reihenfolge per Maus ziehbar (wird gespeichert)."
+ },
+ {
+  "id": "2026-11-27 23:20",
+  "tr": "Bildirimler: sekmelerde açık ve toplam sayı birlikte (örn. «Şikayetler (0 açık · 5 toplam)»); yeni «📚 Hepsi» sekmesi notları, şikayetleri ve önerileri tek listede gösterir. Hiçbir kayıt silinmez.",
+  "de": "Meldungen: Reiter zeigen offen und gesamt (z. B. «Beschwerden (0 offen · 5 gesamt)»); neuer Reiter «📚 Alle» zeigt Notizen, Beschwerden und Vorschläge zusammen. Nichts wird gelöscht."
+ },
+ {
   "id": "2026-11-27 23:11",
   "tr": "Şikayet, öneri ve notlarda Ş-0001 / Ö-0001 numaraları yerine yazan kişinin kullanıcı adı tam olarak gösteriliyor (her yerde).",
   "de": "Bei Beschwerden, Vorschlägen und Notizen wird statt Ş-0001 / Ö-0001 überall der vollständige Benutzername des Verfassers angezeigt."
