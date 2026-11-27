@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-28 00:14",
+  "tr": "Özel Kullanıcılar → Afişler / Fiyat Listeleri: Afişler modülündeki gibi sarı klasör kartları (adet, yayında sayısı, klasörü tek tıkla yayınla, ✎ 🗑, sürükle). Klasörün içinde afişler resimli kartlar halinde (Yayınla, klasör, Önizle, Ad, Sil); ▦ Kart / ☰ Liste geçişi.",
+  "de": "Spezialbenutzer → Plakate / Preislisten: gelbe Ordnerkarten wie im Plakat-Modul (Anzahl, veröffentlicht, Ordner mit einem Klick veröffentlichen, ✎ 🗑, ziehen). Im Ordner Plakate als Bildkarten (Veröffentlichen, Ordner, Vorschau, Name, Löschen); Umschalter ▦ Karten / ☰ Liste."
+ },
+ {
   "id": "2026-11-28 00:00",
   "tr": "Özel Kullanıcılar: Afiş ve Fiyat Listeleri önce klasör kartları olarak gelir, tıklayınca klasörün dosyaları açılır (← Klasörler ile geri). Bildirim arşivi (Kapanan / Tümü) önce kullanıcı kartları olarak gelir, tıklayınca o kullanıcının kayıtları ayrı açılır.",
   "de": "Spezialbenutzer: Plakate und Preislisten zeigen zuerst Ordnerkarten, ein Klick öffnet die Dateien (← Ordner zurück). Meldungsarchiv (Geschlossen / Alle) zeigt zuerst Benutzerkarten, ein Klick öffnet die Einträge dieses Benutzers."
