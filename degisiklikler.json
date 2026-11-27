@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 22:23",
+  "tr": "Şikayet / Öneri formu: «İlgili şube / kullanıcı» alanı normal kullanıcılarda kaldırıldı (sadece denetçide var); zorunlu alan yıldızları düzeltildi.",
+  "de": "Beschwerde- / Vorschlagsformular: Feld «Betroffene Filiale / Benutzer» bei normalen Benutzern entfernt (nur Prüfer); Pflichtfeld-Sterne korrigiert."
+ },
+ {
   "id": "2026-11-27 22:18",
   "tr": "Yeni: Öneri Formu — şikayet formuyla aynı sistem (kategori hazır ya da elle, şube, ürün, açıklama, fotoğraf; denetçiler diğer kullanıcıların önerilerini görür). Admin: Bildirimler → 💡 Öneriler sekmesi; 🚨 lamba, İşleme al → Cevapla ve kapat.",
   "de": "Neu: Vorschlagsformular — gleiches System wie Beschwerden (Kategorie vorgegeben oder frei, Filiale, Artikel, Beschreibung, Foto; Prüfer sehen Vorschläge der anderen). Admin: Meldungen → 💡 Vorschläge; 🚨-Licht, In Bearbeitung → Antworten und schließen."
