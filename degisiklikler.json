@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 18:51",
+  "tr": "Yeni: Müşteriler → «Tur ve Sipariş Takibi» (sadece admin). Tur planı 30.11.2026'dan 2027 sonuna kadar yüklendi; haftalık (Pzt–Cmt) arandı / aranmadı, sipariş var / yok / haber bekleniyor, açıklama; filtre ve arama; hafta Önizle / PDF / Excel.",
+  "de": "Neu: Kunden → «Touren- und Bestellverfolgung» (nur admin). Tourenplan ab 30.11.2026 bis Ende 2027 geladen; wöchentlich (Mo–Sa) angerufen / nicht angerufen, Bestellung ja / nein / Rückmeldung offen, Bemerkung; Filter und Suche; Woche als Vorschau / PDF / Excel."
+ },
+ {
   "id": "2026-11-27 18:25",
   "tr": "Yan menü: ana sayfada açık; başka bir ekran açılınca kendiliğinden gizlenir, solda ince ≡ şeridi kalır — fareyle üstüne gelince açılır. Ürün listesi ve araçlardaki kalan tedarikçi filtreleri kaldırıldı.",
   "de": "Seitenmenü: auf der Startseite offen; in anderen Ansichten automatisch ausgeblendet, links bleibt ein schmaler ≡-Streifen — mit der Maus darüber öffnet es sich. Verbliebene Lieferantenfilter entfernt."
