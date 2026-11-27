@@ -10,21 +10,23 @@ input{width:100%;padding:10px 12px;border:1px solid #cfd6de;border-radius:8px;fo
 input:focus{outline:2px solid #2563eb;border-color:#2563eb}
 button{width:100%;margin-top:18px;padding:11px;border:0;border-radius:8px;background:#c4252d;color:#fff;font-weight:700;font-size:15px;cursor:pointer}
 button:disabled{opacity:.6}.err{color:#c4252d;font-size:13px;min-height:18px;margin-top:10px}
+.pw{position:relative}.pw input{padding-right:42px}#eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:auto;margin:0;padding:4px 8px;background:none;color:inherit;font-size:18px;border:0;cursor:pointer;opacity:.7}#eye:hover{opacity:1}
 .lang{text-align:right;font-size:12px}.lang a{color:#2563eb;cursor:pointer;margin-left:8px}
 </style></head><body>
 <form class="box" id="f">
   <div class="lang"><a data-l="tr">TR</a><a data-l="de">DE</a></div>
   <h1>NakisPanel</h1><p data-t="sub"></p>
   <label data-t="u"></label><input id="u" autocomplete="username" autofocus>
-  <label data-t="p"></label><input id="p" type="password" autocomplete="current-password">
+  <label data-t="p"></label><div class="pw"><input id="p" type="password" autocomplete="current-password"><button type="button" id="eye" tabindex="-1" title="Şifreyi göster / gizle">👁</button></div>
   <button id="b" data-t="go"></button><div class="err" id="e"></div>
 </form>
 <script>
 const T={tr:{sub:'Nakis Food yönetim paneli',u:'Kullanıcı adı',p:'Şifre',go:'Giriş',bad:'Kullanıcı adı veya şifre hatalı.',net:'Sunucuya ulaşılamadı.'},
  de:{sub:'Nakis Food Verwaltung',u:'Benutzername',p:'Passwort',go:'Anmelden',bad:'Benutzername oder Passwort falsch.',net:'Server nicht erreichbar.'}};
-let L=(localStorage.getItem('np_lang')||(navigator.language||'').slice(0,2))==='de'?'de':'tr';
+let L=(localStorage.getItem('nakis_dil_v1')||localStorage.getItem('np_lang')||(navigator.language||'').slice(0,2))==='de'?'de':'tr';
 function ap(){document.documentElement.lang=L;document.querySelectorAll('[data-t]').forEach(e=>e.textContent=T[L][e.dataset.t]);}
-document.querySelectorAll('[data-l]').forEach(a=>a.onclick=()=>{L=a.dataset.l;try{localStorage.setItem('np_lang',L)}catch(e){}ap();});ap();
+document.querySelectorAll('[data-l]').forEach(a=>a.onclick=()=>{L=a.dataset.l;try{localStorage.setItem('np_lang',L);localStorage.setItem('nakis_dil_v1',L)}catch(e){}ap();});ap();
+eye.onmousedown=ev=>ev.preventDefault();eye.onclick=()=>{const sh=p.type==='password';p.type=sh?'text':'password';eye.textContent=sh?'🙈':'👁';};
 f.onsubmit=async ev=>{ev.preventDefault();b.disabled=true;e.textContent='';
  try{const r=await fetch('/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({u:u.value,p:p.value})});
   const j=await r.json().catch(()=>({}));

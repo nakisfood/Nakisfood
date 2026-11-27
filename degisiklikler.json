@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 23:04",
+  "tr": "Giriş sayfasında (portal.nakisfood.de/login) şifre kutusuna 👁 göster / gizle eklendi; giriş sayfası programdaki dil ayarını (TR/DE) kullanıyor.",
+  "de": "Anmeldeseite (portal.nakisfood.de/login): 👁 Passwort anzeigen / verbergen; die Seite nutzt die Spracheinstellung des Programms (TR/DE)."
+ },
+ {
   "id": "2026-11-27 22:54",
   "tr": "Afiş klasörlerinde ✂ (kes) düğmesi artık yazının üstüne binmiyor; kartın sağında ayrı duruyor.",
   "de": "In Plakat-Ordnern überdeckt die ✂-Schaltfläche den Namen nicht mehr; sie steht rechts separat."
