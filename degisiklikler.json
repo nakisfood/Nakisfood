@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 21:32",
+  "tr": "Yan menü artık kendiliğinden gizlenmiyor; sadece üstteki ☰ düğmesiyle açılıp kapanıyor (ince şerit kaldırıldı).",
+  "de": "Seitenmenü blendet sich nicht mehr automatisch aus; nur noch über ☰ öffnen / schließen (schmaler Streifen entfernt)."
+ },
+ {
   "id": "2026-11-27 21:19",
   "tr": "Program açılınca artık Ürün Listesi değil ana sayfa geliyor (sol menü açık; ☰ ile kapatılabilir, program hatırlar).",
   "de": "Beim Öffnen erscheint jetzt die Startseite statt der Artikelliste (Seitenmenü offen; mit ☰ schließbar, wird gemerkt)."
