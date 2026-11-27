@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-27 16:34",
+  "tr": "Raporlardaki sol yan panel kaldırıldı; raporlar tam genişlikte, Geri ile rapor paneline dönülür. Aynı Fiyatlı Ürünler: A / B yerine fiyat adları (ör. Vakıf, Market) yazıyor.",
+  "de": "Seitenleiste in den Berichten entfernt; Berichte in voller Breite, Zurück führt zur Berichts-Übersicht. Artikel mit gleichem Preis: statt A / B stehen die Preisnamen (z. B. Vakıf, Market)."
+ },
+ {
+  "id": "2026-11-27 16:32",
+  "tr": "Programdaki tüm grafikler kaldırıldı; yerine sade tablolar ve sayılar (gruplara göre marj tablosu, aylık değerler yazıyla).",
+  "de": "Alle Grafiken im Programm entfernt; stattdessen einfache Tabellen und Zahlen (Marge nach Gruppen als Tabelle, Monatswerte als Text)."
+ },
+ {
   "id": "2026-11-27 16:00",
   "tr": "Raporlar ekranı yenilendi: açılışta kontrol paneli (kâr, marj, hedef, iade sayıları, bugün bakılacaklar, gruplara göre marj grafiği); rapor açılınca solda tüm raporların listesi, raporlar arası tek tıkla geçiş. Fiyat kontrolü: sıra (büyük/küçük/eşit) kontrolü kaldırıldı, «Boş fiyat seviyeleri» ve «Aynı fiyatlı ürünler» ayrı rapor.",
   "de": "Berichte neu: beim Öffnen eine Übersicht (Gewinn, Marge, Ziele, Retouren, heute zu prüfen, Margen nach Gruppen); im Bericht links die Liste aller Berichte, Wechsel mit einem Klick. Preiskontrolle: keine Prüfung der Reihenfolge (größer/kleiner/gleich) mehr; «Leere Preisstufen» und «Artikel mit gleichem Preis» als eigene Berichte."
