@@ -166,7 +166,7 @@
   window.print = function(){};
 
   /* ---------------- 3) GEMEINSAME DATEN ---------------- */
-  const SH = /^nakis_(urun_kar_v1|urun_kar_fiyat_adlari_v1|urun_kar_gruplar_v1|urun_kar_indirim_baz_v1|faturalar_v1|fatura_eslesme_v1|fatura_yeniden_v2|teklifler_v1|teklif_ayar_v1|musteriler_v1|musteri_gruplari_v1|musteri_fiyat_v1|fatura_fiyat_v1|ozel_dosya_v1|ozel_klasor_v1|iade_v1|iade_sebep_v1|kar_hedef_v1|mig_lv_v1|sablonlar_v1|receteler_v1|uretimler_v1|kullanicilar_v1|degisiklik_log_v1|hedef_marj_v1|alis_reset_1|gecmis_reset_3|hepsi_aktif_1|ornek_kolonya_1|vakif_market_kopya_v1|koli_birim_2026_11_11|afisler_v1|afis_klasor_v1|hazir_katalog_v1|katalog_pdf_v1|kampanyalar_v1|yukleme_[A-Za-z0-9_]+)$/;
+  const SH = /^nakis_(urun_kar_v1|urun_kar_fiyat_adlari_v1|urun_kar_gruplar_v1|urun_kar_indirim_baz_v1|faturalar_v1|fatura_eslesme_v1|fatura_yeniden_v2|teklifler_v1|teklif_ayar_v1|musteriler_v1|musteri_gruplari_v1|musteri_fiyat_v1|fatura_fiyat_v1|ozel_dosya_v1|ozel_klasor_v1|iade_v1|iade_sebep_v1|kar_hedef_v1|mig_ted_v1|mig_lv_v1|sablonlar_v1|receteler_v1|uretimler_v1|kullanicilar_v1|degisiklik_log_v1|hedef_marj_v1|alis_reset_1|gecmis_reset_3|hepsi_aktif_1|ornek_kolonya_1|vakif_market_kopya_v1|koli_birim_2026_11_11|afisler_v1|afis_klasor_v1|hazir_katalog_v1|katalog_pdf_v1|kampanyalar_v1|yukleme_[A-Za-z0-9_]+)$/;
   const isSh = k => SH.test(String(k)); window.npIsSh = isSh;
   const RAW_SET = Storage.prototype.setItem, RAW_REM = Storage.prototype.removeItem, RAW_GET = Storage.prototype.getItem;
   const LS = (()=>{ try{ const s = window.localStorage; RAW_SET.call(s,'np_t','1'); RAW_REM.call(s,'np_t'); return s; }catch(e){ return null; } })();
@@ -1287,7 +1287,7 @@ body.subeonly #toolOv{left:0!important}
   <button id="btnSettings" data-perm="gruplar" title="Önceden tanımlı listeler" style="display:none;border-color:var(--brand);color:var(--brand);font-weight:600">⚙ Ayarlar · Ürün Grupları</button>
   <button id="btnNames" style="display:none" data-perm="fadlari" title="Fiyat 1–6 seviyelerine isim verin">⚙ Fiyat Adları</button>
   <button id="btnReport" style="display:none" data-perm="rapor" class="primary" title="Seçili gruplar veya ürünler için Excel / PDF rapor">📊 Rapor (Excel / PDF)</button>
-  <button id="btnEtBas" data-perm="maliyet" style="display:none" title="Excel basic fiyat → Başlangıç Maliyetli Alış · Hedef (Basic) Fiyat = Fiyat 1">📥 Başlangıç Maliyet (Excel)</button>
+  <button id="btnEtBas" data-perm="maliyet" style="display:none" title="Excel basic fiyat → Başlangıç Nakış Maliyetli Alış · Başlangıç Vakıf Satış = Fiyat 1">📥 Başlangıç Maliyet (Excel)</button>
   <button id="btnBulk" data-perm="toplu" style="display:none" title="Seçili gruplarda alanları toplu boşalt">🧹 Toplu Sıfırla</button>
   <button id="btnCsv" style="display:none" data-perm="excel" title="Excel'de açılabilen CSV dosyası">Excel'e Aktar</button>
   <button id="btnExport" style="display:none" data-perm="yedekal" title="Tüm verilerin yedeği">Yedek Al</button>
@@ -1343,24 +1343,24 @@ body.subeonly #toolOv{left:0!important}
         <label>KDV
           <select id="f_kdv"><option value="7">%7</option><option value="19">%19</option></select>
         </label>
-        <label>Alış Fiyatı (€)<input id="f_alis" inputmode="decimal"></label>
+        <label>Fatura (Alış) Fiyatı (€)<input id="f_alis" inputmode="decimal"></label>
         <label>Maliyetli Alış (€)<input id="f_maliyet" inputmode="decimal"></label>
-        <label title="Hedef fiyat belirlenirken geçerli olan maliyetli alış. Boş bırakılırsa ürünün ilk kayıtlı maliyetli alışı kullanılır.">Başlangıç Maliyet (€)<input id="f_basMal" inputmode="decimal"></label>
-        <label>Hedef (Basic) Fiyat (€)<input id="f_hedef" inputmode="decimal" placeholder="boşsa = Fiyat 1 (KDV hariç)" title="İlk etapta Fiyat 1'den alınır; elle değiştirebilirsiniz."></label>
-        <label title="Hedef fiyat hangi satış fiyatı için? Analizde bu seviyedeki güncel fiyat hedefle karşılaştırılır.">Hedef Fiyat Seviyesi<select id="f_hedefL"></select></label>
-        <label title="(Hedef fiyat − güncel maliyetli alış) ÷ güncel maliyetli alış">Hedef Marj<input id="f_hedefM" disabled style="background:#f1f3f5;font-weight:600"></label>
+        <label title="Hedef fiyat belirlenirken geçerli olan maliyetli alış. Boş bırakılırsa ürünün ilk kayıtlı maliyetli alışı kullanılır.">Başlangıç Nakış Maliyetli Alış (€)<input id="f_basMal" inputmode="decimal"></label>
+        <label>Başlangıç Vakıf Satış (€)<input id="f_hedef" inputmode="decimal" placeholder="boşsa = ilk Vakıf fiyatı" title="Boşsa ürünün ilk kayıtlı Vakıf fiyatı yazılır; elle değiştirebilirsiniz."></label>
+        <label hidden title="Hedef fiyat hangi satış fiyatı için? Analizde bu seviyedeki güncel fiyat hedefle karşılaştırılır.">Hedef Fiyat Seviyesi<select id="f_hedefL"></select></label>
+        <label hidden title="(Hedef fiyat − güncel maliyetli alış) ÷ güncel maliyetli alış">Hedef Marj<input id="f_hedefM" disabled style="background:#f1f3f5;font-weight:600"></label>
         <label>Son Satış KDV dahil (€)<input id="f_son" inputmode="decimal"></label>
         <label>Son Satış KDV hariç<input id="f_sonNet" disabled style="background:#f1f3f5;font-weight:600"></label>
       </div>
       <datalist id="groupList"></datalist>
-      <div class="section">Birim, Tedarikçi & Stok</div>
+      <div class="section">Birim</div>
       <div class="grid g7">
-        <label class="span2">Tedarikçi<input id="f_ted" list="tedList" autocomplete="off" placeholder="örn. Lieferant GmbH"></label>
-        <label>Sipariş Kodu<input id="f_tedKod" title="Tedarikçideki ürün / sipariş numarası"></label>
-        <label>Teslim Süresi (gün)<input id="f_tedGun" inputmode="numeric"></label>
-        <label title="Mevcut stok (örn. koli)">Stok<input id="f_stokMik" inputmode="decimal"></label>
-        <label title="Stok bu değere veya altına düşerse kritik stok uyarısı verilir">Min. Stok<input id="f_minStok" inputmode="decimal"></label>
-        <label title="Sipariş önerisi bu değere tamamlar (boşsa min. stok × 2)">Hedef Stok<input id="f_maxStok" inputmode="decimal"></label>
+        <label hidden class="span2">Tedarikçi<input id="f_ted" list="tedList" autocomplete="off" placeholder="örn. Lieferant GmbH"></label>
+        <label hidden>Sipariş Kodu<input id="f_tedKod" title="Tedarikçideki ürün / sipariş numarası"></label>
+        <label hidden>Teslim Süresi (gün)<input id="f_tedGun" inputmode="numeric"></label>
+        <label hidden title="Mevcut stok (örn. koli)">Stok<input id="f_stokMik" inputmode="decimal"></label>
+        <label hidden title="Stok bu değere veya altına düşerse kritik stok uyarısı verilir">Min. Stok<input id="f_minStok" inputmode="decimal"></label>
+        <label hidden title="Sipariş önerisi bu değere tamamlar (boşsa min. stok × 2)">Hedef Stok<input id="f_maxStok" inputmode="decimal"></label>
         <label title="Fiyat neye göre veriliyor? (adet / kg / koli) · Koli içi = kolideki adet ya da kg. Üretim maliyeti kg ile hesaplanır." style="font-weight:700">Satış birimi *<select id="f_birim"><option value="">— seçin —</option><option value="adet">Adet</option><option value="kg">Kg</option><option value="koli">Koli</option></select></label>
         <label title="1 birim (adet / koli) kaç kg? Birim kg ise boş bırakın.">Birim ağırlığı (kg)<input id="f_pkKg" inputmode="decimal"></label>
       </div>
@@ -1493,11 +1493,11 @@ body.subeonly #toolOv{left:0!important}
   <div class="modal" style="width:min(980px,100%)">
     <div class="mhead"><h2>📥 Başlangıç Maliyet · Excel Listeleri (ET Listesi + Ürün Listesi)</h2><button class="icon" id="etClose" title="Kapat">✕</button></div>
     <div class="mbody">
-      <p class="hint" style="margin-top:0;color:var(--muted)">Excel'deki <b>basic fiyat</b> → <b>Başlangıç Maliyetli Alış</b>. <b>Hedef (Basic) Fiyat</b> ilk etapta ürün kartındaki <b>Fiyat 1</b>'den alınır (boş olanlar ve daha önce otomatik yazılanlar); <b>elle girilmiş hedefler korunur</b>, ürün kartında istediğiniz zaman değiştirebilirsiniz. Eşleştirme <b>Stok Kodu</b>, <b>Barkod</b> veya aynı <b>ürün adı</b> ile yapılır. Excel'de olmayan ürünlerin başlangıç maliyetine dokunulmaz.</p>
+      <p class="hint" style="margin-top:0;color:var(--muted)">Excel'deki <b>basic fiyat</b> → <b>Başlangıç Nakış Maliyetli Alış</b>. <b>Başlangıç Vakıf Satış</b> ilk etapta ürün kartındaki <b>Fiyat 1</b>'den alınır (boş olanlar ve daha önce otomatik yazılanlar); <b>elle girilmiş hedefler korunur</b>, ürün kartında istediğiniz zaman değiştirebilirsiniz. Eşleştirme <b>Stok Kodu</b>, <b>Barkod</b> veya aynı <b>ürün adı</b> ile yapılır. Excel'de olmayan ürünlerin başlangıç maliyetine dokunulmaz.</p>
       <div id="etSum" style="margin:8px 0;font-size:13px"></div>
       <div style="overflow:auto;max-height:55vh"><table class="ettab" style="width:100%;border-collapse:collapse;font-size:12.5px" id="etTab"></table></div>
       <div id="etNo" style="margin-top:10px"></div>
-      <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:13px"><input type="checkbox" id="etVk" checked> <span>Excel'de olmayan ürünlerde de <b>Hedef (Basic) Fiyat = Fiyat 1</b> yazılsın (<span id="etVkN">0</span> ürün)</span></label>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:13px"><input type="checkbox" id="etVk" checked> <span>Excel'de olmayan ürünlerde de <b>Başlangıç Vakıf Satış = Fiyat 1</b> yazılsın (<span id="etVkN">0</span> ürün)</span></label>
       <label style="display:flex;gap:8px;align-items:center;margin-top:6px;font-size:13px"><input type="checkbox" id="etBackup" checked> İşlemden önce yedek dosyası indir (önerilir)</label>
     </div>
     <div class="mfoot">
@@ -1846,7 +1846,7 @@ let sortK = '', sortD = 1, lossOnly = false, headSig = '';
 function matchF(val, f, isNum){
   f = String(f).trim(); if(!f) return true;
   if(isNum){
-    const m = f.replace(/\s/g,'').match(/^(>=|<=|>|<|=)?(-?[\d.,]+)(?:-(-?[\d.,]+))?$/);
+    const m = f.replace(/\s/g,'').match(/^(>=|<=|>|<|=)?(-?[\d.]+)(?:-(-?[\d.]+))?$/);
     if(m){
       if(val==null || !isFinite(val)) return false;
       const x = num(m[2]);
@@ -1862,9 +1862,9 @@ const KEY_LV = 'nakis_liste_gorunum_v1';
 const LV_MET = [['p','Fiyat (KDV hariç)'],['d','İndirim oranı (sadece Fiyat 1)'],['k','Nakset Kâr €'],['m','Nakset kar marjı'],['u','Müşteri Kâr € (son satışa göre)'],['c','Müşteri kar marjı (son satışa göre)']];
 const LV_BASE = [['akt','Aktif','Ürün bilgileri'],['img','Resim','Ürün bilgileri'],['barkod','Barkod','Ürün bilgileri'],['stok','Stok Kodu','Ürün bilgileri'],['grup','Grup','Ürün bilgileri'],['koli','Koli','Ürün bilgileri'],['kdv','KDV','Ürün bilgileri'],['birim','Satış birimi','Ürün bilgileri'],['pkKg','Birim ağırlığı (kg)','Ürün bilgileri'],
   ['alis','Alış','Alış & satış'],['maliyet','Maliyetli Alış','Alış & satış'],['son','Son Satış (KDV dahil)','Alış & satış'],['sonnet','Son Satış (KDV hariç)','Alış & satış'],
-  ['hedef','Hedef (Basic) Fiyat','Hedef fiyat'],['hedefm','Hedef Marj %','Hedef fiyat'],['basmal','Başlangıç Maliyetli Alış','Hedef fiyat'],['hedefl','Hedef Fiyat Seviyesi','Hedef fiyat'],['hpk','Planlanan Kâr €','Hedef fiyat'],['hpm','Planlanan Marj %','Hedef fiyat'],
+  ['hedef','Başlangıç Vakıf Satış','Hedef fiyat'],['hedefm','Hedef Marj %','Hedef fiyat'],['basmal','Başlangıç Nakış Maliyetli Alış','Hedef fiyat'],['hedefl','Hedef Fiyat Seviyesi','Hedef fiyat'],['hpk','Planlanan Kâr €','Hedef fiyat'],['hpm','Planlanan Marj %','Hedef fiyat'],
   ['hgk','Hedefte Güncel Kâr €','Hedef fiyat'],['hgm','Hedefte Güncel Marj %','Hedef fiyat'],['hdk','Hedeften Fark € (birim)','Hedef fiyat'],['hdm','Hedeften Fark (marj puanı)','Hedef fiyat'],['hneed','Planlanan Marj için Gereken Fiyat','Hedef fiyat'],
-  ['ted','Tedarikçi','Tedarikçi & stok'],['tedKod','Sipariş Kodu','Tedarikçi & stok'],['tedGun','Teslim Süresi (gün)','Tedarikçi & stok'],['stokMik','Stok','Tedarikçi & stok'],['minStok','Min. Stok','Tedarikçi & stok'],['maxStok','Hedef Stok','Tedarikçi & stok']];
+  ];
 const LV_BASE_DEF = ['akt','img','barkod','stok','grup','koli','birim','kdv','alis','maliyet','son'];
 // ek sütunlar: [anahtar, tür (e=€, p=%, n=sayı, t=metin), değer]
 const hAn = p => (typeof hedefAn==='function' ? hedefAn(p) : {});
@@ -1885,7 +1885,7 @@ function LVc(p, i){
 }
 const lvPick = () => LV.lv.length ? LV.lv.slice().sort((a,b)=>a-b) : [];
 function syncLvSelects(){ const l = lvPick().filter(i=>i<=6); if($('fLevel') && l.length){ $('fLevel').value = String(l[0]); $('fLevel2').value = String(l[1]||l[0]); } }
-const rngLab = k => /^m\d$/.test(k) ? lvName(+k[1]) + ' – ' + tr('Nakset kâr marjı') + ' (%)' : k==='sonnet' ? 'Son Satış (KDV hariç)' : k==='son' ? 'Son Satış (KDV dahil)' : k==='maliyet' ? 'Maliyetli Alış' : k==='alis' ? 'Alış Fiyatı' : lvName(+k);
+const rngLab = k => /^m\d$/.test(k) ? lvName(+k[1]) + ' – ' + tr('Nakset kâr marjı') + ' (%)' : k==='sonnet' ? 'Son Satış (KDV hariç)' : k==='son' ? 'Son Satış (KDV dahil)' : k==='maliyet' ? 'Maliyetli Alış' : k==='alis' ? 'Fatura (Alış) Fiyatı' : lvName(+k);
 const rngVal = (p, k) => /^m\d$/.test(k) ? (()=>{ const m = calc(p, +k[1]).myMargin; return m==null || !isFinite(m) ? null : m; })() : k==='sonnet' ? LVc(p,7).price : k==='son' ? num(p.son) : k==='maliyet' ? num(p.maliyet) : k==='alis' ? num(p.alis) : num(p.fiyat?.[+k-1]);
 function passRng(p){ const r = LV.rng; if(!r || !r.k) return true; const mn = num(r.min), mx = num(r.max); if(mn==null && mx==null) return true;
   const v = rngVal(p, r.k); if(v==null) return false; return (mn==null || v>=mn-1e-9) && (mx==null || v<=mx+1e-9); }
@@ -2027,7 +2027,7 @@ function render(){
 }
 
 /* ---------- modal ---------- */
-const FIELDS = ['barkod','stok','ad','grup','koli','kdv','alis','maliyet','basMal','hedef','hedefL','son','ted','tedKod','tedGun','stokMik','minStok','maxStok','birim','pkKg'];
+const FIELDS = ['barkod','stok','ad','grup','koli','kdv','alis','maliyet','basMal','hedef','hedefL','son','birim','pkKg'];
 function readForm(){
   const o = {};
   FIELDS.forEach(f=>{ o[f] = $('f_'+(f==='stok'?'stok':f)).value.trim(); });
@@ -2147,11 +2147,12 @@ function save(){
   }
   if(persist()){ refreshGroups(); render(); closeModal(true); }
 }
-// Hedef (Basic) Fiyat: ilk etapta Fiyat 1'den; elle değiştirilirse 'manuel' olarak işaretlenir ve otomatik aktarımlarda korunur
+// Başlangıç Vakıf Satış: ilk etapta Fiyat 1'den; elle değiştirilirse 'manuel' olarak işaretlenir ve otomatik aktarımlarda korunur
 function hedefFix(p, old){
   const h = num(p.hedef);
   if(old && !((h==null && num(old.hedef)==null) || (h!=null && num(old.hedef)!=null && Math.abs(h-num(old.hedef))<0.00001))){ if(h==null) delete p.hedefSrc; else p.hedefSrc = 'manuel'; }
-  if(h==null){ const f = lvl(p,1).price; if(f!=null){ p.hedef = f; p.hedefL = 1; p.hedefSrc = 'f1'; } }
+  if(h==null){ const V = vakifL(), f = lvl(p,V).price; if(f!=null){ p.hedef = f; p.hedefSrc = 'vakif'; } }
+  p.hedefL = vakifL();
 }
 function del(id){
   if(!can('sil')) return;
@@ -2190,7 +2191,7 @@ function download(name, content, type){
 const today = () => new Date().toISOString().slice(0,10);
 /* ---- Excel'e aktar: sütun / ürün seçimi ---- */
 const KEY_CSVSEL = 'nakis_excel_secim_v1';
-const CSV_BASE = [['img','Resim'],['durum','Durum'],['barkod','Barkod'],['stok','Stok Kodu'],['ad','Ürün Adı'],['grup','Ürün Grubu'],['koli','Koli İçi Adet'],['birim','Satış Birimi'],['kdv','KDV %'],['alis','Alış Fiyatı'],['maliyet','Alış Maliyetli Fiyat'],['son','Son Satış KDV dahil'],['sonnet','Son Satış KDV hariç'],['hedef','Hedef (Basic) Fiyat'],['hedefm','Hedef Marj %'],['basmal','Başlangıç Maliyetli Alış'],['hedefl','Hedef Fiyat Seviyesi'],['hpk','Planlanan Kâr €'],['hpm','Planlanan Marj %'],['hgk','Hedefte Güncel Kâr €'],['hgm','Hedefte Güncel Marj %'],['hdk','Hedeften Fark € (birim)'],['hdm','Hedeften Fark (marj puanı)'],['hneed','Planlanan Marj için Gereken Fiyat'],['ted','Tedarikçi'],['tedKod','Sipariş Kodu'],['tedGun','Teslim Süresi (gün)'],['stokMik','Stok'],['minStok','Min. Stok'],['maxStok','Hedef Stok']];
+const CSV_BASE = [['img','Resim'],['durum','Durum'],['barkod','Barkod'],['stok','Stok Kodu'],['ad','Ürün Adı'],['grup','Ürün Grubu'],['koli','Koli İçi Adet'],['birim','Satış Birimi'],['kdv','KDV %'],['alis','Fatura (Alış) Fiyatı'],['maliyet','Alış Maliyetli Fiyat'],['son','Son Satış KDV dahil'],['sonnet','Son Satış KDV hariç'],['hedef','Başlangıç Vakıf Satış'],['hedefm','Hedef Marj %'],['basmal','Başlangıç Nakış Maliyetli Alış'],['hedefl','Hedef Fiyat Seviyesi'],['hpk','Planlanan Kâr €'],['hpm','Planlanan Marj %'],['hgk','Hedefte Güncel Kâr €'],['hgm','Hedefte Güncel Marj %'],['hdk','Hedeften Fark € (birim)'],['hdm','Hedeften Fark (marj puanı)'],['hneed','Planlanan Marj için Gereken Fiyat']];
 const CSV_MET = [['fiyat','Fiyat (KDV hariç)'],['ind','İndirim Oranı %'],['mkar','Nakset Kâr €'],['mmarj','Nakset Kar Marjı %'],['ckar','Müşteri Kâr € (son satışa göre)'],['cmarj','Müşteri Kar Marjı % (son satışa göre)']];
 const csvAll = () => ({b:CSV_BASE.map(x=>x[0]).filter(k=>k!=='img'), l:NPLV(), m:CSV_MET.map(x=>x[0]), st:'aktif', g:''});
 function csvLoad(){ return {...csvAll(), b:[], l:[], m:[]}; try{ const o = JSON.parse(localStorage.getItem(KEY_CSVSEL)); if(o && Array.isArray(o.b) && Array.isArray(o.l) && Array.isArray(o.m)) return {...csvAll(), ...o}; }catch(e){} return csvAll(); }
@@ -2248,7 +2249,7 @@ const CSV_GRP = {info:['Ürün bilgileri','FF5B6472','FFE9ECF1'], alis:['Alış'
   son:['Son satış','FF6B717C','FFECEEF2'], hedef:['Hedef fiyat','FF6A4CA8','FFEDE7F8'], ted:['Tedarik & stok','FF13878A','FFDDF2F1']};
 function csvCols(sel){
   sel = sel || csvAll();
-  const BH = {img:'Resim',durum:'Durum',barkod:'Barkod',stok:'Stok Kodu',ad:'Ürün Adı',grup:'Ürün Grubu',koli:'Koli İçi Adet',birim:'Satış Birimi',kdv:'KDV %',alis:'Alış Fiyatı',maliyet:'Alış Maliyetli Fiyat',son:'Son Satış KDV dahil',sonnet:'Son Satış KDV hariç',mof:'Müşteriye Özel Fiyat',hedef:'Hedef (Basic) Fiyat',hedefm:'Hedef Marj %',basmal:'Başlangıç Maliyetli Alış',hedefl:'Hedef Fiyat Seviyesi',hpk:'Planlanan Kâr €',hpm:'Planlanan Marj %',hgk:'Hedefte Güncel Kâr €',hgm:'Hedefte Güncel Marj %',hdk:'Hedeften Fark € (birim)',hdm:'Hedeften Fark (marj puanı)',hneed:'Planlanan Marj için Gereken Fiyat',ted:'Tedarikçi',tedKod:'Sipariş Kodu',tedGun:'Teslim Süresi (gün)',stokMik:'Stok',minStok:'Min. Stok',maxStok:'Hedef Stok'};
+  const BH = {img:'Resim',durum:'Durum',barkod:'Barkod',stok:'Stok Kodu',ad:'Ürün Adı',grup:'Ürün Grubu',koli:'Koli İçi Adet',birim:'Satış Birimi',kdv:'KDV %',alis:'Fatura (Alış) Fiyatı',maliyet:'Alış Maliyetli Fiyat',son:'Son Satış KDV dahil',sonnet:'Son Satış KDV hariç',mof:'Müşteriye Özel Fiyat',hedef:'Başlangıç Vakıf Satış',hedefm:'Hedef Marj %',basmal:'Başlangıç Nakış Maliyetli Alış',hedefl:'Hedef Fiyat Seviyesi',hpk:'Planlanan Kâr €',hpm:'Planlanan Marj %',hgk:'Hedefte Güncel Kâr €',hgm:'Hedefte Güncel Marj %',hdk:'Hedeften Fark € (birim)',hdm:'Hedeften Fark (marj puanı)',hneed:'Planlanan Marj için Gereken Fiyat',ted:'Tedarikçi',tedKod:'Sipariş Kodu',tedGun:'Teslim Süresi (gün)',stokMik:'Stok',minStok:'Min. Stok',maxStok:'Hedef Stok'};
   const G = {img:'info',durum:'info',barkod:'info',stok:'info',ad:'info',grup:'info',koli:'info',birim:'info',kdv:'info',alis:'alis',maliyet:'alis',basmal:'alis',mof:'fiyat',son:'son',sonnet:'son',hedef:'hedef',hedefm:'hedef',hedefl:'hedef',hpk:'hedef',hpm:'hedef',hgk:'hedef',hgm:'hedef',hdk:'hedef',hdm:'hedef',hneed:'hedef',ted:'ted',tedKod:'ted',tedGun:'ted',stokMik:'ted',minStok:'ted',maxStok:'ted'};
   const T = {kdv:'n',koli:'n',alis:'e',maliyet:'e',basmal:'e',mof:'e',son:'e',sonnet:'e',hedef:'e',hpk:'e',hgk:'e',hdk:'e',hneed:'e',hedefm:'p',hpm:'p',hgm:'p',hdm:'n',tedGun:'n',stokMik:'n',minStok:'n',maxStok:'n'};
   const HA = p => { if(!p.__ha) p.__ha = hedefAn(p); return p.__ha; };
@@ -2737,7 +2738,7 @@ function runBulk(){
   const ps = bulkProducts(), fs = bulkFields();
   if(!ps.length){ alert('Lütfen en az bir grup seçin.'); return; }
   if(!fs.length){ alert('Lütfen sıfırlanacak en az bir alan seçin.'); return; }
-  const fNames = fs.map(f=>({alis:'Alış Fiyatı', maliyet:'Maliyetli Alış'}[f])).join(' ve ');
+  const fNames = fs.map(f=>({alis:'Fatura (Alış) Fiyatı', maliyet:'Maliyetli Alış'}[f])).join(' ve ');
   if(!confirm(`${ps.length} üründe "${fNames}" boşaltılacak.\nGruplar: ${[...bulkSel].join(', ')}\n\nDevam edilsin mi?`)) return;
   if($('bulkBackup').checked) exportJson();
   const now = new Date().toISOString();
@@ -2745,7 +2746,7 @@ function runBulk(){
   if(persist()){ render(); closeBulk(); alert(`Tamam: ${ps.length} üründe ${fNames} sıfırlandı.\nArtık bu fiyatları ürünleri açarak elle girebilirsiniz.`); }
 }
 $('btnBulk').onclick = openBulk;
-/* ---- 14-07-2026 ET LISTESI: basis fiyat → Başlangıç Maliyetli Alış (basMal) ---- */
+/* ---- 14-07-2026 ET LISTESI: basis fiyat → Başlangıç Nakış Maliyetli Alış (basMal) ---- */
 const ET_BASIS = [["104009","DANA KIYMA NORMAL 3 KG VAKUM",8.89,"kirmizi et","",11.56],["104011","DANA KIYMA NORMAL 5 KG VAKUM",8.69,"kirmizi et","",11.09],["104046","DANA KIYMA YAGLI 3 KG VAKUM",9.45,"kirmizi et","",9.98],["104034","DANA KIYMA YAGLI 5 KG VAKUM",8.55,"kirmizi et","",9.5],["104014","DANA KIYMA YAGSIZ 3 KG VAKUM",12.47,"kirmizi et","",12.89],["104016","DANA KIYMA YAGSIZ 5 KG VAKUM",12.27,"kirmizi et","",12.42],["104039","DANA KIYMA KÖFTE VE HAMBURGERLIK 5KG VAKUM",8.69,"kirmizi et","",11.09],["104026","DANA/KUZU KIYMA ADANALIK BAHARATSIZ 5 KG VAKUM",9.58,"kirmizi et","",11.97],["103038","DANA BEL ETI 5 KG VAKUM",14.4,"kirmizi et","",18.0],["103117","DANA BEL ETI( dilimli) 1,5 KG DON TABAK",21.6,"kirmizi et","",29.0],["103125","DANA BEL ETI( dilimli) 1,5 KG TAZE TABAK",21.6,"kirmizi et","",29.0],["103120","T-BONE M/K (+- 400/500 gram)",14.41,"kirmizi et","",22.7],["103123","TOMAHAWK (+ - 800/ 1100 gram)",14.41,"kirmizi et","",22.7],["103124","DALLAS STEAK( + - 500/650 gram)",14.41,"kirmizi et","",22.7],["103041","DANA BOYUN ETI 3 KG VAKUM",11.3,"kirmizi et","",13.33],["103043","DANA BOYUN ETI 5 KG VAKUM",11.1,"kirmizi et","",12.85],["103046","DANA BUT ETI 3 KG VAKUM",13.75,"kirmizi et","",14.7],["103048","DANA BUT ETI 5 KG VAKUM",13.55,"kirmizi et","",14.22],["103007","DANA BONFILE ( 2 - 4,5 KG )",24.4,"kirmizi et","",28.5],["103121","DANA BONFILE DON DILIMLI +/- 500 GR",12.44,"kirmizi et","",14.9],["103126","DANA BONFILE TAZE DILIMLI 500 GR",12.44,"kirmizi et","",14.9],["103051","DANA KUSBASI YAGSIZ 3 KG VAKUM",14.23,"kirmizi et","",14.97],["103053","DANA KUSBASI YAGSIZ 5 KG VAKUM",14.03,"kirmizi et","",14.5],["103122","DANA KUSBASI YAGLI 3 KG VAKUM",11.52,"kirmizi et","",13.78],["103092","DANA KUSBASI YAGLI 5 KG VAKUM",11.32,"kirmizi et","",13.31],["103113","DANA TANTUNI 5 KG VAKUM",13.96,"kirmizi et","",15.17],["106004","NAKSET DON WADEN FLEISCH /ILIKLI 10 kg +/- 2",7.5,"kirmizi et","",8.6],["106014","NAKSET TOSUN ILIKLI KEMIK (1,5 KG - 3,5 KG)",2.0,"kirmizi et","",3.0],["151006","TAVUK BUT 10 KG",2.19,"beyaz et","",3.05],["151017","TAVUK KANAT 10 KG",2.9,"beyaz et","",3.85],["151025","TAVUK GÖGÜS 10 KG",5.97,"beyaz et","",7.4],["151036","TAVUK INCIK 10 KG",2.88,"beyaz et","",3.95],["151005","TAVUK BUT 5 KG",2.3,"beyaz et","",3.16],["151016","TAVUK KANAT 5 KG",3.0,"beyaz et","",4.12],["151024","TAVUK GÖGÜS 5 KG",6.08,"beyaz et","",7.72],["151035","TAVUK INCIK 5 KG",2.98,"beyaz et","",3.97],["151049","TAVUK BUT KEMIKSIZ DERISIZ",5.07,"beyaz et","",6.01],["151011","TAVUK BUT KEMIKSIZ DERILI",4.76,"beyaz et","",5.66],["151047","TAVUK TÜM",2.68,"beyaz et","",4.18],["151042","TAVUK TASLIK 5 KG KARTON",1.5,"beyaz et","",2.47],["151043","TAVUK KALP 5 KG KARTON",1.85,"beyaz et","",2.93],["152015","TAVUK CIGER 5 KG KARTON",1.6,"beyaz et","",3.26],["152003","TAVUK IQF DON BUT 5 x 2 KG",2.59,"beyaz et","",3.27],["152004","TAVUK IQF DON GÖGÜS 5 x 2 KG",6.47,"beyaz et","",7.86],["152005","TAVUK IQF DON INCIK 5 x 2 KG",3.07,"beyaz et","",3.85],["152006","TAVUK IQF DON KANAT 5 x 2 KG",3.15,"beyaz et","",3.95],["152002","TAVUK PILIC DON 1150 - 1250 GR",2.55,"beyaz et","",4.18],["101005","NAKIS TÜM KUZU 17-22,9 KG",11.4,"kuzu","",12.14],["101003","KUZU YARIM YEMEKLIK - 10 KG (+/- 2 KG)",12.8,"kuzu","",13.14],["101004","KUZU YARIM GRILLIK - 10 KG (+/- 2 KG)",12.8,"kuzu","",13.14],["101002","KUZU YARIM SIYRILMIS - 10 KG (+/- 2 KG)",13.8,"kuzu","",14.07],["101029","KUZU PACA 2,5-3 kg (8 adet)",3.0,"kuzu","",4.5],["101028","KUZU CIGER 5 X 2 KG",3.0,"kuzu","",5.25],["101030","KUZU ISKEMBE 10X1,5 KG",2.5,"kuzu","",3.5],["101025","KUZU KELLE 9 adet",2.5,"kuzu","",4.5],["","NAKSET TAVUK DREHSPIEß",3.95,"döner","",5.7],["","NAKSET KIYMA DREHSPIEß",9.15,"döner","",10.4],["","NAKSET STEAK DÖNER DREHSPIEß",11.22,"döner","",12.6],["","NAKSET KUSBASI DREHSPIEß",9.35,"döner","",11.3],["302040","NAKSET PARMAK SUCUK 10 x 1000 GR",9.91,"ürün listesi","4260708492958",12.2],["302042","NAKSET SADRAZAM SUCUK 10 x 1000 GR",9.91,"ürün listesi","4260708492965",12.2],["302043","NAKSET KANGAL SUCUK 10 x 1000 GR",9.91,"ürün listesi","4260708493061",12.2],["302049","NAKSET SUCUK AFYON 12 x 500 GR",5.7,"ürün listesi","4260708493412",6.99],["302046","EFSANE OSMANLI SUCUK (KALIP) +- 3 KG",11.01,"ürün listesi","4260708493467",13.77],["302047","DOGAL KASAP SUCUK (450 - 550 GR )",11.01,"ürün listesi","4260708493474",13.77],["202015","NAKIS MINI SUCUK (6 x 40 x 30 GR)",0.37,"ürün listesi","4260708491272",0.63],["303018","NAKSET IZGARA SIGIR SOSIS 10 x 500 GR",4.83,"ürün listesi","4260708492842",5.52],["303019","NAKSET SIGIR SOSIS 10 x 500 GR",4.83,"ürün listesi","4260708492835",5.52],["303020","NAKSET TAVUK IZGARA SOSIS 10 x 500 GR",3.32,"ürün listesi","4260708492934",4.46],["303021","NAKSET TAVUK SOSIS 10 x 500 GR",3.32,"ürün listesi","4260708493054",4.46],["303017","NAKIS SIGIR SOSIS DOSE 12 x 250 GR",2.33,"ürün listesi","4260708492644",3.13],["304023","NAKSET TAVUK SALAM 12 x 400 GR",2.54,"ürün listesi","4260708493351",3.48],["304024","NAKSET SIGIR SALAM 12 x 400 GR",4.0,"ürün listesi","4260708493368",5.0],["304025","NAKSET SIGIR SALAM DILIM 17 x150 GR",1.65,"ürün listesi","4260708493443",1.97],["304026","NAKSET TAVUK SALAM DILIM 17 x150 GR",0.83,"ürün listesi","4260708493450",1.25],["304027","NAKSET SALAMI 17 x150 GR",1.63,"ürün listesi","4260708493030",2.29],["301013","NAKSET PASTIRMA SALAM DILIM 9 x 100 GR",2.38,"ürün listesi","4260708493122",3.1],["301014","NAKSET PASTIRMA DILIM 9 x 100 GR",3.78,"ürün listesi","4260708493115",4.65],["301006","NAKSET KAVURMA BLOCK (2,5-3,5 KG)",20.94,"ürün listesi","4260708493481",26.18],["204003","NAKIS CIGKÖFTE 8 x 330 GR",1.33,"ürün listesi","4260708492552",1.56],["551004","NAKIS DILIM GOUDA 12 x 400 GR",1.81,"ürün listesi","",2.39],["201002","NAKIS CHICKEN KNUSPERSCHNITTE 12 x 800GR",4.19,"ürün listesi","4260708490008",5.14],["201003","NAKIS CHICKEN NUGGETS 14 x 750 GR",3.93,"ürün listesi","4260708490015",5.0],["203002","NAKIS FISCH BURGER 10 x 800 GR",3.12,"ürün listesi","4260708490053",4.15],["203003","NAKIS FISH FILET 10 x 800 GR",3.92,"ürün listesi","4260708490060",6.23],["203008","NAKIS - FISH RED MULLET (BARBUNYA) 8 X 1000 GR",3.87,"ürün listesi","4260708493184",4.95],["203009","NAKIS - FISCH MAKREEL (USKUMRU) 8 X 1000 GR",2.96,"ürün listesi","4260708493146",3.79],["203010","NAKIS - FISH ANJOVIS (HAMSI) 10 X 1000 GR",3.16,"ürün listesi","4260708493153",4.05],["203011","NAKIS - FISH COD FILLETS (MORINA BALIGI FILOTOSU) 10 X 1000 GR",6.66,"ürün listesi","4260708493160",8.54],["203012","NAKIS - FISCH PANGASIUS FILET (PANGA FILOTOSU) 8 X 1000 GR",3.16,"ürün listesi","4260708493177",4.05],["206003","NAKIS KAYSERI MANTI 14 x1 KG",4.97,"ürün listesi","4260708491333",6.18],["206002","NAKIS KAYSERI MANTISI 3 x 5 KG",24.85,"ürün listesi","O675696140608",29.73],["653002","NAKIS DON KÜNEFE 12 x 270 GR",3.36,"ürün listesi","4260708492156",3.89],["653011","NAKIS KATMER 12X180GR",2.46,"ürün listesi","4260708492170",2.85],["207014","NAKIS POMMES (9x18) 10 X 1kg",1.81,"ürün listesi","4260708490039",2.15],["207001","NAKIS POMMES (9/9) 10x1 KG",1.81,"ürün listesi","4260708493016",2.15],["207016","NAKIS POMMES CRINKLE 8 X 1kg",1.81,"ürün listesi","4260708492828",2.15],["207017","NAKIS POMMES 10 X 1 KG(11x11 milim)",1.81,"ürün listesi","4260708490039",2.15],["902031","NAKSET PISMIS KIYMA DREHSPIEß 15 x 500 GR",5.37,"ürün listesi","4260708493399",7.34],["902030","NAKSET PISMIS TAVUK DREHSPIEß 15 x 500 GR",4.78,"ürün listesi","4260708493405",6.72],["209004","LAHMACUN 30CM 200 GR (8 X 5)",4.39,"ürün listesi","4260708492392",5.13],["209006","LAHMACUN 25 CM 150 GR (7 X 3)",2.82,"ürün listesi","4260708492750",3.29],["202023","NAKIS DON CORBALIK KÖFTE 12x0,400 GR",3.38,"ürün listesi","4260708492774",3.83],["202024","NAKIS DON ADANA KEBAP 12 x 0,600 GR",5.09,"ürün listesi","4260708492767",5.39],["202025","NAKSET DON HAMBURGER PAKET( 2 x135 GR) x8",3.3,"ürün listesi","4260708493023",3.98],["201014","NAKIS DON KIP FRIKANDEL SOSIS 8 x 1300 GR",6.93,"ürün listesi","4260708492798",8.01],["201015","NAKIS DON KIP BURGER 8 x 1170 GR",6.81,"ürün listesi","4260708492781",8.01],["204007","NAKIS FALAFEL 8 x 500 GR",2.82,"ürün listesi","4260708492989",3.11],["405012","NAKIS-KARAKOVAN CITA BAL 10x1,70 KG +-",16.5,"ürün listesi","4260708493498",22.75],["405013","NAKIS-SÜZME CICEK BALI 12X450 GR",7.0,"ürün listesi","4260708493504",9.21],["405014","NAKIS-SÜZME KESTANE BALI 6X450 GR",7.5,"ürün listesi","4260708493511",9.89],["410023","SERIZE SADE ERISTE 400 GRX10",1.45,"ürün listesi","4260708492699",1.62],["410062","SERIZE KARISIK ERISTE 400 GRX10",1.45,"ürün listesi","4260708492705",1.62]]; // [stok kodu, Excel ürün adı, basic fiyat, sayfa, barkod, Excel Vakıf fiyatı] — eşleşme: stok kodu VEYA barkod VEYA aynı ürün adı
 const etStok = v => String(v??'').replace(/\.0+$/,'').replace(/\D/g,'').replace(/^0+/,'');
 const etName = v => norm(v).replace(/ß/g,'ss').replace(/[^a-z0-9çğöşü]+/g,'');
@@ -2758,7 +2759,7 @@ function etBuild(){
     return {s,ad,v,hv,sh,ps};
   });
 }
-// Hedef (Basic) Fiyat = Fiyat 1 (ilk değer). Elle girilmiş hedef korunur; boş ya da önceki aktarımlarda otomatik yazılmış hedefler (Vakıf) Fiyat 1 ile değiştirilir.
+// Başlangıç Vakıf Satış = Fiyat 1 (ilk değer). Elle girilmiş hedef korunur; boş ya da önceki aktarımlarda otomatik yazılmış hedefler (Vakıf) Fiyat 1 ile değiştirilir.
 const etF1v = p => lvl(p,1).price;
 const etAuto = (p, exV) => { const h = num(p.hedef); if(h==null) return true; if(p.hedefSrc==='manuel') return false;
   return ['f1','excel','vakif'].includes(p.hedefSrc) || etEq(h,exV) || (etEq(h, lvl(p,vakifL()).price) && +p.hedefL===vakifL()) || etEq(h, etF1v(p)); };
@@ -2780,12 +2781,12 @@ function openEt(){
       return `<tr class="${upd?'':'same'}"><td>${esc(r.s||'–')}</td><td>${esc(r.ad)}</td><td>${esc(r.sh)}</td><td class="n"><b>${fmtE(r.v)}</b></td><td>${esc(p.ad)}${p.pasif?' <span class="ptag">PASİF</span>':''}</td><td class="n">${chg(num(p.basMal),r.v)}</td><td class="n">${hCell(p,r.hv)}</td><td>${upd?'<b style="color:var(--ok)">Güncellenecek</b>':'Aynı'}</td></tr>`;
     }).join('');
   }).join('');
-  $('etTab').innerHTML = `<thead><tr><th>Stok Kodu</th><th>Excel Ürün Adı</th><th>Sayfa</th><th class="n">Basic Fiyat</th><th>Programdaki Ürün</th><th class="n">Başlangıç Maliyet</th><th class="n">Hedef (Basic) = ${esc(lvN(1))}</th><th>Durum</th></tr></thead><tbody>${rows}</tbody>`;
+  $('etTab').innerHTML = `<thead><tr><th>Stok Kodu</th><th>Excel Ürün Adı</th><th>Sayfa</th><th class="n">Basic Fiyat</th><th>Programdaki Ürün</th><th class="n">Başlangıç Maliyet</th><th class="n">Başlangıç Vakıf = ${esc(lvN(1))}</th><th>Durum</th></tr></thead><tbody>${rows}</tbody>`;
   const hit = new Set(etPlan.flatMap(r=>r.ps.map(p=>p.id)));
   const noM = products.filter(p=>!hit.has(p.id));
   etF1 = noM.filter(p=>etHNeed(p,null));
   $('etVkN').textContent = etF1.length;
-  $('etNo').innerHTML = noM.length ? `<details><summary style="cursor:pointer;font-size:13px">Programda olup Excel'de bulunamayan ürünler (${noM.length}) – başlangıç maliyetine dokunulmaz; ${etF1.length} üründe hedef = ${esc(lvN(1))}</summary><table class="ettab" style="width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px"><thead><tr><th>Stok Kodu</th><th>Barkod</th><th>Ürün</th><th>Grup</th><th class="n">${esc(lvN(1))} (kart)</th><th class="n">Hedef (Basic) Fiyat</th></tr></thead><tbody>${noM.map(p=>`<tr><td>${esc(p.stok||'–')}</td><td>${esc(p.barkod||'–')}</td><td>${esc(p.ad)}</td><td>${esc(p.grup||'')}</td><td class="n">${cell(etF1v(p))}</td><td class="n">${hCell(p,null)}</td></tr>`).join('')}</tbody></table></details>` : '';
+  $('etNo').innerHTML = noM.length ? `<details><summary style="cursor:pointer;font-size:13px">Programda olup Excel'de bulunamayan ürünler (${noM.length}) – başlangıç maliyetine dokunulmaz; ${etF1.length} üründe hedef = ${esc(lvN(1))}</summary><table class="ettab" style="width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px"><thead><tr><th>Stok Kodu</th><th>Barkod</th><th>Ürün</th><th>Grup</th><th class="n">${esc(lvN(1))} (kart)</th><th class="n">Başlangıç Vakıf Satış</th></tr></thead><tbody>${noM.map(p=>`<tr><td>${esc(p.stok||'–')}</td><td>${esc(p.barkod||'–')}</td><td>${esc(p.ad)}</td><td>${esc(p.grup||'')}</td><td class="n">${cell(etF1v(p))}</td><td class="n">${hCell(p,null)}</td></tr>`).join('')}</tbody></table></details>` : '';
   $('etSum').innerHTML = `Excel'de <b>${ET_BASIS.length}</b> ürün · <b style="color:var(--ok)">${nUpd}</b> güncellenecek · ${nSame} zaten aynı · ${nMiss} programda yok`;
   const etCnt = () => { const n = nUpd + ($('etVk').checked ? etF1.length : 0); $('etCount').textContent = n ? `${n} ürün güncellenecek` : 'Tüm ürünler güncel'; $('etRun').disabled = false; };
   $('etVk').onchange = etCnt; etCnt();
@@ -2797,8 +2798,8 @@ function runEt(){
   etPlan.forEach(r=>r.ps.forEach(p=>{ if(etNeeds(p,r)) todo.push([p,r]); }));
   const f1 = $('etVk').checked ? etF1 : [];
   if(!todo.length && !f1.length){ closeEt(); alert('Tüm ürünler zaten güncel – değiştirilecek bir şey yok.'); return; }
-  if(!confirm(`Excel'deki ${todo.length} üründe "Başlangıç Maliyetli Alış" = Excel basic fiyat yazılacak.
-${todo.length + f1.length} üründe boş veya otomatik yazılmış "Hedef (Basic) Fiyat" = ${lvN(1)} olacak. Elle girilmiş hedefler korunur.
+  if(!confirm(`Excel'deki ${todo.length} üründe "Başlangıç Nakış Maliyetli Alış" = Excel basic fiyat yazılacak.
+${todo.length + f1.length} üründe boş veya otomatik yazılmış "Başlangıç Vakıf Satış" = ${lvN(1)} olacak. Elle girilmiş hedefler korunur.
 
 Devam edilsin mi?`)) return;
   if($('etBackup').checked) exportJson();
@@ -2806,7 +2807,7 @@ Devam edilsin mi?`)) return;
   const setH = (p,exV) => { if(etHNeed(p,exV)){ p.hedef = etF1v(p); p.hedefL = 1; p.hedefSrc = 'f1'; } };
   todo.forEach(([p,r])=>{ p.basMal = r.v; p.basSrc = 'excel'; setH(p,r.hv); p.updated = now; });
   f1.forEach(p=>{ setH(p,null); p.updated = now; });
-  if(persist()){ render(); closeEt(); alert(`${todo.length} üründe Başlangıç Maliyet (Excel), ${todo.length + f1.length} ürüne kadar Hedef (Basic) Fiyat = ${lvN(1)} güncellendi.`); }
+  if(persist()){ render(); closeEt(); alert(`${todo.length} üründe Başlangıç Maliyet (Excel), ${todo.length + f1.length} ürüne kadar Başlangıç Vakıf Satış = ${lvN(1)} güncellendi.`); }
 }
 $('btnEtBas').onclick = openEt;
 $('etClose').onclick = closeEt; $('etCancel').onclick = closeEt; $('etRun').onclick = runEt;
@@ -2933,9 +2934,9 @@ const REP_COLS = [
   {k:'grup',    h:'Grup'},
   {k:'koli',    h:'Koli İçi'},
   {k:'kdv',     h:'KDV'},
-  {k:'alis',    h:'Alış Fiyatı'},
+  {k:'alis',    h:'Fatura (Alış) Fiyatı'},
   {k:'maliyet', h:'Maliyetli Alış'},
-  {k:'hedef',   h:'Hedef (Basic) Fiyat'},
+  {k:'hedef',   h:'Başlangıç Vakıf Satış'},
   {k:'fiyat',   h:'Fiyat (seçili fiyatlar)'},
   {k:'indirim', h:'İndirim Oranı'},
   {k:'nk',      h:'Nakset Kar Marjı'},
@@ -2969,9 +2970,9 @@ function repColumns(ls, markup){
   if(on('grup'))    C.push({h:'Grup', t:'s', w:18, v:p=>p.grup});
   if(on('koli'))    C.push({h:'Koli İçi', t:'n', w:8, v:p=>num(p.koli)});
   if(on('kdv'))     C.push({h:'KDV', t:'s', w:6, v:p=>p.kdv?('%'+p.kdv):''});
-  if(on('alis'))    C.push({h:'Alış Fiyatı', t:'e', w:11, v:p=>num(p.alis)});
+  if(on('alis'))    C.push({h:'Fatura (Alış) Fiyatı', t:'e', w:11, v:p=>num(p.alis)});
   if(on('maliyet')) C.push({h:'Maliyetli Alış', t:'e', w:11, v:p=>num(p.maliyet)});
-  if(on('hedef'))   C.push({h:'Hedef (Basic) Fiyat', t:'e', w:11, v:p=>num(p.hedef)});
+  if(on('hedef'))   C.push({h:'Başlangıç Vakıf Satış', t:'e', w:11, v:p=>num(p.hedef)});
   ls.forEach(L=>{ const n=lvName(L);
     if(on('fiyat')) C.push({h:`${n} Fiyat`, t:'e', w:10, v:p=>calc(p,L).price});
     if(on('indirim') && L!==discBase) C.push({h:`${n} İndirim (${ya(lvName(discBase))} göre)`, t:'p', w:11, v:p=>calc(p,L).disc, avg:true});
@@ -3335,10 +3336,10 @@ const NEW_KV = ['hedef','grup','guncel','eksik'];   // v4 ile eklenen raporlar
 // Yetki listesi: programdaki tüm ana veriler ve işlemler
 const permGroups = () => [
   ['Ürün bilgileri (düzenleme)', [['barkod','Barkod'],['stok','Stok Kodu'],['ad','Ürün Adı'],['grup','Ürün Grubu'],['koli','Koli İçi Adet'],['kdv','KDV'],['img','Resim']]],
-  ['Alış fiyatları (düzenleme)', [['alis','Alış Fiyatı'],['maliyet','Alış Maliyetli Fiyat']]],
-  ['Satış fiyatları (düzenleme)', NPLV().map(i=>['f'+i, lvName(i)]).concat([['son','Son Satış (KDV dahil)'],['hedef','Hedef (Basic) Fiyat']])],
+  ['Alış fiyatları (düzenleme)', [['alis','Fatura (Alış) Fiyatı'],['maliyet','Alış Maliyetli Fiyat']]],
+  ['Satış fiyatları (düzenleme)', NPLV().map(i=>['f'+i, lvName(i)]).concat([['son','Son Satış (KDV dahil)'],['hedef','Başlangıç Vakıf Satış']])],
   ['Ürün işlemleri', [['ekle','Yeni ürün ekle'],['sil','Ürün sil'],['aktif','Ürünü aktif / pasif yap'],['toplu','Toplu sıfırla']]],
-  ['Ürün araçları', [['topfiyat','Toplu fiyat güncelleme'],['icaktar',"Excel'den içe aktarma"],['etiket','Etiket & fiyat listesi'],['tedarik','Tedarikçi bilgisi (görme / düzenleme)'],['stokduz','Stok bilgisi (düzenleme)'],['stokgor','Stok & sipariş önerisi'],['degisiklik','Son değişiklikler']]],
+  ['Ürün araçları', [['topfiyat','Toplu fiyat güncelleme'],['icaktar',"Excel'den içe aktarma"],['etiket','Etiket & fiyat listesi'],['degisiklik','Son değişiklikler']]],
   ['Üretim', [['recete','Reçete tanımlama'],['urt','Üretim kaydı girme'],['urtsil','Üretim kaydı silme'],['urtrap','Üretim geçmişi & rapor']]],
   ['Ekranlar', [['dash','Raporlar'],['rapor','Rapor (Excel / PDF)'],['rapxls','Rapor: Excel indir'],['rappdf','Rapor: PDF oluştur']]],
   ['Raporlar ekranı', KAR_MENU.flatMap(s=>s[2]).map(t=>['kv_'+t[0], t[2]]).concat([['dashexp','Raporlar: Excel (CSV) / PDF indir']])],
@@ -3381,7 +3382,7 @@ function loadUsers(){
   // v4: yeni raporlar – "Raporlar" ekranını görebilen kullanıcılara otomatik açılır
   users.forEach(x=>{ if(x.v===3){ if((x.p||[]).includes('dash')) NEW_KV.forEach(k=>{ if(!x.p.includes('kv_'+k)) x.p.push('kv_'+k); }); x.v = 4; mig = true; } });
   users.forEach(x=>{ if(x.v===4){ if((x.p||[]).includes('dash')) NEW_KV5.forEach(k=>{ if(!x.p.includes('kv_'+k)) x.p.push('kv_'+k); }); x.v = 5; mig = true; } });
-  // v6: Hedef (Basic) Fiyat – satış fiyatı düzenleyebilen kullanıcılara açılır
+  // v6: Başlangıç Vakıf Satış – satış fiyatı düzenleyebilen kullanıcılara açılır
   users.forEach(x=>{ if(x.v===5){ if(['f1','f2','f3','f4','f5','f6','son'].some(k=>(x.p||[]).includes(k)) && !x.p.includes('hedef')) x.p.push('hedef'); x.v = 6; mig = true; } });
   // v7: Fatura düzenleme yetkisi – fatura yükleyebilen kullanıcılara açılır
   users.forEach(x=>{ if(x.v===6){ if((x.p||[]).includes('fatyukle') && !x.p.includes('fatduz')) x.p.push('fatduz'); x.v = 7; mig = true; } });
@@ -3396,7 +3397,7 @@ function loadUsers(){
   const a = users.find(x=>uKey(x.u)==='admin'); if(a) a.p = ALL_P.slice();
 }
 function persistUsers(){ try{ localStorage.setItem(KEY_USERS, JSON.stringify(users)); }catch(e){ alert('Kullanıcılar kaydedilemedi.'); } }
-const can = perm => !!me && perm!=='mof' && (window.NP_RO ? !['kullanici','yukle'].includes(perm) : uKey(me.u)==='admin' || me.p.includes(perm) || ((perm==='rapxls' || perm==='rappdf') && me.p.includes('sube')) || (perm==='mof' && me.p.some(x=>/^f[1-6]$/.test(x))));
+const can = perm => !!me && perm!=='mof' && !['tedarik','stokgor','stokduz'].includes(perm) && (window.NP_RO ? !['kullanici','yukle'].includes(perm) : uKey(me.u)==='admin' || me.p.includes(perm) || ((perm==='rapxls' || perm==='rappdf') && me.p.includes('sube')) || (perm==='mof' && me.p.some(x=>/^f[1-6]$/.test(x))));
 const EDIT_F = ['barkod','stok','ad','grup','koli','kdv','img','alis','maliyet','hedef','f1','f2','f3','f4','f5','f6','mof','son','tedarik','stokduz'];
 const canEdit = () => EDIT_F.some(can) || can('ekle');
 
@@ -3567,7 +3568,7 @@ function homeSections(){
       ['cubes','Ürün Grupları','gruplar',()=>$('btnSettings').click()],
       ['tag','Fiyat Adları','fadlari',()=>$('btnNames').click()]
     ]],
-    ['arac','Fiyat & Stok Araçları','c-green',[
+    ['arac','Fiyat Araçları','c-green',[
       ['importx',"Excel'den İçe Aktar",'icaktar',()=>openImportX()],
       ['label','Etiket & Fiyat Listesi','etiket',()=>openLabels()],
       ['truck','Tedarikçiler','tedarik',()=>openSuppliers()],
@@ -3862,12 +3863,12 @@ const I18N_RX = [
   [/^Fiyat (\d): (.*)$/, 'Preis $1: $2']
 ];
 
-Object.assign(I18N, {"Hedef (Basic) Fiyat (€)":"Zielpreis (Basic) (€)","Hedef (Basic) Fiyat":"Zielpreis (Basic)","Hedef Marj":"Zielmarge","Hedef marj":"Zielmarge","KDV hariç":"ohne MwSt.",
-"Hedef (Basic) fiyatın altında satılan ürünler":"Artikel unter dem Zielpreis (Basic)","Hedef fiyatı girilmemiş ürün":"Artikel ohne Zielpreis","Hedef fiyat":"Zielpreis","Satış fiyatı hedef fiyatın altında":"Verkaufspreis unter Zielpreis",
+Object.assign(I18N, {"Başlangıç Vakıf Satış (€)":"Zielpreis (Basic) (€)","Başlangıç Vakıf Satış":"Zielpreis (Basic)","Hedef Marj":"Zielmarge","Hedef marj":"Zielmarge","KDV hariç":"ohne MwSt.",
+"Başlangıç Vakıf satışın altında satılan ürünler":"Artikel unter dem Zielpreis (Basic)","Hedef fiyatı girilmemiş ürün":"Artikel ohne Zielpreis","Hedef fiyat":"Zielpreis","Satış fiyatı hedef fiyatın altında":"Verkaufspreis unter Zielpreis",
 "Tüm ürünler hedef fiyatta veya üstünde satılıyor.":"Alle Artikel werden zum Zielpreis oder darüber verkauft.",
-"Henüz hiçbir ürüne Hedef (Basic) Fiyat girilmemiş. Ürün kartında “Hedef (Basic) Fiyat” alanını doldurun.":"Noch kein Zielpreis (Basic) erfasst. Füllen Sie das Feld „Zielpreis (Basic)“ in der Artikelkarte aus.",
-"Hedef (Basic) Fiyat her ürünün kartında girilir (KDV hariç). Hedef marj = (hedef fiyat − maliyetli alış) ÷ maliyetli alış, yani maliyet değişince hedef marj kendiliğinden güncellenir. Seçilen fiyat seviyesi hedef fiyatın altındaysa ürün burada listelenir.":"Der Zielpreis (Basic) wird in jeder Artikelkarte erfasst (ohne MwSt.). Zielmarge = (Zielpreis − EK inkl. Kosten) ÷ EK inkl. Kosten; ändern sich die Kosten, passt sich die Zielmarge automatisch an. Liegt die gewählte Preisstufe unter dem Zielpreis, erscheint der Artikel hier.",
-"Ortalamalar, seçilen fiyat seviyesinde fiyatı ve maliyetli alışı girilmiş ürünlerden hesaplanır. \"Hedefin altında\" = seçilen fiyatı, ürün kartındaki Hedef (Basic) Fiyatın altında olan ürün sayısı.":"Durchschnitte aus Artikeln mit Preis und EK inkl. Kosten auf der gewählten Preisstufe. „Unter Ziel“ = Anzahl Artikel, deren Preis unter dem Zielpreis (Basic) liegt.",
+"Henüz hiçbir ürüne Başlangıç Vakıf Satış girilmemiş. Ürün kartında “Başlangıç Vakıf Satış” alanını doldurun.":"Noch kein Zielpreis (Basic) erfasst. Füllen Sie das Feld „Zielpreis (Basic)“ in der Artikelkarte aus.",
+"Başlangıç Vakıf Satış her ürünün kartında girilir (KDV hariç). Hedef marj = (hedef fiyat − maliyetli alış) ÷ maliyetli alış, yani maliyet değişince hedef marj kendiliğinden güncellenir. Seçilen fiyat seviyesi hedef fiyatın altındaysa ürün burada listelenir.":"Der Zielpreis (Basic) wird in jeder Artikelkarte erfasst (ohne MwSt.). Zielmarge = (Zielpreis − EK inkl. Kosten) ÷ EK inkl. Kosten; ändern sich die Kosten, passt sich die Zielmarge automatisch an. Liegt die gewählte Preisstufe unter dem Zielpreis, erscheint der Artikel hier.",
+"Ortalamalar, seçilen fiyat seviyesinde fiyatı ve maliyetli alışı girilmiş ürünlerden hesaplanır. \"Hedefin altında\" = seçilen fiyatı, ürün kartındaki Başlangıç Vakıf Satışın altında olan ürün sayısı.":"Durchschnitte aus Artikeln mit Preis und EK inkl. Kosten auf der gewählten Preisstufe. „Unter Ziel“ = Anzahl Artikel, deren Preis unter dem Zielpreis (Basic) liegt.",
 "Hedef Marj %":"Zielmarge %"});
 Object.assign(I18N, {"Faturaya tıklayarak satır satır kârı görün. \"Hesaplanan satış\" = programda eşleşen ürün satırları (iskonto düşülmüş); Transport / Leergut sadece faturada \"kâra dahil\" seçildiyse eklenir. Korrektur / Gutschrift belgeleri kayıp olarak cirodan ve kârdan düşülür.": "Klicken Sie auf eine Rechnung, um den Gewinn je Zeile zu sehen. „Berechneter Umsatz“ = zugeordnete Artikelzeilen (nach Rabatt); Transport / Leergut nur, wenn in der Rechnung „im Gewinn“ gewählt. Korrektur / Gutschrift werden als Verlust von Umsatz und Gewinn abgezogen.", "Sadece programdaki ürünlerle eşleşen fatura satırları sayılır. Aynı ürün hem kg hem adet ile satıldıysa ayrı satırda gösterilir. Korrektur kaybı, ürünün kârından düşülür.": "Nur Rechnungszeilen, die einem Artikel im Programm zugeordnet sind, werden gezählt. Wird ein Artikel in kg und Stück verkauft, erscheint er in getrennten Zeilen. Korrekturverluste werden vom Artikelgewinn abgezogen.", "Kâr = satış tutarı − (maliyetli alış × miktar). Marj = kâr ÷ maliyet. Maliyet olarak fatura tarihindeki maliyetli alış kullanılır.": "Gewinn = Verkaufsbetrag − (EK inkl. Kosten × Menge). Marge = Gewinn ÷ Kosten. Als Kosten gilt der EK inkl. Kosten am Rechnungsdatum.", "Tarih": "Datum", "Bugün": "Heute", "Temizle": "Leeren"});
 Object.assign(I18N, {"gg.aa.yyyy":"TT.MM.JJJJ","Tarih geçersiz. Örnek: 03.11.2026":"Ungültiges Datum. Beispiel: 03.11.2026"});
@@ -3942,8 +3943,8 @@ Object.assign(I18N, {"Başlangıç Maliyet (€)":"Anfangs-EK (€)","Hedef Fiya
 "Güncel kâr € (hedef fiyatta)":"Aktueller Gewinn € (zum Zielpreis)","Güncel marj (hedef fiyatta)":"Aktuelle Marge (zum Zielpreis)","Hedeften fark € (birim)":"Abweichung vom Ziel € (Stück)","Hedeften fark (marj puanı)":"Abweichung vom Ziel (Margenpunkte)",
 "Planlanan marj için gereken fiyat":"Nötiger Preis für geplante Marge","Hedef seviyesi":"Zielstufe","Seviyedeki güncel fiyat":"Aktueller Preis der Stufe","Güncel fiyat − hedef €":"Aktueller Preis − Ziel €","Güncel fiyatla marj":"Marge zum aktuellen Preis",
 "Bu filtreye uyan ürün yok.":"Keine Artikel für diesen Filter.","Durum":"Status",
-"Başlangıç Maliyetli Alış":"Anfangs-Einstandspreis","Planlanan Kâr €":"Geplanter Gewinn €","Planlanan Marj %":"Geplante Marge %","Hedefte Güncel Kâr €":"Aktueller Gewinn zum Zielpreis €","Hedefte Güncel Marj %":"Aktuelle Marge zum Zielpreis %","Hedeften Fark € (birim)":"Abweichung vom Ziel € (Stück)","Hedeften Fark (marj puanı)":"Abweichung vom Ziel (Margenpunkte)","Planlanan Marj için Gereken Fiyat":"Nötiger Preis für geplante Marge"});
-Object.assign(I18N, {"Hedef (Basic) fiyatı girilen ürünler (altında / üstünde)":"Artikel mit Zielpreis (Basic) – darunter / darüber","Fiyatı girilmemiş":"Ohne Preis","Fiyat yok":"Kein Preis","▼ Altında":"▼ Darunter","▲ Hedefte / üstünde":"▲ Im Ziel / darüber","Altında":"Darunter","Hedefte / üstünde":"Im Ziel / darüber","Seviye fiyatı girilmemiş":"Ohne Preis in der Stufe","Fark (fiyat − hedef) €":"Differenz (Preis − Ziel) €","Fark (fiyat − hedef) %":"Differenz (Preis − Ziel) %"});
+"Başlangıç Nakış Maliyetli Alış":"Anfangs-Einstandspreis","Planlanan Kâr €":"Geplanter Gewinn €","Planlanan Marj %":"Geplante Marge %","Hedefte Güncel Kâr €":"Aktueller Gewinn zum Zielpreis €","Hedefte Güncel Marj %":"Aktuelle Marge zum Zielpreis %","Hedeften Fark € (birim)":"Abweichung vom Ziel € (Stück)","Hedeften Fark (marj puanı)":"Abweichung vom Ziel (Margenpunkte)","Planlanan Marj için Gereken Fiyat":"Nötiger Preis für geplante Marge"});
+Object.assign(I18N, {"Başlangıç Vakıf satışı girilen ürünler (altında / üstünde)":"Artikel mit Zielpreis (Basic) – darunter / darüber","Fiyatı girilmemiş":"Ohne Preis","Fiyat yok":"Kein Preis","▼ Altında":"▼ Darunter","▲ Hedefte / üstünde":"▲ Im Ziel / darüber","Altında":"Darunter","Hedefte / üstünde":"Im Ziel / darüber","Seviye fiyatı girilmemiş":"Ohne Preis in der Stufe","Fark (fiyat − hedef) €":"Differenz (Preis − Ziel) €","Fark (fiyat − hedef) %":"Differenz (Preis − Ziel) %"});
 Object.assign(I18N, {"Başlangıç Maliyet":"Anfangs-EK","Planlanan marj (başlangıç maliyetine göre)":"Geplante Marge (bez. auf Anfangs-EK)","Hedef marj (güncel)":"Zielmarge (aktuell)"});
 Object.assign(I18N, {"Müşteriye Teklif": "Kundenangebot", "Müşteriye teklif": "Kundenangebot", "Müşteriye teklif (oluşturma / kaydetme)": "Kundenangebot (erstellen / speichern)", "Kayıtlı teklifler": "Gespeicherte Angebote", "— yeni teklif —": "— neues Angebot —", "Yeni teklif": "Neues Angebot", "Teklifi sil": "Angebot löschen", "Kayıtlı teklif düzenleniyor": "Gespeichertes Angebot wird bearbeitet", "Yeni teklif (henüz kaydedilmedi)": "Neues Angebot (noch nicht gespeichert)", "kaydedilmemiş değişiklik": "ungespeicherte Änderung", "Müşteriler bölümünden seç": "Aus Kundenbereich wählen", "— manuel yaz —": "— manuell eingeben —", "Faturalardaki müşteriler": "Kunden aus Rechnungen", "Önceki teklifler": "Frühere Angebote", "Kayıtlı müşteri yok, bilgileri manuel yazın.": "Keine gespeicherten Kunden – Daten bitte manuell eingeben.", "Manuel (temizle)": "Manuell (leeren)", "Firma": "Firma", "Yetkili": "Ansprechpartner", "Adres": "Adresse", "PLZ / Şehir": "PLZ / Ort", "Ülke": "Land", "Telefon": "Telefon", "E-posta": "E-Mail", "Firma adı": "Firmenname", "Teklif bilgileri": "Angebotsdaten", "Geçerlilik (son gün)": "Gültig bis", "Kenara al": "Parken", "Pencereyi küçült; başka yere gidip sonra kaldığınız yerden devam edin": "Fenster parken; woanders hingehen und später genau hier weitermachen", "Kenarda": "Geparkt", "Tıklayınca kaldığınız yerden açılır": "Klicken: genau dort weitermachen", "Açık bir ürün kartı var. Onu kenara alıp bunu açayım mı?": "Eine Artikelkarte ist geöffnet. Parken und diese öffnen?", "Kenardaki bu iş kapatılsın mı? Kaydedilmemiş değişiklikler kaybolur.": "Diese geparkte Aufgabe schließen? Nicht gespeicherte Änderungen gehen verloren.", "Kenarda bekleyen bir ürün kartı var": "Es ist eine Artikelkarte geparkt", "Tamam = kenardakini aç · İptal = vazgeç": "OK = geparkte öffnen · Abbrechen = zurück", "Teklif": "Angebot", "Fiyat (seçili birim)": "Preis (gewählte Einheit)", "Satış birimi seçin (adet / kg / koli).": "Bitte Verkaufseinheit wählen (Stück / kg / Karton).", "Koli içi ve satış birimi": "Karton-Inhalt und Verkaufseinheit", "Gönderdiğiniz koli içi listesi programa işlenecek. Sadece farklı olan değerler değişir.": "Ihre Karton-Inhalt-Liste wird übernommen. Nur abweichende Werte werden geändert.", "ürün güncellenecek": "Artikel werden aktualisiert", "ürün silinecek (kilosuz eski dönerler)": "Artikel werden gelöscht (alte Döner ohne kg)", "programda bulunamadı": "nicht im Programm gefunden", "Koli içi": "Karton-Inhalt", "Satış birimi": "Verkaufseinheit", "silinecek": "wird gelöscht", "programda yok, atlandı": "nicht vorhanden, übersprungen", "Uygula": "Übernehmen", "ürün güncellendi": "Artikel aktualisiert", "ürün silindi": "Artikel gelöscht", "Tıklayınca": "Klick:", "Toplam müşteri kârı": "Kundengewinn gesamt", "Son satış seçilmeden hesaplanmaz": "Ohne Verkaufspreis keine Berechnung", "Son satış seçilmediği için müşteri kârı ve marjı hesaplanmaz.": "Ohne gewählten Verkaufspreis werden Kundengewinn und -marge nicht berechnet.", "Son satış KDV dahil": "Verkaufspreis inkl. MwSt.", "Son satış KDV hariç": "Verkaufspreis netto", "üründe": "Artikeln", "fiyatı var ama": "-Preis vorhanden, aber", "fiyatı boş. Bu ürünlerde": "-Preis leer. Bei diesen Artikeln wird der", "fiyatı": "-Preis", "fiyatıyla aynı yapılacak (indirim yok).": "-Preis übernommen (kein Rabatt).", "yeni": "neu", "pasif": "inaktiv", "Şimdi değil": "Nicht jetzt", "Bir daha sorma": "Nicht mehr fragen", "Güncelle": "Aktualisieren", "fiyatı güncellendi.": "-Preis aktualisiert.", "miktar yazınca ürün kendiliğinden seçilir": "Artikel wird bei Mengeneingabe automatisch gewählt", "Önizleme ve Excel": "Vorschau und Excel", "Fiyat farkı": "Preisdifferenz", "Excel indir": "Excel herunterladen", "Fiyat Karşılaştırma": "Preisvergleich", "Elle fiyat": "Manueller Preis", "Müşteri hangi fiyattan alırsa ne kadar kâr eder? Karşılaştırmak istediğiniz fiyatları ve ürünleri işaretleyin. Müşteri kârı = son satış (KDV hariç) − alış fiyatı. Miktar girerseniz toplamlar da hesaplanır.": "Wie viel verdient der Kunde bei welchem Preis? Preise und Artikel zum Vergleich ankreuzen. Kundengewinn = Endpreis (netto) − Einkaufspreis. Mit Menge werden auch Summen berechnet.", "Fark hesabında baz fiyat": "Basispreis für Differenz", "Dahili: alış maliyetli ve Nakis kârını göster": "Intern: EK und NaksEt-Gewinn anzeigen", "Karşılaştırılacak fiyatlar": "Zu vergleichende Preise", "Son satış (KDV hariç)": "Endpreis (netto)", "baz": "Basis", "Fark": "Differenz", "Müşteri kârı": "Kundengewinn", "Müşteri marjı": "Kundenmarge", "Nakis kârı": "NaksEt-Gewinn", "Nakis marjı": "NaksEt-Marge", "Excel için": "Für Excel", "Excel’e sadece müşteriye ait bilgiler aktarılır; alış ve Nakis kârı asla aktarılmaz.": "In Excel werden nur Kundendaten übernommen; EK und NaksEt-Gewinn niemals.", "Ürün resimleri": "Artikelbilder", "Son satış": "Endpreis", "Miktar ve toplamlar": "Menge und Summen", "Özet tablo": "Übersichtstabelle", "Toplam karşılaştırma için ürünlere miktar girin.": "Für den Gesamtvergleich Mengen eingeben.", "Toplam karşılaştırma (girilen miktarlara göre)": "Gesamtvergleich (nach eingegebenen Mengen)", "Müşterinin ödeyeceği (KDV hariç)": "Einkauf Kunde (netto)", "Kâr farkı": "Gewinndifferenz", "Nakis kâr farkı": "Differenz NaksEt-Gewinn", "Excel (müşteri için)": "Excel (für Kunden)", "Önizle": "Vorschau", "Fiyat güncellemesi bekleyen": "Preisanpassung fällig", "Satış": "Verkauf", "Teklifler": "Angebote", "Siparişler": "Bestellungen", "İrsaliyeler": "Lieferscheine", "Faturalar": "Rechnungen", "yakında": "bald", "Bu bölüm yakında eklenecek.": "Dieser Bereich folgt in Kürze.", "Fatura Kes": "Rechnung erstellen", "Önce açık ürün kartını kapatın.": "Bitte zuerst die geöffnete Artikelkarte schließen.", "Ana Sayfa": "Startseite", "Sıralamayı değiştirmek için sürükleyip bırakın.": "Reihenfolge per Drag & Drop ändern.", "Ara: ürün, barkod, stok kodu, teklif no…": "Suchen: Artikel, Barcode, Art.-Nr., Angebots-Nr. …", "Yeni": "Neu", "Yeni Teklif": "Neues Angebot", "Açık teklif": "Offene Angebote", "ürünün alış fiyatı arttı, satış fiyatı güncellenmedi": "Artikel mit gestiegenem EK, Verkaufspreis nicht angepasst", "Fiyatları gör": "Preise ansehen", "ürün kritik stokta": "Artikel mit kritischem Bestand", "Sipariş önerisi": "Bestellvorschlag", "teklifin süresi doldu": "Angebot abgelaufen", "teklifin süresi yakında doluyor": "Angebot läuft bald ab", "Teklifi aç": "Angebot öffnen", "Gömülü ürün listesi yüklenmeyi bekliyor": "Eingebettete Artikelliste wartet auf Import", "Tavuk fiyat listesi yüklenmeyi bekliyor (25 ürün)": "Hähnchen-Preisliste wartet auf Import (25 Artikel)", "Yükle": "Importieren", "Hızlı İşlemler": "Schnellaktionen", "klavye kısayolları": "Tastenkürzel", "Bekleyen İşler": "Offene Aufgaben", "Bekleyen iş yok.": "Keine offenen Aufgaben.", "Son Teklifler": "Letzte Angebote", "Süresi doldu": "Abgelaufen", "Taslak": "Entwurf", "Henüz kayıtlı teklif yok.": "Noch keine gespeicherten Angebote.", "Sık Kullanılanlar": "Favoriten", "düzenle": "bearbeiten", "düzenle ile ekleyin": "über bearbeiten hinzufügen", "Bu Hafta Kâr": "Gewinn diese Woche", "Ana sayfada görmek istediğiniz işlemleri işaretleyin. Sıralamayı ana sayfada sürükleyerek değiştirebilirsiniz.": "Aktionen für die Startseite ankreuzen. Die Reihenfolge ändern Sie auf der Startseite per Drag & Drop.", "Varsayılana dön": "Standard wiederherstellen", "Tamam": "OK", "Yardım": "Hilfe", "Kapat": "Schließen", "Ürün · Fiyat · Kâr · Teklif": "Artikel · Preise · Gewinn · Angebote", "Tüm alanlara tıklayıp yazabilirsiniz. Enter = sonraki alan.": "Alle Felder sind direkt bearbeitbar. Enter = nächstes Feld.", "Kârım €": "Mein Gewinn €", "Müşt. kârı €": "Kundengewinn €", "Nakis %": "NaksEt %", "Müşt. %": "Kunde %", "Birim fiyat": "Einzelpreis", "Nakis kârım € (toplam)": "Mein NaksEt-Gewinn € (gesamt)", "Müşteri kârı € (toplam)": "Kundengewinn € (gesamt)", "Müşterinin bu siparişten kârı (son satışa göre)": "Gewinn des Kunden aus diesem Auftrag (zum Endpreis)", "son satış toplamı (KDV hariç)": "Endverkauf gesamt (netto)", "fiyat": "Preis", "Bu listedeki fiyatlar programda zaten aynı, yüklenecek değişiklik yok.": "Die Preise dieser Liste sind im Programm bereits identisch – keine Änderungen.", "ürünün Müşteriye Özel Fiyatı listedekiyle aynı.": "Artikel haben bereits denselben kundenspezifischen Preis.", "Bu listede Müşteriye Özel Fiyat (Fiyat 7) var, ama giriş yaptığınız kullanıcının bu fiyatı değiştirme yetkisi yok. Lütfen admin ile giriş yapın veya Kullanıcılar ekranından yetki verin.": "Diese Liste enthält kundenspezifische Preise (Preis 7), aber der angemeldete Benutzer darf diese nicht ändern. Bitte als admin anmelden oder Berechtigung vergeben.", "Yeni fiyat listesi hazır: Tavuk fiyatları (25 ürün)": "Neue Preisliste bereit: Hähnchenpreise (25 Artikel)", "Alış maliyetli fiyat ve Müşteriye Özel Fiyat (Fiyat 7). Önizlemeyi kontrol edip İçe aktar düğmesine basın.": "Einstandspreis und kundenspezifischer Preis (Preis 7). Vorschau prüfen und auf Importieren klicken.", "Kilo Çeşitleri Oluştur": "Gewichtsvarianten erstellen", "Kilolar": "Kilogramm", "kg fiyatı olarak aynen kopyala": "als kg-Preis übernehmen", "parça fiyatına çevir (kg fiyatı × kilo)": "in Stückpreis umrechnen (kg-Preis × kg)", "Kaynak ürün": "Ausgangsartikel", "pasif yap (önerilen)": "inaktiv setzen (empfohlen)", "aktif kalsın": "aktiv lassen", "Kg belirtilmemiş dönerleri seç": "Döner ohne kg-Angabe wählen", "Seçimi temizle": "Auswahl bereinigen", "döner, kg yok": "Döner, ohne kg", "Oluşturulacak ürünler": "Neue Artikel", "zaten var, atlanacak": "existieren bereits, werden übersprungen", "Yeni ürün adı": "Neuer Artikelname", "zaten var": "existiert", "Ürün ve kilo seçin.": "Artikel und kg wählen.", "yeni ürün": "neue Artikel", "kaynak ürün pasif yapılacak": "Ausgangsartikel werden inaktiv", "Ürünleri oluştur": "Artikel erstellen", "yeni ürün oluşturulacak.": "neue Artikel werden erstellt.", "kaynak ürün pasif yapılacak.": "Ausgangsartikel werden inaktiv gesetzt.", "yeni ürün oluşturuldu.": "neue Artikel erstellt.", "Seçtiğiniz her ürün için aşağıdaki kilolarda ayrı ürün oluşturulur. Resim, grup, KDV, fiyatlar ve diğer tüm bilgiler kopyalanır; ada kilo eklenir (örn. NAKSET TAVUK DREHSPIEß 10 KG). Aynı adla zaten olan ürünler atlanır.": "Für jeden gewählten Artikel wird je kg ein eigener Artikel erstellt. Bild, Gruppe, MwSt., Preise und alle übrigen Daten werden kopiert; der Name erhält das Gewicht (z. B. NAKSET TAVUK DREHSPIEß 10 KG). Bereits vorhandene Namen werden übersprungen.", "Müşteriye Özel Fiyat": "Kundenspezifischer Preis", "Müşteriye Özel Fiyat (KDV hariç)": "Kundenspezifischer Preis (netto)", "teklifte kullanılır": "für Angebote", "Müşteriye Özel Fiyatlar": "Kundenspezifische Preise", "Müşteriye özel fiyat": "Kundenpreis", "Çıktı": "Ausgabe", "Sadece fiyat (eski + teklif)": "Nur Preise (bisher + Angebot)", "Miktarlı (sipariş adedine göre tutar)": "Mit Menge (Beträge nach Bestellmenge)", "müşteriye özel": "kundenspezifisch", "Ana fiyat seviyesi": "Basis-Preisstufe", "ana seviye": "Basisstufe", "Özel fiyatı olan müşteriler": "Kunden mit Sonderpreisen", "Diğer müşteriler (yeni liste aç)": "Andere Kunden (neue Liste)", "henüz yok": "noch keine", "— yeni müşteri (kaydedilmedi) —": "— neuer Kunde (nicht gespeichert) —", "Yeni müşteri (manuel)": "Neuer Kunde (manuell)", "Bu müşterinin özel fiyatlarını sil": "Sonderpreise dieses Kunden löschen", "Müşteri adı": "Kundenname", "Not": "Notiz", "Sadece özel fiyatlı ürünleri göster": "Nur Artikel mit Sonderpreis", "ürün özel fiyatlı": "Artikel mit Sonderpreis", "Fark %": "Differenz %", "Geçerli fiyat": "Gültiger Preis", "Özel fiyatı kaldır": "Sonderpreis entfernen", "Müşteri adı girilmedi": "Kein Kundenname", "Bu müşteriye teklif hazırla": "Angebot für diesen Kunden", "Önce müşteri adını girin.": "Bitte zuerst den Kundennamen eingeben.", "Bu müşteri için zaten bir özel fiyat listesi var.": "Für diesen Kunden gibt es bereits eine Sonderpreisliste.", "Bu müşterinin özel fiyat listesi silinsin mi?": "Sonderpreisliste dieses Kunden löschen?", "Bu müşterinin özel fiyat listesi var": "Für diesen Kunden gibt es Sonderpreise", "Özel fiyatlı ürünleri teklife ekle": "Artikel mit Sonderpreis ins Angebot", "Özel fiyatları düzenle": "Sonderpreise bearbeiten", "Bu müşteri için özel fiyat listesi yok.": "Für diesen Kunden gibt es keine Sonderpreise.", "Özel fiyat listesi aç": "Sonderpreisliste anlegen", "Fiyatları müşteriye kaydet": "Preise beim Kunden speichern", "Bu teklifte yazdığınız özel fiyatlar ve ana seviye, bir sonraki teklifte otomatik gelsin": "Sonderpreise und Basisstufe dieses Angebots für künftige Angebote speichern", "Teklifte özel fiyat girilmiş ürün yok.": "Im Angebot sind keine Sonderpreise eingetragen.", "ürünün özel fiyatı müşteriye kaydedilecek.": "Sonderpreise werden beim Kunden gespeichert.", "Devam edilsin mi?": "Fortfahren?", "Müşteriye özel fiyatlar kaydedildi.": "Kundenspezifische Preise gespeichert.", "Bu müşteri tüm ürünleri ana fiyat seviyesinden alır; aşağıda özel fiyat yazdığınız ürünlerde sadece ona ait fiyat geçerlidir (KDV hariç). Boş bırakılan ürün ana seviyeden gelir.": "Dieser Kunde bezieht alle Artikel zur Basis-Preisstufe; für Artikel mit eingetragenem Sonderpreis gilt nur dieser Preis (netto). Leere Felder = Basisstufe.", "Dahili sütunlar işaretli (alış maliyeti / Nakis marjı / müşteri marjı).": "Interne Spalten sind markiert (EK / NaksEt-Marge / Kundenmarge).", "Tamam = Kaldır, sadece müşteri sütunlarıyla devam et (önerilen)": "OK = Entfernen, nur mit Kundenspalten fortfahren (empfohlen)", "İptal = Dahili sütunlarla iç kontrol nüshası göster": "Abbrechen = Interne Kontrollversion mit diesen Spalten anzeigen", "Adım 1: Seçim": "Schritt 1: Auswahl", "Adım 2: Fatura görünümünde düzenle": "Schritt 2: In Rechnungsansicht bearbeiten", "Fatura görünümünde düzenle": "In Rechnungsansicht bearbeiten", "Dahili (belgede)": "Intern (im Dokument)", "Kontrol için açın, müşteriye göndermeden önce kaldırın.": "Zur Kontrolle einblenden, vor dem Versand an den Kunden ausblenden.", "Alış maliyetli fiyat": "Einstandspreis (EK)", "Nakis kâr marjı": "NaksEt-Marge", "Müşteri kâr marjı": "Kundenmarge", "işaretleyin; bir fiyata tıklayınca özel fiyat olarak alınır": "ankreuzen; Klick auf einen Preis übernimmt ihn als Sonderpreis", "Tabloda göster": "In Tabelle anzeigen", "Tüm fiyatlar": "Alle Preise", "Alış maliyetli": "EK", "Nakis kâr €": "NaksEt-Gewinn €", "Nakis marj %": "NaksEt-Marge %", "Müşteri marj %": "Kundenmarge %", "Özel fiyat olarak al": "Als Sonderpreis übernehmen", "teklif satırı": "Positionen", "Nakis kâr": "NaksEt-Gewinn", "Seçime dön": "Zurück zur Auswahl", "Yukarı": "Nach oben", "Aşağı": "Nach unten", "Ürün seçin veya yazın": "Artikel wählen oder eingeben", "Listeden başka ürün seçerek ürünü değiştirin; serbest yazı sadece teklifteki adı değiştirir": "Anderen Artikel aus der Liste wählen, um ihn zu ersetzen; freier Text ändert nur die Bezeichnung im Angebot", "orijinal": "Original", "serbest satır": "freie Position", "Satırı sil": "Position löschen", "Tüm alanlara tıklayıp yazabilirsiniz.": "Alle Felder sind direkt bearbeitbar.", "Dahili": "Intern", "Fiyatlar": "Preise", "değiştirmek için tıklayın": "zum Ändern anklicken", "Birim fiyat (net)": "Einzelpreis (netto)", "İnd. %": "Rab. %", "Teklifte satır yok.": "Keine Positionen im Angebot.", "Ürün ekle": "Artikel hinzufügen", "Ürün adı, stok kodu… yazıp seçin": "Artikelname, Art.-Nr. … eingeben und wählen", "Serbest satır (örn. nakliye)": "Freie Position (z. B. Fracht)", "Nakis kâr toplamı": "NaksEt-Gewinn gesamt", "ort. marj": "Ø Marge", "Bu ürün teklifte zaten var.": "Dieser Artikel ist bereits im Angebot.", "Listeden bir ürün seçin.": "Bitte einen Artikel aus der Liste wählen.", "dahili sütunlar açık": "interne Spalten sichtbar", "Dahili sütunlar (alış maliyeti / kâr marjları) belgede görünüyor. Müşteriye gönderilecekse önce kaldırın. Yine de PDF oluşturulsun mu?": "Interne Spalten (EK / Margen) sind im Dokument sichtbar. Vor dem Versand an den Kunden bitte ausblenden. Trotzdem PDF erstellen?", "Fiyatlar KDV hariçtir. Sarı sütunlar dahilidir (sadece sizin için). Nakis marjı = (teklif fiyatı − alış maliyetli) ÷ alış maliyetli; müşteri marjı = (son satış KDV hariç − teklif fiyatı) ÷ teklif fiyatı.": "Preise netto. Gelbe Spalten sind intern. NaksEt-Marge = (Angebotspreis − EK) ÷ EK; Kundenmarge = (Endpreis netto − Angebotspreis) ÷ Angebotspreis.", "Teklif no": "Angebots-Nr.", "Tarih": "Datum", "Ödeme koşulu": "Zahlungsbedingung", "Teslimat koşulu": "Lieferbedingung", "Giriş metni": "Einleitungstext", "Notlar": "Notizen", "Kapanış metni": "Schlusstext", "Teklifte gösterilecekler (işaretleyin)": "Im Angebot anzeigen (ankreuzen)", "Fiyat alternatifleri": "Preisalternativen", "Sütunlar": "Spalten", "Belge": "Dokument", "Stok kodu": "Artikelnr.", "Koli içi (VE)": "VE", "KDV %": "MwSt. %", "Teklif fiyatı": "Angebotspreis", "İndirim %": "Rabatt %", "Miktar": "Menge", "Toplam": "Gesamt", "Resim": "Bild", "Gruplara göre": "Nach Gruppen", "Toplam bloğu (net / KDV / brüt)": "Summenblock (netto / MwSt. / brutto)", "Müşteri adres bloğu": "Kundenadresse", "İmza alanı": "Unterschriftsfeld", "Logo": "Logo", "Teklif fiyatı bazı": "Basis Angebotspreis", "Ürünler": "Artikel", "işaretleyin; miktar, özel fiyat ve indirim isteğe bağlı": "ankreuzen; Menge, Sonderpreis und Rabatt optional", "Sadece seçilenleri göster": "Nur ausgewählte anzeigen", "Özel fiyat": "Sonderpreis", "Toplam (KDV hariç)": "Gesamt (netto)", "Teklifi kaydet": "Angebot speichern", "Fiyatlar tabloda KDV hariçtir. Özel fiyat boşsa baz fiyat kullanılır. Müşteri bilgileri ve teklif ayarları (sütunlar, metinler) bir sonraki teklif için hatırlanır.": "Preise in der Tabelle sind netto. Ohne Sonderpreis wird der Basispreis verwendet. Spalten und Texte werden für das nächste Angebot gespeichert.", "Önce teklife ürün seçin.": "Bitte zuerst Artikel für das Angebot auswählen.", "Müşteri adı boş. Yine de kaydedilsin mi?": "Kundenname ist leer. Trotzdem speichern?", "Teklif kaydedildi": "Angebot gespeichert", "Kaydedilmemiş değişiklikler kaybolacak. Devam edilsin mi?": "Ungespeicherte Änderungen gehen verloren. Fortfahren?", "Bu teklif silinsin mi?": "Dieses Angebot löschen?", "Ürün listesini filtreleri ve kaydırmasıyla kenara al; ana sayfaya dön": "Artikelliste mit Filtern und Scrollposition parken; zur Startseite", "Ürün Listesi": "Artikelliste", "Rapor": "Bericht", "Ürün Kataloğu": "Produktkatalog", "Müşteriye verilecek sade ürün listesi: müşteri adı veya başka bilgi yazılmaz. Ürünleri ve sütunları seçin, sonra önizleyin; PDF ya da Excel olarak alın.": "Neutrale Artikelliste zur Weitergabe an Kunden: ohne Kundenname oder sonstige Angaben. Artikel und Spalten wählen, Vorschau ansehen, als PDF oder Excel ausgeben.", "Filtreye uyan bütün ürünler": "Alle Artikel laut Filter", "Sadece işaretlediklerim": "Nur angekreuzte", "Fiyatlar (isteğe bağlı)": "Preise (optional)", "Koli fiyatı da": "Auch Kartonpreis", "ürün listede": "Artikel in der Liste", "Son Satış (KDV dahil)": "Endpreis (inkl. MwSt.)", "Filtreye uyan ürün yok.": "Keine Artikel für diesen Filter.", "Ön İzleme": "Vorschau", "Geri": "Zurück", "seçili ürün filtre dışında kaldı, listeye girmez": "ausgewählte Artikel außerhalb des Filters – nicht in der Liste", "Müşterinin şu an aldığı fiyat": "Aktueller Preis des Kunden", "Kâr / zarar için baz fiyat": "Basispreis für Gewinn / Verlust", "bu müşteri için hatırlandı": "für diesen Kunden gespeichert", "Karşılaştırmak için en az bir fiyat daha seçin.": "Bitte mindestens einen weiteren Preis zum Vergleich wählen.", "Alış fiyatı": "Einkaufspreis", "Maliyetli Alış": "Einstandspreis", "seçili": "ausgewählt", "Birden fazla seçebilirsiniz": "Mehrfachauswahl möglich", "Ne yapmak istiyorsunuz?": "Was möchten Sie tun?", "gruplar": "Gruppen", "Gruplar": "Gruppen", "Grup seçerseniz o gruptaki bütün aktif ürünler şablona girer; gruba sonradan eklenen ürünler de kendiliğinden gelir. İstemediğiniz ürünlerin işaretini aşağıda kaldırabilir, başka gruptan tek tek ürün de ekleyebilirsiniz.": "Bei gewählter Gruppe gehören alle aktiven Artikel der Gruppe zur Vorlage – auch später hinzugefügte. Unerwünschte Artikel können unten abgewählt, weitere einzeln hinzugefügt werden.", "Grup seçili olduğu için şablonda – çıkarmak için işareti kaldırın": "In der Vorlage, da die Gruppe gewählt ist – zum Entfernen Haken entfernen", "Şablondan çıkarıldı": "Aus der Vorlage entfernt", "hariç": "ausgeschlossen", "Grup seçili olduğu için şablonda": "In der Vorlage, da die Gruppe gewählt ist", "Önce grup veya ürün seçin.": "Bitte zuerst Gruppe oder Artikel wählen.", "Sonra": "Später", "Ürün Şablonları": "Artikelvorlagen", "Şablon": "Vorlage", "Şablon kaydet": "Vorlage speichern", "İşaretli ürünleri şablon olarak kaydet": "Angekreuzte Artikel als Vorlage speichern", "Ürün şablonu: seçince liste şablonun ürünleriyle süzülür": "Artikelvorlage: filtert die Liste auf die Artikel der Vorlage", "Önce ürün işaretleyin.": "Bitte zuerst Artikel ankreuzen.", "ürün şablon olarak kaydedilecek. Şablonun adı:": "Artikel werden als Vorlage gespeichert. Name der Vorlage:", "şablonu zaten var. Üzerine yazılsın mı?": "existiert bereits. Überschreiben?", "şablonu kaydedildi": "Vorlage gespeichert", "Bu şablonda programda bulunan ürün yok.": "Diese Vorlage enthält keine vorhandenen Artikel.", "Sık kullandığınız ürün gruplarını şablon olarak kaydedin (örn. Nakis ürünleri, Kuzu fiyatları, Taze tavuk). Şablonu seçince fiyat listesi, karşılaştırma, katalog veya teklif o ürünlerle hazır açılır. Ürünler stok koduna göre saklanır.": "Häufig genutzte Artikelgruppen als Vorlage speichern (z. B. Nakis-Artikel, Lammpreise, frisches Hähnchen). Mit einer Vorlage öffnen Preisliste, Vergleich, Katalog oder Angebot sofort mit diesen Artikeln. Gespeichert wird nach Artikelnummer.", "Hızlı aç": "Schnell öffnen", "Stok kodu programda bulunamadı": "Artikelnummer nicht im Programm", "bulunamadı": "nicht gefunden", "Fiyat listesi": "Preisliste", "Karşılaştırma": "Vergleich", "Katalog": "Katalog", "Toplu fiyat": "Massenpreis", "Düzenle": "Bearbeiten", "Sil": "Löschen", "Henüz şablon yok. \"+ Yeni şablon\" ile başlayın.": "Noch keine Vorlagen. Mit \"+ Neue Vorlage\" beginnen.", "şablon": "Vorlagen", "Yeni şablon": "Neue Vorlage", "şablonu silinsin mi? (Ürünler silinmez.)": "Vorlage löschen? (Artikel bleiben erhalten.)", "Şablon adı": "Name der Vorlage", "örn. Nakis ürünleri": "z. B. Nakis-Artikel", "Sadece şablondakileri göster": "Nur Artikel der Vorlage", "Stok kodlarını yapıştırarak ekle (Excel’den kopyalayabilirsiniz)": "Artikelnummern einfügen (aus Excel kopieren)", "Ekle": "Hinzufügen", "ürün şablonda": "Artikel in der Vorlage", "Şablonu kaydet": "Vorlage speichern", "ürün eklendi.": "Artikel hinzugefügt.", "kod bulunamadı (kutuda bırakıldı)": "Nummern nicht gefunden (im Feld belassen)", "Şablona bir ad verin.": "Bitte einen Namen eingeben.", "adında bir şablon zaten var.": "– Vorlage mit diesem Namen existiert bereits.", "Kaydedilemedi.": "Speichern fehlgeschlagen.", "Seçili gruplardaki ürünler – rapora girmesini istemediklerinizin işaretini kaldırın": "Artikel der gewählten Gruppen – Haken entfernen, um Artikel aus dem Bericht auszuschließen", "Önce yukarıdan grup seçin.": "Bitte zuerst oben eine Gruppe wählen.", "Şablondaki ürünler (sıralı)": "Artikel der Vorlage (sortiert)", "Sıra / Sil": "Reihenfolge / Löschen", "Yukarı": "Nach oben", "Aşağı": "Nach unten", "Şablondan çıkar": "Aus der Vorlage entfernen", "Henüz ürün yok – aşağıdan ekleyin.": "Noch keine Artikel – unten hinzufügen.", "Ürün ekle / çıkar": "Artikel hinzufügen / entfernen", "boş bırakılabilir": "kann leer bleiben", "İşaretli ürünlerle şablonu güncelle (sıra korunur)": "Vorlage mit den angekreuzten Artikeln aktualisieren (Reihenfolge bleibt)", "Şablonu güncelle": "Vorlage aktualisieren", "Şablonda görünecek adı değiştir": "Anzeigename in der Vorlage ändern", "Alış + %": "EK + %", "Alış + % bazı": "Basis EK + %", "Hazır şablondan başla": "Mit Vorlage beginnen", "Hazır şablon": "Vorlage", "— şablon seçin —": "— Vorlage wählen —", "Koli içi gösterilmesin": "Ohne VE (Karton)", "Katalog, teklif, karşılaştırma ve fiyat listesinde bu şablonun ürünlerinde koli içi yazılmaz; fiyat kg/adet başına olur.": "Katalog, Angebot, Vergleich und Preisliste zeigen bei diesen Artikeln keine VE; Preis je kg/Stück.", "📋 Şablondan ekle…": "📋 Aus Vorlage hinzufügen…", "Tıklayınca şablonun ürünleri sırasıyla teklife eklenir; istemediğinizin işaretini kaldırın.": "Ein Klick fügt die Artikel der Vorlage in ihrer Reihenfolge hinzu; nicht gewünschte abwählen.", "Alış fiyatının üzerine yüzde: teklif fiyatı = alış × (1 + % / 100)": "Aufschlag auf den Einkaufspreis: Angebotspreis = EK × (1 + % / 100)", "Bu şablonda görünecek ad (boş bırakırsanız ürünün kendi adı):": "Anzeigename in dieser Vorlage (leer = Artikelname):", "şablonu güncellensin mi?": "– Vorlage aktualisieren?"});
 const I18N_LC = {}; for(const k in I18N) I18N_LC[k.replace(/\s+/g,' ').trim()] = I18N[k];
@@ -4458,7 +4459,7 @@ function renderKar(){
         {h:'Maliyetli Alış', n:1, v:r=>r.m, f:r=>fmtE(r.m)},
         {h:'Değişim ', n:1, v:r=>r.m!=null?chgP(r.pm,r.m):null, f:r=>r.m!=null&&r.pm!=null&&r.m!==r.pm?`${sgnE(r.m-r.pm,false)} ${sgnP(chgP(r.pm,r.m),false,'',3)}`:'<span class="na">–</span>'},
         {h:'Önceki alış fiyatı', n:1, v:r=>r.a!=null?r.pa:null, f:r=>r.a!=null&&r.pa!=null?fmtE(r.pa):'<span class="na">–</span>'},
-        {h:'Alış Fiyatı', n:1, v:r=>r.a, f:r=>fmtE(r.a)},
+        {h:'Fatura (Alış) Fiyatı', n:1, v:r=>r.a, f:r=>fmtE(r.a)},
         {h:'Değişim', n:1, v:r=>r.a!=null?chgP(r.pa,r.a):null, f:r=>r.a!=null&&r.pa!=null&&r.a!==r.pa?`${sgnE(r.a-r.pa,false)} ${sgnP(chgP(r.pa,r.a),false,'',3)}`:'<span class="na">–</span>'},
         {h:'Kullanıcı', v:r=>r.u}];
       html = `<div class="dsec">${esc(p.ad)} <span class="cnt">· ${esc(p.grup||'')}</span> <button data-open="${p.id}" style="font-size:12px;text-transform:none;letter-spacing:0">Ürünü incele</button></div>`
@@ -4469,7 +4470,7 @@ function renderKar(){
       const pIx = new Map(actv().map((p,i)=>[p.id,i]));
       ev.sort((a,b)=>(a.f===b.f ? 0 : (a.f==='maliyet' ? -1 : 1)) || (pIx.get(a.p.id)-pIx.get(b.p.id)) || String(a.t).localeCompare(String(b.t)));
       const cols = [{h:'Tarih', v:e=>e.t, f:e=>fmtD(e.t)}, {h:'Ürün', v:e=>e.p.ad||'', f:e=>nmP(e.p)}, {h:'Grup', v:e=>e.p.grup||''},
-        {h:'Alan', v:e=>e.f==='alis'?'Alış Fiyatı':'Maliyetli Alış'},
+        {h:'Alan', v:e=>e.f==='alis'?'Fatura (Alış) Fiyatı':'Maliyetli Alış'},
         {h:'Önceki', n:1, v:e=>e.prev, f:e=>e.prev==null?'<span class="na">– (ilk giriş)</span>':fmtE(e.prev)}, {h:'Yeni', n:1, v:e=>e.v, f:e=>fmtE(e.v)},
         {h:'Fark €', n:1, v:e=>e.prev==null?null:e.v-e.prev, f:e=>e.prev==null?'<span class="na">–</span>':sgnE(e.v-e.prev,false)},
         {h:'Fark %', n:1, v:e=>chgP(e.prev,e.v), f:e=>sgnP(chgP(e.prev,e.v),false,'',3)},
@@ -4509,7 +4510,7 @@ function renderKar(){
       html = `<div class="dtiles">${tile(up.length,'Fiyatı artan ürün', up.length?'bad':'')}${tile(dn.length,'Fiyatı düşen ürün', dn.length?'ok':'')}
         ${tile(avgP==null?'–':sgnP(avgP,false,'',3),'Ort. değişim')}${tile(up.length?esc(up.slice().sort((a,b)=>b.pct-a.pct)[0].p.ad):'–','En çok artan')}${tile(dn.length?esc(dn.slice().sort((a,b)=>a.pct-b.pct)[0].p.ad):'–','En çok düşen')}</div>`
         + karTable('degisim', cols, ys, {k:-1}, {pid:x=>x.p.id, csv:'Alis_fiyati_artis_azalis', empty:'Bu dönemde alış fiyatı değişen ürün yok.'})
-        + `<div class="dnote">${fld==='alis'?'Alış Fiyatı':'Maliyetli Alış'} · ${since?'başlangıç tarihindeki değer ile güncel değer karşılaştırılır.':'ilk kayıt ile güncel değer karşılaştırılır.'} Artış kırmızı, düşüş yeşil gösterilir.</div>`;
+        + `<div class="dnote">${fld==='alis'?'Fatura (Alış) Fiyatı':'Maliyetli Alış'} · ${since?'başlangıç tarihindeki değer ile güncel değer karşılaştırılır.':'ilk kayıt ile güncel değer karşılaştırılır.'} Artış kırmızı, düşüş yeşil gösterilir.</div>`;
     } else {
       const rs = xs.map(x=>{ const o = lvl(x.p, L1, x.base), n = lvl(x.p, L1, x.now); if(o.price==null) return null;
         return {...x, price:n.price, op:o.profit, np:n.profit, om:o.margin, nm:n.margin, dp:okN(o.profit)&&okN(n.profit)?n.profit-o.profit:null,
@@ -4555,12 +4556,12 @@ function renderKar(){
     const xs = (hf==='nohedef' ? all.filter(x=>x.h==null) : hf==='hvar' ? all.filter(x=>x.h!=null) : hf==='zarar' ? all.filter(x=>okN(x.c.profit) && x.c.profit<0) : hf ? all.filter(x=>x.st===hf) : all).sort((a,b)=>ord[a.st]-ord[b.st] || (b.gap??0)-(a.gap??0));
     const loss = all.filter(x=>okN(x.c.profit) && x.c.profit<0).length;
     const avgG = alt.length ? alt.map(x=>x.need).filter(okN).reduce((a,b)=>a+b,0)/alt.length : null;
-    const DUR = {mdus:'<span class="pill low" style="background:#fff4e0;color:#b45309;font-weight:700" title="Fiyat hedefte ama maliyet arttığı için marj planlananın altına düştü">⚠ Marj düştü</span>', alt:'<span class="pill neg">▼ Altında</span>', ust:'<span class="pill pos">▲ Hedefte / üstünde</span>', yok:'<span class="pill low">Fiyat yok</span>', nh:'<span class="pill neg" title="Satıra tıklayıp ürün kartında Hedef (Basic) Fiyat girin">Hedef girilmemiş ✎</span>', hyok:'<span class="pill low" title="Başlangıç maliyeti Excel listesinden aktarıldı; Hedef (Basic) Fiyat girilmemiş">Hedef yok · Excel</span>'};
+    const DUR = {mdus:'<span class="pill low" style="background:#fff4e0;color:#b45309;font-weight:700" title="Fiyat hedefte ama maliyet arttığı için marj planlananın altına düştü">⚠ Marj düştü</span>', alt:'<span class="pill neg">▼ Altında</span>', ust:'<span class="pill pos">▲ Hedefte / üstünde</span>', yok:'<span class="pill low">Fiyat yok</span>', nh:'<span class="pill neg" title="Satıra tıklayıp ürün kartında Başlangıç Vakıf Satış girin">Hedef girilmemiş ✎</span>', hyok:'<span class="pill low" title="Başlangıç maliyeti Excel listesinden aktarıldı; Başlangıç Vakıf Satış girilmemiş">Hedef yok · Excel</span>'};
     const DURT = {mdus:'Marj düştü (maliyet arttı)', nh:'Hedef girilmemiş', alt:'Altında', ust:'Hedefte / üstünde', yok:'Fiyat yok', hyok:'Hedef yok (Excel başlangıç maliyeti)'};
     const cols = [{h:'Ürün', t:'s', v:x=>x.p.ad||'', f:x=>nmP(x.p)}, {h:'Grup', t:'s', v:x=>x.p.grup||''},
       {h:'Durum', t:'s', v:x=>DURT[x.st], f:x=>DUR[x.st]},
       {h:'Başlangıç Maliyet', n:1, t:'e', v:x=>x.b, f:x=>`<b>${fmtE(x.b)}</b>`},
-      {h:'Hedef (Basic) Fiyat', n:1, t:'e', v:x=>x.h, f:x=>`<b>${fmtE(x.h)}</b>`},
+      {h:'Başlangıç Vakıf Satış', n:1, t:'e', v:x=>x.h, f:x=>`<b>${fmtE(x.h)}</b>`},
       {h:'Planlanan marj', n:1, t:'p', v:x=>x.pm, f:x=>pill(x.pm)},
       {h:'Güncel maliyetli alış', n:1, t:'e', v:x=>x.c.cost, f:x=>fmtE(x.c.cost)},
       {h:'Maliyet farkı €', n:1, t:'e', v:x=>x.mc, f:x=>sgnE(x.mc,false)},
@@ -4573,8 +4574,8 @@ function renderKar(){
       {h:'Gereken artış %', n:1, t:'p', v:x=>x.need, f:x=>x.need==null?'<span class="na">–</span>':sgnP(x.need,false)});
     html = `<div class="dtiles">${tile(all.length-hyok.length-nhs.length,'Hedef fiyatı girilmiş ürün','','hvar')}${hyok.length?tile(hyok.length,'Excel başlangıç maliyeti (hedef yok)','warn','hyok'):''}${tile(alt.length,'Hedefin altında', alt.length?'bad':'ok','alt')}${tile(mdus.length,'⚠ Marj düştü (maliyet arttı)', mdus.length?'warn':'ok','mdus')}${tile(ust.length,'Hedefte veya üstünde','ok','ust')}
       ${yok.length?tile(yok.length,'Seviye fiyatı girilmemiş','warn','yok'):''}${tile(loss,'Zararda', loss?'bad':'','zarar')}${tile(avgG==null?'–':sgnP(avgG,false),'Ort. gereken fiyat artışı','','alt')}${tile(noH,'Hedef fiyatı girilmemiş ürün', noH?'warn':'ok','nohedef')}</div>`
-      + (hf ? `<div class="dnote" style="margin:0 0 8px">${esc(tr('Gösterilen'))}: ${hf==='nohedef'?`<span style="color:var(--muted)">${esc(tr('Satıra tıklayın → ürün kartında Hedef (Basic) Fiyat girip kaydedin; ürün bu listeden düşer.'))}</span> · `:''}<b>${esc({mdus:'Marj düştü (maliyet arttı)',hvar:'Hedef fiyatı girilmiş',hyok:'Excel başlangıç maliyeti (hedef yok)',alt:'Hedefin altında',ust:'Hedefte veya üstünde',yok:'Seviye fiyatı girilmemiş',zarar:'Zararda',nohedef:'Hedef fiyatı girilmemiş'}[hf]||hf)}</b> (${xs.length}) · <button class="kclr" data-hd="${hf}">✕ Tümünü göster</button></div>` : '')
-      + karTable('hedef', cols, xs, {k:-1}, {pid:x=>x.p.id, csv:'Hedef_fiyat', rowCls:x=>okN(x.c.profit)&&x.c.profit<0?'loss':'', empty: withH.length ? 'Bu filtreye uyan ürün yok.' : 'Henüz hiçbir ürüne Hedef (Basic) Fiyat girilmemiş. Ürün kartında “Hedef (Basic) Fiyat” alanını doldurun.'})
+      + (hf ? `<div class="dnote" style="margin:0 0 8px">${esc(tr('Gösterilen'))}: ${hf==='nohedef'?`<span style="color:var(--muted)">${esc(tr('Satıra tıklayın → ürün kartında Başlangıç Vakıf Satış girip kaydedin; ürün bu listeden düşer.'))}</span> · `:''}<b>${esc({mdus:'Marj düştü (maliyet arttı)',hvar:'Hedef fiyatı girilmiş',hyok:'Excel başlangıç maliyeti (hedef yok)',alt:'Hedefin altında',ust:'Hedefte veya üstünde',yok:'Seviye fiyatı girilmemiş',zarar:'Zararda',nohedef:'Hedef fiyatı girilmemiş'}[hf]||hf)}</b> (${xs.length}) · <button class="kclr" data-hd="${hf}">✕ Tümünü göster</button></div>` : '')
+      + karTable('hedef', cols, xs, {k:-1}, {pid:x=>x.p.id, csv:'Hedef_fiyat', rowCls:x=>okN(x.c.profit)&&x.c.profit<0?'loss':'', empty: withH.length ? 'Bu filtreye uyan ürün yok.' : 'Henüz hiçbir ürüne Başlangıç Vakıf Satış girilmemiş. Ürün kartında “Başlangıç Vakıf Satış” alanını doldurun.'})
       + `<div class="dnote"><b>⚠ Marj düştü</b> = satış fiyatı hedefte veya üstünde, ama güncel maliyetli alış başlangıç maliyetinden yüksek ve marj planlanan marjın altında; "Gereken artış %" planlanan marjı geri getirmek için gereken fiyat artışıdır. Tüm ürünler listelenir: önce hedefin altındakiler, sonra marjı düşenler, sonra hedefte veya üstündekiler, seçilen seviyede fiyatı olmayanlar, en sonda hedef fiyatı girilmemiş ürünler (satıra tıklayıp kartta hedef girebilirsiniz). Fark = seçilen seviyedeki fiyat − hedef fiyat (artı = hedefin üstünde). Planlanan marj = (hedef fiyat − başlangıç maliyet) ÷ başlangıç maliyet · Hedef marj (güncel) = (hedef fiyat − güncel maliyetli alış) ÷ güncel maliyetli alış. Başlangıç maliyet ürün kartından gelir; boşsa ürünün ilk kayıtlı maliyetli alışı kullanılır.</div>`;
   }
   else if(v==='hedefan'){
@@ -4592,7 +4593,7 @@ function renderKar(){
       {h:'Güncel maliyetli alış', n:1, t:'e', v:x=>x.a.m, f:x=>fmtE(x.a.m)},
       {h:'Maliyet farkı €', n:1, t:'e', v:x=>x.a.mc, f:x=>sgnE(x.a.mc,false)},
       {h:'Maliyet farkı %', n:1, t:'p', v:x=>x.a.mcP, f:x=>sgnP(x.a.mcP,false)},
-      {h:'Hedef (Basic) Fiyat', n:1, t:'e', v:x=>x.a.h, f:x=>`<b>${fmtE(x.a.h)}</b>`},
+      {h:'Başlangıç Vakıf Satış', n:1, t:'e', v:x=>x.a.h, f:x=>`<b>${fmtE(x.a.h)}</b>`},
       {h:'Planlanan kâr €', n:1, t:'e', v:x=>x.a.pk, f:x=>fmtE(x.a.pk)},
       {h:'Planlanan marj', n:1, t:'p', v:x=>x.a.pm, f:x=>pill(x.a.pm)},
       {h:'Güncel kâr € (hedef fiyatta)', n:1, t:'e', v:x=>x.a.gk, f:x=>fmtE(x.a.gk)},
@@ -4608,7 +4609,7 @@ function renderKar(){
       ${tile(avgDk==null?'–':sgnE(avgDk,true),'Ort. birim fark €')}${tile(avgDm==null?'–':sgnP(avgDm,true,' puan',1),'Ort. marj farkı')}${tile(noH,'Hedef fiyatı girilmemiş ürün', noH?'warn':'ok','nohedef')}</div>`
       + (hf ? `<div class="dnote" style="margin:0 0 8px">${esc(tr('Gösterilen'))}: <b>${esc({hvar:'Hedef fiyatı girilmiş',hyok:'Başlangıç maliyeti eksik',eksi:'Hedefin gerisinde (ekside)',arti:'Hedefte / önünde (artıda)',nohedef:'Hedef fiyatı girilmemiş'}[hf]||hf)}</b> (${xs.length}) · <button class="kclr" data-hd="${hf}">✕ Tümünü göster</button></div>` : '')
       + karTable('hedefan', cols, xs, {k:11, d:1}, {pid:x=>x.p.id, csv:'Hedef_fiyat_analizi', rowCls:x=>x.a.dk < -0.00001 ? 'loss' : '',
-          empty: withH.length ? 'Bu filtreye uyan ürün yok.' : 'Henüz hiçbir ürüne Hedef (Basic) Fiyat girilmemiş. Ürün kartında “Hedef (Basic) Fiyat” alanını doldurduğunuzda analiz burada görünür.'})
+          empty: withH.length ? 'Bu filtreye uyan ürün yok.' : 'Henüz hiçbir ürüne Başlangıç Vakıf Satış girilmemiş. Ürün kartında “Başlangıç Vakıf Satış” alanını doldurduğunuzda analiz burada görünür.'})
       + `<div class="dnote">Planlanan kâr = hedef fiyat − başlangıç maliyetli alış · Güncel kâr = hedef fiyat − güncel maliyetli alış · Marj = kâr ÷ maliyet. Örn. başlangıç 10 €, hedef 15 € → planlanan 5 € / %50; maliyet 12 € olunca hedefte 3 € / %25 → hedeften fark −2 € ve −25 puan; %50'yi korumak için gereken fiyat 18 €. Başlangıç maliyeti kartta boşsa ürünün ilk kayıtlı maliyetli alışı kullanılır. Hedef seviyesi kartta seçilir (varsayılan: ${esc(lvN(vakifL()))}).</div>`;
   }
   else if(v==='grup'){
@@ -4638,7 +4639,7 @@ function renderKar(){
     html = `<div class="dtiles">${tile(rows.length,'Grup')}${tile(wm.length?esc(wm[0].g):'–','En kârlı grup','ok')}${tile(wm.length?esc(wm[wm.length-1].g):'–','En az kârlı grup', wm.length?'bad':'')}
       ${tile(rows.reduce((a,r)=>a+r.loss,0),'Zararda olan ürün', rows.some(r=>r.loss)?'bad':'ok')}</div>`
       + karTable('grup', cols, rows, {k:-1}, {csv:'Grup_bazinda_kar', empty:'Gösterilecek veri yok.'})
-      + `<div class="dnote">Ortalamalar, seçilen fiyat seviyesinde fiyatı ve maliyetli alışı girilmiş ürünlerden hesaplanır. "Hedefin altında" = seçilen fiyatı, ürün kartındaki Hedef (Basic) Fiyatın altında olan ürün sayısı.</div>`;
+      + `<div class="dnote">Ortalamalar, seçilen fiyat seviyesinde fiyatı ve maliyetli alışı girilmiş ürünlerden hesaplanır. "Hedefin altında" = seçilen fiyatı, ürün kartındaki Başlangıç Vakıf Satışın altında olan ürün sayısı.</div>`;
   }
   else if(v==='guncel'){
     ctl.push(`<label>Fiyat seviyesi <select data-k="L1">${lvOpts(L1)}</select></label>`);
@@ -4672,7 +4673,7 @@ function renderKar(){
       ['barkod','Barkod', p=>!String(p.barkod||'').trim()],
       ['grup','Ürün grubu', p=>!String(p.grup||'').trim()],
       ['img','Resim', p=>!p.img],
-      ['hedef','Hedef (Basic) Fiyat', p=>num(p.hedef)==null]];
+      ['hedef','Başlangıç Vakıf Satış', p=>num(p.hedef)==null]];
     karCfg.eks = msKeep(karCfg.eks, CH.map(c=>c[0]));
     ctl.push(`<label>Eksik bilgi <select data-k="eks"><option value="">Tümü</option>${CH.map(c=>`<option value="${c[0]}" ${karCfg.eks===c[0]?'selected':''}>${esc(c[1])}</option>`).join('')}${msTail(karCfg.eks)}</select></label>`);
     const all = ps.map(p=>({p, m:CH.filter(c=>c[2](p))})).filter(x=>x.m.length);
@@ -4766,7 +4767,7 @@ function eksApply(pid, quiet){
   setN('alis', 'Alış fiyatı', n=>{ np.alis = n; });
   setN('maliyet', 'Maliyetli alış', n=>{ np.maliyet = n; if(num(np.basMal)==null) np.basMal = n; });
   setN('fiyat', lvName(1), n=>{ np.fiyat[0] = n; });
-  setN('hedef', 'Hedef (Basic) Fiyat', n=>{ np.hedef = n; if(!np.hedefL) np.hedefL = 1; });
+  setN('hedef', 'Başlangıç Vakıf Satış', n=>{ np.hedef = n; if(!np.hedefL) np.hedefL = 1; });
   if(has('barkod')){ const b = String(d.barkod).trim(), dup = products.find(x=>x.barkod===b && x.id!==pid);
     if(dup && !confirm(`"${old.ad}": ` + tr('Bu barkod zaten şu üründe kayıtlı') + `: "${dup.ad}". ` + tr('Yine de kaydedilsin mi?'))) return 'skip';
     np.barkod = b; }
@@ -5544,7 +5545,7 @@ const filtBar = f => `<div class="tbar">
   <select data-tf="akt"><option value="aktif" ${!f.akt||f.akt==='aktif'?'selected':''}>${esc(tr('Aktif ürünler'))}</option><option value="pasif" ${f.akt==='pasif'?'selected':''}>${esc(tr('Pasif ürünler'))}</option><option value="hepsi" ${f.akt==='hepsi'?'selected':''}>${esc(tr('Tüm ürünler (aktif + pasif)'))}</option></select>${tplSel(f)}</div>`;
 // fiyat / değer alanları (okuma, yazma, yetki)
 const VF = () => NPLV().map(i=>['f'+i, lvName(i)+' (KDV hariç)', 'f'+i]).concat([
-  ['son','Son Satış (KDV dahil)','son'], ['hedef','Hedef (Basic) Fiyat','hedef'], ['alis','Alış Fiyatı','alis'], ['maliyet','Maliyetli Alış','maliyet']]);
+  ['son','Son Satış (KDV dahil)','son'], ['hedef','Başlangıç Vakıf Satış','hedef'], ['alis','Fatura (Alış) Fiyatı','alis'], ['maliyet','Maliyetli Alış','maliyet']]);
 const vfLabel = k => (VF().find(x=>x[0]===k)||[k,k])[1];
 const getV = (p, k) => /^f\d$/.test(k) ? num(p.fiyat?.[+k[1]-1]) : num(p[k]);
 function setV(p, k, v){ if(/^f\d$/.test(k)){ p.fiyat = [0,1,2,3,4,5].map(i=>p.fiyat?.[i] ?? ''); p.fiyat[+k[1]-1] = v; } else p[k] = v; }
@@ -5684,12 +5685,12 @@ function readCsv(text){
   if(cur || row.length){ row.push(cur); rows.push(row); }
   return rows.filter(r=>r.some(v=>String(v).trim()!==''));
 }
-const IX_T = () => [['_key','— eşleştirme anahtarı —'],['ad','Ürün Adı (sadece yeni ürünler)','ekle'],['grup','Ürün Grubu','grup'],['koli','Koli İçi Adet','koli'],['alis','Alış Fiyatı','alis'],['maliyet','Maliyetli Alış','maliyet']]
+const IX_T = () => [['_key','— eşleştirme anahtarı —'],['ad','Ürün Adı (sadece yeni ürünler)','ekle'],['grup','Ürün Grubu','grup'],['koli','Koli İçi Adet','koli'],['alis','Fatura (Alış) Fiyatı','alis'],['maliyet','Maliyetli Alış','maliyet']]
   .concat(NPLV().map(i=>['f'+i, lvName(i)+' (KDV hariç)','f'+i]))
-  .concat([['son','Son Satış (KDV dahil)','son'],['hedef','Hedef (Basic) Fiyat','hedef'],['durum','Durum (Aktif / Pasif)','aktif'],['ted','Tedarikçi','tedarik'],['tedKod','Sipariş Kodu','tedarik'],['tedGun','Teslim Süresi (gün)','tedarik'],['stokMik','Stok','stokduz'],['minStok','Min. Stok','stokduz'],['maxStok','Hedef Stok','stokduz']]);
+  .concat([['son','Son Satış (KDV dahil)','son'],['hedef','Başlangıç Vakıf Satış','hedef'],['durum','Durum (Aktif / Pasif)','aktif']]);
 const IX = {rows:null, head:[], name:'', map:{}, key:'auto', keyCol:-1, hdr:true, addNew:false, plan:null, st:'hepsi', newSt:'aktif', byName:true};
 // katı sayı: '4.May' gibi Excel'in tarihe çevirdiği değerler kabul edilmez
-const ixNum = raw => { if(typeof raw==='number') return isFinite(raw) ? raw : null; const t = String(raw).trim().replace(/\s|€/g,''); if(!/^-?\d{1,3}([.,]?\d{3})*([.,]\d+)?$|^-?\d+([.,]\d+)?$/.test(t)) return null; return num(t); };
+const ixNum = raw => { if(typeof raw==='number') return isFinite(raw) ? raw : null; const t = String(raw).trim().replace(/\s|€/g,''); if(!/^-?\d{1,3}([.]?\d{3})*([.]\d+)?$|^-?\d+([.]\d+)?$/.test(t)) return null; return num(t); };
 function ixGuess(){
   const fold = v => norm(v).replace(/ü/g,'u').replace(/ö/g,'o').replace(/ş/g,'s').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ä/g,'a').replace(/ß/g,'ss').replace(/[\s._\-\/()%€]+/g,'');
   const H = IX.head.map(fold);
@@ -5701,8 +5702,8 @@ function ixGuess(){
   const g = (k, ...ps) => { const i = find(...ps); if(i>=0 && i!==IX.keyCol && !Object.values(IX.map).includes(i)) IX.map[k] = i; };
   g('maliyet', /maliyet|einstand|landed/); g('alis', /alis|einkauf|^ek$|ekpreis|netto|purchase/); g('ad', /urunad|^ad$|artikelname|bezeichnung|^name$|aciklama|beschreibung/);
   g('grup', /grup|grub|warengruppe|kategori/); g('koli', /koli|karton|^ve$|inhalt|packung/); g('son', /sonsatis|uvp|^vk$|verkauf/); g('hedef', /hedef|basic/);
-  g('tedKod', /siparis|bestellnr|lieferantenartikel/); g('ted', /tedarik|lieferant|supplier/); g('tedGun', /teslim|lieferzeit/);
-  g('durum', /^durum$|^status$/); g('minStok', /minstok|mindest|^min/); g('maxStok', /hedefstok|maxstok|^max/); g('stokMik', /^stok$|stokmiktar|bestand|menge/);
+
+  g('durum', /^durum$|^status$/); 
   NPLV().forEach(i=>g('f'+i, new RegExp('^(fiyat|preis)'+i+'$'), fold(lvName(i))));
   g('mof', /musteriyeozel|ozelfiyat|sonderpreis|kundenpreis|^(fiyat|preis)7$/);
 }
@@ -6593,7 +6594,7 @@ function ofPreview(){
 const KG = {sel:null, kgs:'10, 15, 20, 25, 30, 40, 50', src:'pasif', price:'kg', f:{akt:'aktif'}};
 const kgHasW = s => /\d+\s*(x\s*\d+\s*)?(kg|gr|g)\b/i.test(String(s||''));
 const kgIsDoner = p => /drehspie|d[öo]ner/i.test(String(p.ad||'') + ' ' + String(p.grup||'')) && !/pi[sş]mi[sş]|snack/i.test(String(p.ad||'') + ' ' + String(p.grup||'')) && !kgHasW(p.ad);
-const kgList = () => [...new Set(String(KG.kgs).split(/[^\d.,]+/).map(x=>num(x)).filter(x=>x!=null && x>0))].sort((a,b)=>a-b);
+const kgList = () => [...new Set(String(KG.kgs).split(/[^\d.]+/).map(x=>num(x)).filter(x=>x!=null && x>0))].sort((a,b)=>a-b);
 const kgName = (p, kg) => `${String(p.ad||'').trim()} ${String(kg).replace('.',',')} KG`;
 function kgPlan(){ const kgs = kgList(), names = new Set(products.map(p=>norm(String(p.ad||'').trim()))), out = [];
   products.filter(p=>KG.sel.has(p.id)).forEach(p=>kgs.forEach(kg=>{ const n = kgName(p, kg); out.push({p, kg, n, skip:names.has(norm(n))}); }));
@@ -8041,10 +8042,10 @@ function copyProduct(id){
 const KEY_LOG = 'nakis_degisiklik_log_v1', LOG_MAX = 5000;
 let chLog = []; try{ chLog = JSON.parse(localStorage.getItem(KEY_LOG)||'[]'); if(!Array.isArray(chLog)) chLog = []; }catch(e){ chLog = []; }
 const CH_F = () => [['ad','Ürün Adı',p=>p.ad],['barkod','Barkod',p=>p.barkod],['stok','Stok Kodu',p=>p.stok],['grup','Ürün Grubu',p=>p.grup],['koli','Koli İçi Adet',p=>num(p.koli)],['kdv','KDV',p=>p.kdv],
-  ['alis','Alış Fiyatı',p=>num(p.alis)],['maliyet','Maliyetli Alış',p=>num(p.maliyet)],['basMal','Başlangıç Maliyet',p=>num(p.basMal)]]
+  ['alis','Fatura (Alış) Fiyatı',p=>num(p.alis)],['maliyet','Maliyetli Alış',p=>num(p.maliyet)],['basMal','Başlangıç Maliyet',p=>num(p.basMal)]]
   .concat(NPLV().map(i=>['f'+i, lvName(i), p=>num(p.fiyat?.[i-1])]))
-  .concat([['son','Son Satış (KDV dahil)',p=>num(p.son)],['hedef','Hedef (Basic) Fiyat',p=>num(p.hedef)],['img','Resim',p=>p.img ? p.img.length+':'+p.img.slice(-32) : ''],['pasif','Durum',p=>p.pasif?'Pasif':'Aktif'],
-    ['ted','Tedarikçi',p=>p.ted],['tedKod','Sipariş Kodu',p=>p.tedKod],['tedGun','Teslim Süresi (gün)',p=>num(p.tedGun)],['stokMik','Stok',p=>num(p.stokMik)],['minStok','Min. Stok',p=>num(p.minStok)],['maxStok','Hedef Stok',p=>num(p.maxStok)],['birim','Birim',p=>p.birim],['pkKg','Birim ağırlığı (kg)',p=>num(p.pkKg)]]);
+  .concat([['son','Son Satış (KDV dahil)',p=>num(p.son)],['hedef','Başlangıç Vakıf Satış',p=>num(p.hedef)],['img','Resim',p=>p.img ? p.img.length+':'+p.img.slice(-32) : ''],['pasif','Durum',p=>p.pasif?'Pasif':'Aktif'],
+    ['birim','Birim',p=>p.birim],['pkKg','Birim ağırlığı (kg)',p=>num(p.pkKg)]]);
 const chFlat = p => { const o = {}; CH_F().forEach(([k,,g])=>{ const v = g(p); o[k] = v==null || v==='' ? '' : (typeof v==='number' ? r4(v) : String(v)); }); return o; };
 let chBase = new Map();
 function chSnap(){ chBase = new Map(products.map(p=>[p.id, chFlat(p)])); }
@@ -8945,12 +8946,12 @@ function renderNewRep(v, ps, tile, lvOpts, L1, LV){
     const xs = ps.map(p=>({p, a:hedefAn(p)})).filter(x=>okN(x.a.h) && okN(x.a.fiy) && x.a.fiy < x.a.h - 0.005).sort((a,b)=>a.a.fkP-b.a.fkP);
     const top = xs.reduce((s,x)=>s+(x.a.fk||0),0);
     const cols = [{h:'Ürün', v:x=>x.p.ad||'', f:x=>nmP(x.p)}, {h:'Grup', v:x=>x.p.grup||''}, {h:'Seviye', v:x=>lvN(x.a.L)},
-      {h:'Hedef (Basic) Fiyat', n:1, v:x=>x.a.h, f:x=>fmtE(x.a.h)}, {h:'Güncel fiyat', n:1, v:x=>x.a.fiy, f:x=>`<b>${fmtE(x.a.fiy)}</b>`},
+      {h:'Başlangıç Vakıf Satış', n:1, v:x=>x.a.h, f:x=>fmtE(x.a.h)}, {h:'Güncel fiyat', n:1, v:x=>x.a.fiy, f:x=>`<b>${fmtE(x.a.fiy)}</b>`},
       {h:'Fark €', n:1, v:x=>x.a.fk, f:x=>sgnE(x.a.fk,true)}, {h:'Fark %', n:1, v:x=>x.a.fkP, f:x=>pill(x.a.fkP)},
       {h:'Maliyetli Alış', n:1, v:x=>x.a.m, f:x=>fmtE(x.a.m)}, {h:'Güncel marj', n:1, v:x=>x.a.am, f:x=>pill(x.a.am)}];
     html = `<div class="dtiles">${tile(xs.length,'Hedef fiyatın altında', xs.length?'bad':'ok')}${tile(fmtE(top),'Toplam birim fark (€)', top<0?'bad':'')}</div>`
       + karTable('fhedefalt', cols, xs, {k:6, d:1}, {pid:x=>x.p.id, csv:'Hedef_fiyatin_altindakiler', rowCls:x=>okN(x.a.am)&&x.a.am<0?'loss':'', empty:'Hedef fiyatın altında satılan ürün yok.'})
-      + `<div class="dnote">Ürünün hedef fiyat seviyesindeki güncel satış fiyatı, ürün kartındaki Hedef (Basic) Fiyat'ın altındaysa listelenir.</div>`;
+      + `<div class="dnote">Ürünün hedef fiyat seviyesindeki güncel satış fiyatı, ürün kartındaki Başlangıç Vakıf Satış'ın altındaysa listelenir.</div>`;
   }
   else if(v==='fsabit'){
     const ay = +karCfg.ay || 6, sadece = karCfg.alisd!=='hepsi', lim = new Date(); lim.setMonth(lim.getMonth()-ay); const limI = lim.toISOString();
@@ -9221,7 +9222,7 @@ const T = x => typeof tr==='function' ? tr(x) : x;
 i18nAdd({"önceki":"vorher","Fiyat geçmişi":"Preisverlauf","Tarih":"Datum","Alan":"Feld","Eski":"Alt","Yeni":"Neu","Değişim":"Änderung","Kullanıcı":"Benutzer","Bu ürün için henüz kayıtlı fiyat değişikliği yok.":"Für diesen Artikel sind noch keine Preisänderungen gespeichert.","Satış fiyatı geçmişi bu sürümden itibaren kaydedilir; daha önceki değişiklikler görünmez.":"Der Verkaufspreisverlauf wird ab dieser Version gespeichert; frühere Änderungen sind nicht sichtbar.","Kapat":"Schließen","Tümü":"Alle"});
 const PK = ['f1','f2','f3','f4','f5','f6','mof','son','hedef'];
 const pv = (p, k) => !p ? null : /^f\d$/.test(k) ? num(p.fiyat?.[+k[1]-1]) : num(p[k]);
-const pLab = k => /^f\d$/.test(k) ? lvName(+k[1]) : k==='mof' ? 'Müşteriye Özel Fiyat' : k==='son' ? 'Son Satış KDV dahil' : k==='hedef' ? 'Hedef (Basic) Fiyat' : k==='alis' ? 'Alış Fiyatı' : k==='maliyet' ? 'Maliyetli Alış' : k;
+const pLab = k => /^f\d$/.test(k) ? lvName(+k[1]) : k==='mof' ? 'Müşteriye Özel Fiyat' : k==='son' ? 'Son Satış KDV dahil' : k==='hedef' ? 'Başlangıç Vakıf Satış' : k==='alis' ? 'Fatura (Alış) Fiyatı' : k==='maliyet' ? 'Maliyetli Alış' : k;
 // kayıt: her kaydetmede değişen satış fiyatları geçmişe yazılır
 const _tc = trackCost;
 trackCost = function(prev, nw, extraHist){
@@ -9344,7 +9345,7 @@ function saveCheck(){
   const oM = num(before.maliyet), nM = num(after.maliyet), oA = num(before.alis), nA = num(after.alis);
   let base = null;
   if(oM!=null && nM!=null && Math.abs(nM-oM)>1e-9){ if(nM>oM) base = {f:'Maliyetli Alış', o:oM, n:nM}; }
-  else if(oA!=null && nA!=null && nA>oA+1e-9) base = {f:'Alış Fiyatı', o:oA, n:nA};
+  else if(oA!=null && nA!=null && nA>oA+1e-9) base = {f:'Fatura (Alış) Fiyatı', o:oA, n:nA};
   if(!base || !base.o) return;
   const r = base.n/base.o, kdv = (num(after.kdv)??7)/100, cost = nM ?? nA, oCost = oM ?? oA;
   const rows = LVS().filter(L=>can(L.perm) && L.get(before)!=null).map(L=>{
@@ -9527,7 +9528,7 @@ i18nAdd({
         <select data-mf="akt"><option value="aktif" ${MU.f.akt==='aktif'?'selected':''}>${esc(T('Aktif müşteriler'))}</option><option value="pasif" ${MU.f.akt==='pasif'?'selected':''}>${esc(T('Pasif müşteriler'))}</option><option value="hepsi" ${MU.f.akt==='hepsi'?'selected':''}>${esc(T('Hepsi'))}</option></select>
         <span class="grow" style="flex:1"></span>
         ${canE()&&nInv?`<button data-ma="frominv">🧾 ${esc(T('Faturalardan müşteri al'))} (${nInv})</button>`:''}
-        ${canE()&&nTed?`<button data-ma="fromted">🚚 ${esc(T('Ürünlerdeki tedarikçileri al'))} (${nTed})</button>`:''}
+        ${false&&nTed?`<button data-ma="fromted">🚚 ${esc(T('Ürünlerdeki tedarikçileri al'))} (${nTed})</button>`:''}
         ${MU.f.rol==='satici'&&can('tedarik')?`<button data-ma="tedscr">📦 ${esc(T('Ürün tedarikçileri ekranı'))}</button>`:''}
         ${canE()?`<label class="fbtn" style="cursor:pointer;border:1px solid #cbd3db;border-radius:6px;padding:7px 12px;background:#fff">📥 ${esc(T("Excel'den İçe Aktar"))}<input type="file" id="muFile" accept=".xlsx,.csv,.txt" hidden></label>`:''}
         <button data-ma="csv">📤 ${esc(T("Excel'e Aktar"))}</button>
@@ -9984,7 +9985,7 @@ i18nAdd({
       const after = fieldChanges(p,'maliyet').filter(c=>c.prev!=null && (!ft || String(c.t) > ft)); return after.length && r4(now) > r4(after[0].prev); }, false);
   const isEksik = p => ([0,1,2,3,4,5].every(i=>num(p.fiyat?.[i])==null) && num(p.son)==null)
       || !String(p.barkod||'').trim() || !String(p.grup||'').trim() || !p.img || num(p.hedef)==null;
-  const eksikWhat = p => !String(p.barkod||'').trim() ? T('Barkod') : !String(p.grup||'').trim() ? T('Ürün Grubu') : num(p.hedef)==null ? T('Hedef (Basic) Fiyat') : !p.img ? T('resim yok') : T('Fiyat');
+  const eksikWhat = p => !String(p.barkod||'').trim() ? T('Barkod') : !String(p.grup||'').trim() ? T('Ürün Grubu') : num(p.hedef)==null ? T('Başlangıç Vakıf Satış') : !p.img ? T('resim yok') : T('Fiyat');
   const eur = v => okN(v) ? fmtN(v,2)+' €' : '';
   const fmtT = iso => { const d = new Date(iso); if(isNaN(d)) return ''; const loc = LANG==='de'?'de-DE':'tr-TR', now = new Date();
     const same = d.toDateString()===now.toDateString(), y = new Date(now - 86400000).toDateString()===d.toDateString();
@@ -10241,7 +10242,7 @@ i18nAdd({
         .forEach(o=>out.push({g:'Teklifler', k:'✉', t:(o.cust?.ad||'—'), s:[o.no, safe(()=>fmtDay(o.tarih),'')].filter(Boolean).join(' · '), fn:()=>openOffer(o.id)}));
     // tedarikçiler
     if(can('tedarik')) safe(()=>tedNames(), []).filter(t=>norm(t).includes(q)).slice(0,4)
-      .forEach(t=>out.push({g:'Tedarikçiler', k:'🚚', t, s:products.filter(p=>p.ted===t && !p.pasif).length+' '+T('Ürünler').toLowerCase(), fn:()=>{ openSuppliers(); }}));
+      .filter(()=>false).forEach(t=>out.push({g:'Tedarikçiler', k:'🚚', t, s:products.filter(p=>p.ted===t && !p.pasif).length+' '+T('Ürünler').toLowerCase(), fn:()=>{ openSuppliers(); }}));
     return out;
   }
   function gsRender(){
@@ -10553,7 +10554,7 @@ i18nAdd({
           ps.forEach(p=>{ const a = hedefAn(p); if(!okN(a.h) || !okN(a.fiy)){ noH++; return; } if(Math.abs(a.fiy-a.h)<0.005) eq++; else if(a.fiy>a.h) up++; else dn++;
             if(okN(a.m) && a.fiy < a.m && a.h <= a.m + 0.005) lossLowH++; });
           r.html = `<div class="dnote" style="background:#f5f9ff;border:1px solid #d6e2f5;border-radius:10px;padding:10px 14px;margin-bottom:10px;line-height:1.6;font-size:13px">
-            <b>${esc(T('Bu rapor neyi gösterir?'))}</b> ${esc(T('Ürünün hedef seviyesindeki güncel satış fiyatı, ürün kartındaki Hedef (Basic) Fiyat\'tan düşükse listelenir.'))}<br>
+            <b>${esc(T('Bu rapor neyi gösterir?'))}</b> ${esc(T('Ürünün hedef seviyesindeki güncel satış fiyatı, ürün kartındaki Başlangıç Vakıf Satış\'tan düşükse listelenir.'))}<br>
             <b>${esc(T('Zararına satılanlardan farkı'))}:</b> ${esc(T('Zararına satış = fiyat maliyetli alışın altında. Hedefin altı = fiyat sizin belirlediğiniz hedefin altında. Hedef fiyat da maliyetin altında girilmişse ürün zararda olur ama hedefin altında görünmez.'))}<br>
             <b>${esc(T('Şu anki durum'))}:</b> ${eq} ${esc(T('üründe güncel fiyat = hedef fiyat'))} (${esc(T('hedef fiyat boşken Fiyat 1\'den alındığı için'))}), ${up} ${esc(T('ürün hedefin üstünde'))}, ${dn} ${esc(T('ürün hedefin altında'))}, ${noH} ${esc(T('üründe hedef fiyat ya da hedef seviyedeki fiyat yok'))}.
             ${lossLowH?`<br><b style="color:var(--bad)">${lossLowH} ${esc(T('ürün zararda ve hedef fiyatı da maliyetin altında'))}</b> — ${esc(T('bu ürünlerin hedef fiyatını gözden geçirin.'))}`:''}</div>` + r.html;
@@ -11070,7 +11071,7 @@ i18nAdd({
     ths.forEach((th,i)=>{ const td = first[i]; if(!td) return; if(td.classList.contains('akt') || td.querySelector('button[data-act]')) return; const h = th.innerText.replace(/\s+/g,' ').trim(); const img = !!td.querySelector('img') || /RES[İI]M|BILD/i.test(h); if(!h && !img) return; cols.push({i, h: h || tr('Resim'), img}); });
     return {cols, rows}; }
   const npAllFields = () => [['stok','Stok kodu'],['barkod','Barkod'],['ad','Ürün adı'],['grup','Ürün grubu'],['_akt','Durum'],['koli','Koli içi adet'],['kdv','KDV %'],['birim','Satış birimi'],['alis','Alış fiyatı'],['maliyet','Maliyetli alış']]
-    .concat(NPLV().map(i=>['_f'+i, lvName(i)]), [['son','Son satış KDV dahil'],['hedef','Hedef (Basic) fiyat'],['ted','Tedarikçi'],['tedKod','Sipariş kodu'],['tedGun','Teslim süresi (gün)'],['stokMik','Stok'],['minStok','Min. stok'],['maxStok','Hedef stok'],['pkKg','Birim ağırlığı (kg)']]);
+    .concat(NPLV().map(i=>['_f'+i, lvName(i)]), [['son','Son satış KDV dahil'],['hedef','Başlangıç Vakıf satış'],['pkKg','Birim ağırlığı (kg)']]);
   function npListExport(kind, o){ const G = npListGrab(); if(!G) return alert(tr('Tabloda ürün yok.')); const title = String(o.title||'').trim() || tr('Ürün Listesi'), ids = G.rows.map(r=>r.dataset.id);
     if(kind==='xlsx'){ if(o.all){ const F = npAllFields(), P = ids.map(id=>products.find(p=>String(p.id)===String(id))).filter(Boolean);
         return npXlsx(title, F.map(f=>tr(f[1])), P.map(p=>F.map(([k])=>{ if(k==='_akt') return tr(p.pasif?'Pasif':'Aktif'); if(k.startsWith('_f')){ const v = num(p.fiyat?.[+k.slice(2)-1]); return v==null ? '' : v; } const v = p[k]; const n = ['alis','maliyet','son','hedef','koli','kdv','stokMik','minStok','maxStok','pkKg','tedGun'].includes(k) ? num(v) : null; return n!=null ? n : (v==null ? '' : String(v)); })), title); }
@@ -11375,6 +11376,7 @@ i18nAdd({"Resim yükle": "Bild hochladen"});
     const prd2 = s.find(x=>x[0]==='prd'); let fa = null; s.forEach(x=>{ x[3] = x[3].filter(t=>{ if(t[1]==='Fiyat Adları'){ fa = t; return false; } return true; }); });
     if(fa && prd2){ fa = fa.slice(); fa[1] = 'Fiyat Seviyeleri'; const gi = prd2[3].findIndex(t=>t[1]==='Ürün Grupları'); prd2[3].splice(gi>=0 ? gi+1 : prd2[3].length, 0, fa); }
     const DROP = ["Excel'den İçe Aktar", 'Rapor (Excel / PDF)', "Excel'e Aktar"]; s.forEach(x=>{ x[3] = x[3].filter(t=>!DROP.includes(t[1])); });
+    { const fr = s.findIndex(x=>x[0]==='fiyr'); if(fr>=0) s.splice(fr,1); }
     for(let i=s.length-1;i>=0;i--){ if(!s[i][3].length && s[i][0]!=='prd') s.splice(i,1); }
   }catch(e){} return s; }; }
 /* 27.11.: fiyat seviyeleri yeni düzen – tek seferlik geçiş (admin): Toptan/Özel-1..3 silinir, Müşteriye özel fiyat 3. seviyeye taşınır */
@@ -11411,6 +11413,7 @@ i18nAdd({"Boş fiyat seviyeleri": "Leere Preisstufen", "Fiyatı girilmemiş sevi
 i18nAdd({"Bu ay fatura kârı": "Rechnungsgewinn diesen Monat", "Sorun": "Anzahl", "Sorunlar": "Probleme"});
 i18nAdd({"Geçen ay": "Letzter Monat", "hedefin en altında olan üstte": "am weitesten unter Ziel zuerst"});
 i18nAdd({"aktif ürün": "aktive Artikel", "Maliyetin altında satılan": "Unter Einstandspreis verkauft", "en düşük marj üstte": "niedrigste Marge zuerst"});
+i18nAdd({"Başlangıç değerleri": "Startwerte", "Başlangıç Vakıf Satış": "Start-VK Vakıf", "Başlangıç Vakıf satış": "Start-VK Vakıf", "Başlangıç Vakıf Satış (€)": "Start-VK Vakıf (€)", "Başlangıç Nakış Maliyetli Alış": "Start-EK Nakış inkl. Kosten", "Başlangıç Nakış Maliyetli Alış (€)": "Start-EK Nakış inkl. Kosten (€)", "Fatura (Alış) Fiyatı": "Rechnungspreis (EK)", "Fatura (Alış) Fiyatı (€)": "Rechnungspreis (EK) (€)", "Birim": "Einheit", "Fiyat Araçları": "Preis-Tools", "boşsa = ilk Vakıf fiyatı": "leer = erster Vakıf-Preis"});
 i18nAdd({"Tam Yedek (Railway)": "Komplett-Sicherung (Railway)"}); i18nAdd({"Şablon: Vakıf – Market": "Vorlage: Vakıf – Market", "Şube Vakıf-Market Fiyat Karşılaştırma": "Filiale Vakıf-Market Preisvergleich", "Faturanızı yükleyin; Vakıf ve Market fiyatları otomatik karşılaştırılır.": "Laden Sie Ihre Rechnung hoch – Vakıf- und Market-Preise werden automatisch verglichen.", "Kayıtlı karşılaştırmalar": "Gespeicherte Vergleiche", "Kayıtlı karşılaştırma": "Gespeicherter Vergleich", "Kaydedildi": "Gespeichert", "Henüz kayıtlı karşılaştırma yok.": "Noch keine gespeicherten Vergleiche.", "Listeye dön": "Zurück zur Liste", "Devam et": "Weiter", "Kaydet ve bitir": "Speichern und beenden", "Bu karşılaştırma kaydedilmedi. Çıkılsın mı?": "Dieser Vergleich wurde nicht gespeichert. Trotzdem verlassen?", "Bu karşılaştırma kaydedilsin mi? Kaydedildikten sonra değiştirilemez.": "Diesen Vergleich speichern? Danach kann er nicht mehr geändert werden.", "Karşılaştırma kaydedildi": "Vergleich gespeichert", "Kayıtlı karşılaştırma silinsin mi?": "Gespeicherten Vergleich löschen?", "Bu fatura zaten kayıtlı. Lütfen başka bir fatura seçin.": "Diese Rechnung ist bereits gespeichert. Bitte eine andere Rechnung wählen.", "Ara: fatura no, müşteri, tarih…": "Suche: Rechnungsnr., Kunde, Datum…", "Aramaya uyan kayıt yok.": "Keine Treffer.", "Şube (kısıtlı kullanıcı)": "Filiale (eingeschränkter Benutzer)", "Şube Vakıf-Market Fiyat Karşılaştırma – sadece bu ekranı görür": "Filiale Vakıf-Market Preisvergleich – sieht nur diese Ansicht", "Arama paneli (şube)": "Suchleiste (Filiale)", "Resim": "Bild", "Şablondan çık": "Vorlage verlassen", "alış fiyatı": "Einkaufspreis", "Başka fatura yükle": "Andere Rechnung hochladen", "Faturanızı yükleyin; faturadaki fiyatlar otomatik olarak karşılaştırılır.": "Laden Sie Ihre Rechnung hoch – die Preise werden automatisch verglichen.", "Kaydedilen hali": "Gespeicherter Stand", "Kaydedilen teklif": "Gespeichertes Angebot", "fiyatlar kaydedildiği andaki gibi": "Preise wie beim Speichern", "Kaydedilen karşılaştırma silinsin mi? Fatura silinmez.": "Gespeicherten Vergleich löschen? Die Rechnung bleibt erhalten.", "nakliye": "Fracht", "Alış (fatura) + nakliye": "EK (Rechnung) + Fracht", "Nakliye müşterinin kârından düşülür; leergut iade edildiği için düşülmez. Faturadaki miktar ve fiyatlar değiştirilemez.": "Fracht wird vom Gewinn abgezogen; Leergut nicht, da es zurückgegeben wird. Menge und Preise der Rechnung sind nicht änderbar.", "Seçilen fiyattan alıp son satış fiyatından (KDV hariç) satarsa kâr. Leergut iade edildiği için kârdan düşülmez; nakliye 1. adımda girdiğiniz tutardır.": "Gewinn bei Einkauf zum gewählten Preis und Verkauf zum Endpreis (netto). Leergut wird nicht abgezogen (Rückgabe); Fracht ist der Betrag aus Schritt 1.", "Aynı ürünleri aynı son satış fiyatından satarsa: faturadaki fiyatla ve seçilen fiyatla alınca kâr. Leergut iade edildiği için kârdan düşülmez; nakliye seçilen fiyatta 1. adımda girdiğiniz tutardır.": "Gleicher Endpreis: Gewinn mit Rechnungspreis und mit gewähltem Preis. Leergut wird nicht abgezogen (Rückgabe); Fracht beim gewählten Preis ist der Betrag aus Schritt 1."}); i18nAdd({"Faturadaki fiyat": "Preis auf der Rechnung", "Fatura": "Rechnung", "fiyatlarıyla ödediğiniz toplam (nakliye / leergut dahil)": "– so viel haben Sie insgesamt bezahlt (inkl. Fracht / Leergut)", "ile seçilen fiyat aynı tutuyor.": "und der gewählte Preis ergeben denselben Betrag.", "ile almanız daha kârlı": "– Einkauf günstiger", "ile almanız daha pahalı": "– Einkauf teurer", "ile aldığınızda, seçilen fiyata göre bu kadar daha az ödediniz.": "– so viel weniger haben Sie im Vergleich zum gewählten Preis bezahlt.", "Toplam ödenen": "Gesamt bezahlt", "ile daha ucuz": "günstiger", "ile daha pahalı": "teurer"}); i18nAdd({"Veri Aktarımı (Import)": "Datenübernahme (Import)"}); i18nAdd({"Afişte hangi fiyatlar görünsün?": "Welche Preise auf dem Plakat?", "Kampanya fiyatı her zaman büyük ve kırmızı yazılır.": "Der Aktionspreis wird immer groß und rot angezeigt.", "hangi fiyat?": "welcher Preis?", "İndirim rozeti (−%)": "Rabatt-Abzeichen (−%)", "Fiyatlar KDV dahil": "Preise inkl. MwSt.", "Eski fiyat için bir fiyat seçin.": "Für den alten Preis eine Preisstufe wählen.", "Eski fiyat (üstü çizili)": "Alter Preis (durchgestrichen)"});
 i18nAdd({"Afiş başlığı": "Plakattitel", "Afiş fiyatı (büyük, kırmızı)": "Plakatpreis (groß, rot)", "fiyat seçin": "Preis wählen", "Afiş fiyatı seçin.": "Plakatpreis wählen.", "Teklif fiyatı her zaman büyük ve kırmızı yazılır.": "Der Angebotspreis wird immer groß und rot angezeigt.", "Afiş için ürün yok.": "Keine Artikel für das Plakat.", "Seçilen fiyatta hiçbir ürünün fiyatı yok.": "Für den gewählten Preis hat kein Artikel einen Preis.", "Listede görünen ürünlerden afiş": "Plakat aus den angezeigten Artikeln", "Bu katalogdan afiş": "Plakat aus diesem Katalog", "Otomatik afiş": "Automatisches Plakat", "Fiyat Listesi": "Preisliste"});
 i18nAdd({"Afiş": "Plakat", "Kampanya afişi (A4)": "Aktionsplakat (A4)", "Afiş indirildi ve Afişler’e kaydedildi": "Plakat heruntergeladen und unter Plakate gespeichert", "Afiş indirildi": "Plakat heruntergeladen", "Önce kampanyaya ürün seçin.": "Zuerst Artikel für die Aktion wählen.", "Kampanyadan otomatik": "Automatisch aus Aktion"});
@@ -12233,7 +12236,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 
   /* ---------- 1) Fiyat değişiklik geçmişi ---------- */
   const FG = {per:'30', k:'', u:'', q:'', yon:''};
-  const fgKeys = () => [...NPLV().map(i=>['f'+i, lvName(i)]), ['son', tr('Son Satış (KDV dahil)')], ['hedef', tr('Hedef (Basic) Fiyat')], ['alis', tr('Alış Fiyatı')], ['maliyet', tr('Maliyetli Alış')]];
+  const fgKeys = () => [...NPLV().map(i=>['f'+i, lvName(i)]), ['son', tr('Son Satış (KDV dahil)')], ['hedef', tr('Başlangıç Vakıf Satış')], ['alis', tr('Fatura (Alış) Fiyatı')], ['maliyet', tr('Maliyetli Alış')]];
   function fgBody(){ const K = fgKeys(), KM = new Map(K), s = since(FG.per), q = norm(FG.q.trim());
     const all = LOG().filter(x=>KM.has(x.k) && (!s || x.t>=s));
     const L = all.filter(x=>(!FG.k || x.k===FG.k) && (!FG.u || x.u===FG.u) && (!q || norm(x.ad||'').includes(q))).map(x=>{ const o = x.o===''||x.o==null ? null : +x.o, n = x.n===''||x.n==null ? null : +x.n; return Object.assign({}, x, {ov:o, nv:n, d: o!=null && n!=null ? n-o : null, p: o && n!=null ? (n-o)/o*100 : null}); })
@@ -12422,6 +12425,40 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
   .nkn-g button.on{background:var(--c);color:#fff;font-weight:700}.nkn-g button.on b{background:rgba(255,255,255,.25);color:#fff}
   @media (max-width:900px){#karRep.open.npws{display:block}#npKarNav{position:static;height:auto;border-right:0;border-bottom:1px solid #e3e7f0;display:flex;gap:8px;padding:8px}#npKarNav .nkn-g{display:none}.nkn-top button{margin:0;width:auto;white-space:nowrap}.nkn-sel{display:block;flex:1;min-width:0}.nkd-two{grid-template-columns:1fr}.nkd-kpis{grid-template-columns:1fr 1fr!important}}`;
   document.head.appendChild(st);
+})();
+</script>
+<script type="text/x-np">
+/* 27.11.: Başlangıç değerleri (üstte çerçeveli) + tedarikçi / stok bilgileri tamamen kaldırıldı */
+(function(){
+  const TEDK = ['ted','tedKod','tedGun','stokMik','minStok','maxStok'];
+  const firstVakif = (p, V) => { try{ const e = (typeof chLog!=='undefined' ? chLog : []).find(x=>x.pid===p.id && x.k==='f'+V); if(e){ const o = e.o===''||e.o==null ? null : +e.o, n = e.n===''||e.n==null ? null : +e.n; if(o!=null && isFinite(o)) return o; if(n!=null && isFinite(n)) return n; } }catch(_){}
+    return num(p.fiyat?.[V-1]); };
+  function fill(p){ let ch = false; TEDK.forEach(k=>{ if(k in p){ delete p[k]; ch = true; } });
+    if(typeof isHiz==='function' && isHiz(p)) return ch;
+    if(num(p.basMal)==null){ const b = basMalOf(Object.assign({}, p, {basMal:''})); if(b!=null){ p.basMal = b; ch = true; } }
+    const V = vakifL(); if(num(p.hedef)==null){ const h = firstVakif(p, V); if(h!=null){ p.hedef = h; p.hedefSrc = 'vakif'; ch = true; } }
+    if(+p.hedefL!==V){ p.hedefL = V; ch = true; } return ch; }
+  window.npBasFill = fill;
+  { const _hs = homeSections; homeSections = function(){ const r = _hs.apply(this, arguments); try{ return r.filter(x=>!/^fiyr/.test(x[0])); }catch(e){ return r; } }; }
+  { const _p = persist; persist = function(){ try{ (Array.isArray(products) ? products : []).forEach(fill); }catch(e){ console.error(e); } return _p.apply(this, arguments); }; }
+  function migrate(){ try{ if(typeof me==='undefined' || !me || uKey(me.u)!=='admin' || !Array.isArray(products) || !products.length) return; if(localStorage.getItem('nakis_mig_ted_v1')) return;
+      let n = 0; products.forEach(p=>{ if(fill(p)) n++; });
+      try{ if(typeof chLog!=='undefined' && Array.isArray(chLog)){ const L = chLog.filter(x=>!TEDK.includes(x.k)); if(L.length!==chLog.length){ chLog.length = 0; L.forEach(x=>chLog.push(x)); localStorage.setItem('nakis_degisiklik_log_v1', JSON.stringify(chLog)); } } }catch(_){}
+      if(n) persist(); localStorage.setItem('nakis_mig_ted_v1', new Date().toISOString()); try{ render(); }catch(_){} }catch(e){ console.error('mig ted', e); } }
+  setInterval(()=>{ try{ if(!document.body.classList.contains('locked')) migrate(); }catch(_){} }, 5000);
+
+  /* ürün kartı: başlangıç değerleri en üstte, kalın çerçeve içinde */
+  function box(){ const b = $('f_basMal'), h = $('f_hedef'); if(!b || !h || document.getElementById('npBasBox')) return; const mb = b.closest('.mbody'); if(!mb) return;
+    const d = document.createElement('div'); d.id = 'npBasBox';
+    d.innerHTML = `<div class="npbb-t">🏁 <span data-i18n-np="1">${esc(tr('Başlangıç değerleri'))}</span></div><div class="npbb-g"></div>`;
+    const g = d.querySelector('.npbb-g'); [b.closest('label'), h.closest('label')].forEach(l=>{ l.removeAttribute('title'); g.appendChild(l); });
+    mb.insertBefore(d, mb.firstChild); }
+  box(); setTimeout(box, 1500);
+  const st = document.createElement('style'); st.textContent = `#npBasBox{border:3px solid #185FA5;border-radius:14px;background:#f3f8fe;padding:12px 16px 14px;margin:0 0 16px}
+    #npBasBox .npbb-t{font-weight:800;font-size:15px;color:#0C447C;margin-bottom:8px}#npBasBox .npbb-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    #npBasBox label{display:flex!important;flex-direction:column;gap:6px;font-weight:800;color:#0C447C;font-size:13.5px}#overlay label[hidden]{display:none!important}#npBasBox input{border:2px solid #185FA5!important;font-size:18px!important;font-weight:800;padding:9px 12px!important;background:#fff}
+    @media (max-width:700px){#npBasBox .npbb-g{grid-template-columns:1fr}}`; document.head.appendChild(st);
+  setInterval(()=>{ const t = document.querySelector('#npBasBox [data-i18n-np]'); if(t){ const v = tr('Başlangıç değerleri'); if(t.textContent!==v) t.textContent = v; } }, 1000);
 })();
 </script>
 </body>

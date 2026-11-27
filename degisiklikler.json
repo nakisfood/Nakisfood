@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 17:38",
+  "tr": "Ürün kartı: en üstte çerçeveli «Başlangıç değerleri» (Başlangıç Nakış maliyetli alış, Başlangıç Vakıf satış); boş olanlar ilk kayıtlı değerlerle dolduruldu. «Alış Fiyatı» → «Fatura (Alış) Fiyatı». Hedef fiyat seviyesi ve hedef marj kaldırıldı. Tedarikçi ve stok bilgileri (tedarikçi, sipariş kodu, teslim süresi, stok, kritik stok, sipariş önerisi) tamamen kaldırıldı. Menüden «Fiyat Raporları» çıkarıldı (Raporlar'da var).",
+  "de": "Artikelkarte: oben umrandete «Startwerte» (Start-EK Nakış inkl. Kosten, Start-VK Vakıf); leere Werte mit den ersten gespeicherten Werten gefüllt. «Einkaufspreis» → «Rechnungspreis (EK)». Zielpreis-Stufe und Zielmarge entfernt. Lieferanten- und Bestandsdaten (Lieferant, Bestellnummer, Lieferzeit, Bestand, kritischer Bestand, Bestellvorschlag) vollständig entfernt. «Preisberichte» aus dem Menü entfernt (in Berichten vorhanden)."
+ },
+ {
   "id": "2026-11-27 16:44",
   "tr": "Hedef marj kaldırıldı (ileride belirlenecek): Kâr hedefi takibi raporu ve hedef karşılaştırmaları çıkarıldı. Rapor panelinde gruplara göre sadece marj gösteriliyor.",
   "de": "Zielmarge entfernt (wird später festgelegt): Gewinnziel-Verfolgung und Zielvergleiche entfernt. Die Berichts-Übersicht zeigt je Gruppe nur die Marge."
