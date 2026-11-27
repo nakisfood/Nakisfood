@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 15:29",
+  "tr": "Raporlar yenilendi: üstte uyarı şeridi, kategori sekmeleri, büyük sayılı kartlar; benzer raporlar birleşti (Marj analizi, Fiyat tutarlılığı, Alış değişimleri). Yeni: İade raporu ve Şube karşılaştırma özeti. Özel kullanıcı listelerinde kim açtı / indirdi görünür. Alt çubukta gizli kalan düğmeler düzeltildi; Önizle / PDF / Excel alırken sütun seçimi.",
+  "de": "Berichte neu gestaltet: Hinweisleiste oben, Kategorie-Reiter, große Kennzahlkarten; ähnliche Berichte zusammengeführt (Margenanalyse, Preiskonsistenz, EK-Änderungen). Neu: Retourenbericht und Filialvergleich-Übersicht. Bei Sonderbenutzer-Listen sichtbar, wer geöffnet / heruntergeladen hat. Verdeckte Schaltflächen in der unteren Leiste behoben; Spaltenauswahl bei Vorschau / PDF / Excel."
+ },
+ {
   "id": "2026-11-27 15:08",
   "tr": "Hazır Kataloglar: fiyat seviyesi değişikliğinden sonra yanlış çıkan «fiyat değişti» uyarıları düzeltildi (eski karşılaştırma eski Toptan fiyatını kullanıyordu).",
   "de": "Fertige Kataloge: falsche «Preis geändert»-Hinweise nach der Preisstufen-Umstellung behoben."
