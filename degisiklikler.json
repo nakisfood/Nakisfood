@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 21:41",
+  "tr": "Yeni: Denetçi rolü (Özel Kullanıcılar → «👁 Denetçi» anahtarı). Denetçi bütün özel kullanıcıların iade formlarını ve şube karşılaştırmalarını sadece görür, değiştiremez, kendisi iade açamaz; her kayda «Yöneticiye not» yazabilir (sadece admin görür). Admin: Özel Kullanıcılar → «🔔 Bildirimler», kısa cevap, Formu aç, Okundu; notlar silinmez. Program açılınca yan menü kapalı gelir (☰ ile açılır).",
+  "de": "Neu: Prüfer-Rolle (Sonderbenutzer → Schalter «👁 Prüfer»). Prüfer sehen alle Retourenformulare und Filialvergleiche nur an, können nichts ändern und keine Retoure anlegen; zu jedem Eintrag «Notiz an den Admin» (nur Admin sieht sie). Admin: Sonderbenutzer → «🔔 Meldungen», kurze Antwort, Formular öffnen, Gelesen; Notizen werden nicht gelöscht. Beim Start ist das Seitenmenü geschlossen (☰ öffnet)."
+ },
+ {
   "id": "2026-11-27 21:32",
   "tr": "Yan menü artık kendiliğinden gizlenmiyor; sadece üstteki ☰ düğmesiyle açılıp kapanıyor (ince şerit kaldırıldı).",
   "de": "Seitenmenü blendet sich nicht mehr automatisch aus; nur noch über ☰ öffnen / schließen (schmaler Streifen entfernt)."
