@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 22:05",
+  "tr": "Denetçi notları: üst çubukta yanıp sönen 🚨 lamba (yeni not varsa, tıklayınca Bildirimler açılır); notlar sayfa yenilemeden gelir; akış Yeni → 🛠 İşleme al → ↩ Cevapla ve kapat; denetçi notunu işleme alınana kadar düzenleyebilir. Denetçi listesinde «📝 Not yaz» ve formda not kutusuna götüren düğme. Özel kullanıcı ekranlarının hepsinde ← Geri ve ⌂ Ana sayfa.",
+  "de": "Prüfer-Notizen: blinkendes 🚨-Licht oben bei neuen Notizen (Klick öffnet Meldungen); Notizen kommen ohne Neuladen; Ablauf Neu → 🛠 In Bearbeitung → ↩ Antworten und schließen; Prüfer kann die Notiz bis zur Übernahme bearbeiten. «📝 Notiz schreiben» in der Liste und Sprung-Button im Formular. Alle Sonderbenutzer-Ansichten mit ← Zurück und ⌂ Startseite."
+ },
+ {
   "id": "2026-11-27 21:53",
   "tr": "serdar ve senol denetçi yapıldı (admin olarak ilk girişte bir kez, otomatik).",
   "de": "serdar und senol als Prüfer festgelegt (einmalig automatisch bei der ersten Admin-Anmeldung)."
