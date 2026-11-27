@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-27 11:07",
+  "tr": "İade Formları: admin ekranı adım adım (İşleme al → Kabul/Red → Red cevabı veya İade faturası → Tamamlandı). Kullanıcı red cevabını ve onay bildirimini mesaj olarak görür (Önizle, PDF); fatura sadece tamamlanınca görünür.",
+  "de": "Retourenformulare: Admin Schritt für Schritt (In Bearbeitung → Annehmen/Ablehnen → Ablehnungsantwort oder Retourenrechnung → Abgeschlossen). Benutzer sieht Ablehnung/Bestätigung als Nachricht (Vorschau, PDF); Rechnung erst nach Abschluss."
+ },
+ {
+  "id": "2026-11-27 10:46",
+  "tr": "İade formu: admin fatura eklediğinde veya satır kararı/düzeltme yaptığında kullanıcı formu artık düzeltemez/silemez; faturada sadece Önizle ve PDF. Fatura eklenince form otomatik «İşleme alındı».",
+  "de": "Retourenformular: Sobald der Admin eine Rechnung hinzufügt oder Zeilen entscheidet/korrigiert, kann der Benutzer nicht mehr ändern/löschen; Rechnung nur Vorschau und PDF. Mit Rechnung automatisch «In Bearbeitung»."
+ },
+ {
   "id": "2026-11-27 10:08",
   "tr": "İade Formları (Adım 3–4): İade yapıldı + iade faturası (no, tutar, PDF), kullanıcıda fatura ve «güncelleme» uyarısı, form PDF/Excel, toplu Excel, iade sebepleri düzenleme.",
   "de": "Retourenformulare (Schritt 3–4): Retoure erledigt + Retourenrechnung (Nr., Betrag, PDF), Rechnung und «Aktualisierung»-Hinweis beim Benutzer, PDF/Excel je Formular, Sammel-Excel, Retourengründe bearbeiten."
