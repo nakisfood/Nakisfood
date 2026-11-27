@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 20:28",
+  "tr": "Tur takibi: müşteri adıyla arayınca bütün yılın turları (geçmiş ve gelecek) tarihleriyle listelenir; her tarihte arandı / sipariş durumu oradan girilebilir. Üstte özet: kaç tur, arandı, sipariş var / yok / bekliyor, son sipariş tarihi.",
+  "de": "Tourenverfolgung: Suche nach Kundennamen listet alle Touren des Jahres (vergangen und künftig) mit Datum; Anruf / Bestellstatus direkt dort eingeben. Oben Zusammenfassung: Touren, angerufen, Bestellung ja / nein / offen, letzte Bestellung."
+ },
+ {
   "id": "2026-11-27 20:03",
   "tr": "Düzeltme: «Program güncellendi» penceresi Türkçe seçiliyken Almanca çıkıyordu; artık programdaki dil ayarına göre gösteriliyor.",
   "de": "Fix: Das Fenster «Programm wurde aktualisiert» erschien bei Türkisch auf Deutsch; jetzt folgt es der Spracheinstellung des Programms."
