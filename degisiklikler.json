@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-27 16:00",
+  "tr": "Raporlar ekranı yenilendi: açılışta kontrol paneli (kâr, marj, hedef, iade sayıları, bugün bakılacaklar, gruplara göre marj grafiği); rapor açılınca solda tüm raporların listesi, raporlar arası tek tıkla geçiş. Fiyat kontrolü: sıra (büyük/küçük/eşit) kontrolü kaldırıldı, «Boş fiyat seviyeleri» ve «Aynı fiyatlı ürünler» ayrı rapor.",
+  "de": "Berichte neu: beim Öffnen eine Übersicht (Gewinn, Marge, Ziele, Retouren, heute zu prüfen, Margen nach Gruppen); im Bericht links die Liste aller Berichte, Wechsel mit einem Klick. Preiskontrolle: keine Prüfung der Reihenfolge (größer/kleiner/gleich) mehr; «Leere Preisstufen» und «Artikel mit gleichem Preis» als eigene Berichte."
+ },
+ {
+  "id": "2026-11-27 15:38",
+  "tr": "Yeni raporlar: Fiyat değişiklik geçmişi (kim, ne zaman, hangi fiyatı değiştirdi), Kâr hedefi takibi (grup hedefleri, aylık gidişat, hedef için gereken fiyat), Haftalık özet (pazartesi açılışta otomatik). İade raporuna tahmini iade maliyeti eklendi.",
+  "de": "Neue Berichte: Preisänderungsverlauf (wer hat wann welchen Preis geändert), Gewinnziel-Verfolgung (Gruppenziele, Monatsverlauf, Preis für Ziel), Wochenübersicht (montags automatisch). Retourenbericht mit geschätzten Retourenkosten."
+ },
+ {
   "id": "2026-11-27 15:29",
   "tr": "Raporlar yenilendi: üstte uyarı şeridi, kategori sekmeleri, büyük sayılı kartlar; benzer raporlar birleşti (Marj analizi, Fiyat tutarlılığı, Alış değişimleri). Yeni: İade raporu ve Şube karşılaştırma özeti. Özel kullanıcı listelerinde kim açtı / indirdi görünür. Alt çubukta gizli kalan düğmeler düzeltildi; Önizle / PDF / Excel alırken sütun seçimi.",
   "de": "Berichte neu gestaltet: Hinweisleiste oben, Kategorie-Reiter, große Kennzahlkarten; ähnliche Berichte zusammengeführt (Margenanalyse, Preiskonsistenz, EK-Änderungen). Neu: Retourenbericht und Filialvergleich-Übersicht. Bei Sonderbenutzer-Listen sichtbar, wer geöffnet / heruntergeladen hat. Verdeckte Schaltflächen in der unteren Leiste behoben; Spaltenauswahl bei Vorschau / PDF / Excel."
