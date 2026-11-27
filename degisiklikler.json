@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-27 11:30",
+  "tr": "Raporlar yeni düzen: solda kategoriler, sağda raporlar. Tüm programda büyük renkli alt çubuk (Geri + Ana sayfa), 🎨 ile renk seçimi; raporlardaki üst geri butonları alta alındı.",
+  "de": "Berichte neu: links Kategorien, rechts Berichte. Im ganzen Programm große farbige Leiste unten (Zurück + Startseite), Farbwahl mit 🎨; Zurück-Knöpfe der Berichte nach unten verschoben."
+ },
+ {
+  "id": "2026-11-27 11:22",
+  "tr": "İade formu: tarih otomatik; Bölge, Şube, Ürün, İade sebebi, SKT zorunlu; Miktar (adet) ve Kg ayrı (en az biri); Teslimat tarihi ve fotoğraf kaldırıldı.",
+  "de": "Retourenformular: Datum automatisch; Region, Filiale, Artikel, Grund, MHD Pflicht; Menge (Stk.) und kg getrennt (mind. eines); Lieferdatum und Foto entfernt."
+ },
+ {
   "id": "2026-11-27 11:07",
   "tr": "İade Formları: admin ekranı adım adım (İşleme al → Kabul/Red → Red cevabı veya İade faturası → Tamamlandı). Kullanıcı red cevabını ve onay bildirimini mesaj olarak görür (Önizle, PDF); fatura sadece tamamlanınca görünür.",
   "de": "Retourenformulare: Admin Schritt für Schritt (In Bearbeitung → Annehmen/Ablehnen → Ablehnungsantwort oder Retourenrechnung → Abgeschlossen). Benutzer sieht Ablehnung/Bestätigung als Nachricht (Vorschau, PDF); Rechnung erst nach Abschluss."
