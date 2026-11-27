@@ -123,7 +123,7 @@
 /* Sürüm: her güncellemede sorar ve ne değiştiğini kısa notla gösterir; sağ altta sürüm saati */
 (function () {
   'use strict';
-  const de = () => { try { return (window.LANG || localStorage.getItem('np_lang') || document.documentElement.lang) === 'de'; } catch (e) { return false; } };
+  const de = () => { try { const v = localStorage.getItem('nakis_dil_v1'); return (v ? v : document.documentElement.lang) === 'de'; } catch (e) { return false; } }; /* programın kendi dil ayarı (TR/DE) */
   const SEEN = 'np_seen_ver', SEEN_ID = 'np_seen_note';
   const lsG = k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, lsS = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } };
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);

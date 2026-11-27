@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 20:03",
+  "tr": "Düzeltme: «Program güncellendi» penceresi Türkçe seçiliyken Almanca çıkıyordu; artık programdaki dil ayarına göre gösteriliyor.",
+  "de": "Fix: Das Fenster «Programm wurde aktualisiert» erschien bei Türkisch auf Deutsch; jetzt folgt es der Spracheinstellung des Programms."
+ },
+ {
   "id": "2026-11-27 19:55",
   "tr": "Tur takibi: durum filtresi düğmeler yerine açılır liste (programdaki diğer filtreler gibi).",
   "de": "Tourenverfolgung: Statusfilter als Auswahlliste statt Schaltflächen (wie die übrigen Filter)."
