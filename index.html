@@ -167,7 +167,7 @@
   window.print = function(){};
 
   /* ---------------- 3) GEMEINSAME DATEN ---------------- */
-  const SH = /^nakis_(urun_kar_v1|urun_kar_fiyat_adlari_v1|urun_kar_gruplar_v1|urun_kar_indirim_baz_v1|faturalar_v1|fatura_eslesme_v1|fatura_yeniden_v2|teklifler_v1|teklif_ayar_v1|musteriler_v1|musteri_gruplari_v1|musteri_fiyat_v1|fatura_fiyat_v1|ozel_dosya_v1|ozel_klasor_v1|iade_v1|iade_sebep_v1|sablonlar_v1|receteler_v1|uretimler_v1|kullanicilar_v1|degisiklik_log_v1|hedef_marj_v1|alis_reset_1|gecmis_reset_3|hepsi_aktif_1|ornek_kolonya_1|vakif_market_kopya_v1|koli_birim_2026_11_11|afisler_v1|afis_klasor_v1|hazir_katalog_v1|katalog_pdf_v1|kampanyalar_v1|yukleme_[A-Za-z0-9_]+)$/;
+  const SH = /^nakis_(urun_kar_v1|urun_kar_fiyat_adlari_v1|urun_kar_gruplar_v1|urun_kar_indirim_baz_v1|faturalar_v1|fatura_eslesme_v1|fatura_yeniden_v2|teklifler_v1|teklif_ayar_v1|musteriler_v1|musteri_gruplari_v1|musteri_fiyat_v1|fatura_fiyat_v1|ozel_dosya_v1|ozel_klasor_v1|iade_v1|iade_sebep_v1|mig_lv_v1|sablonlar_v1|receteler_v1|uretimler_v1|kullanicilar_v1|degisiklik_log_v1|hedef_marj_v1|alis_reset_1|gecmis_reset_3|hepsi_aktif_1|ornek_kolonya_1|vakif_market_kopya_v1|koli_birim_2026_11_11|afisler_v1|afis_klasor_v1|hazir_katalog_v1|katalog_pdf_v1|kampanyalar_v1|yukleme_[A-Za-z0-9_]+)$/;
   const isSh = k => SH.test(String(k)); window.npIsSh = isSh;
   const RAW_SET = Storage.prototype.setItem, RAW_REM = Storage.prototype.removeItem, RAW_GET = Storage.prototype.getItem;
   const LS = (()=>{ try{ const s = window.localStorage; RAW_SET.call(s,'np_t','1'); RAW_REM.call(s,'np_t'); return s; }catch(e){ return null; } })();
@@ -1399,11 +1399,11 @@ body.subeonly #toolOv{left:0!important}
 <div class="overlay" id="namesOverlay">
   <div class="modal" style="width:min(520px,100%)">
     <div class="mhead">
-      <h2>Fiyat Seviyesi Adları</h2>
+      <h2>Fiyat Seviyeleri</h2>
       <button class="icon" id="btnNamesClose" title="Kapat">✕</button>
     </div>
     <div class="mbody">
-      <p class="hint" style="margin-top:0">Her fiyat seviyesine kendi adınızı verin (örn. Toptan, Market, Zincir, Restoran, İhracat, Kampanya). Boş bırakırsanız "Fiyat 1, Fiyat 2…" kullanılır. Ürün verileri değişmez, sadece isimler değişir.</p>
+      <p class="hint" style="margin-top:0">Fiyat seviyelerinizi burada yönetin: ad verin, ＋ ile yeni seviye açın, 🗑 ile kaldırın. Programda her yerde sadece bu adlar görünür.</p>
       <div id="namesList" style="display:flex;flex-direction:column;gap:10px"></div>
       <div class="section" style="margin-top:20px">İndirim Oranı</div>
       <p class="hint" style="margin-top:0">İndirim oranı hangi fiyat seviyesine göre hesaplansın? (örn. Market seçilirse: Vakıf İndirim = (Market − Vakıf) ÷ Market)</p>
@@ -1600,6 +1600,7 @@ let grpDraft = [];   // [{orig, name}]
 const KEY_NAMES = 'nakis_urun_kar_fiyat_adlari_v1';
 let levelNames = ['','','','','',''];
 const lvName = i => (levelNames[i-1]||'').trim() || ('Fiyat ' + i);
+const NPLV = () => { const L = [1,2,3,4,5,6].filter(i=>(levelNames[i-1]||'').trim()); return L.length ? L : [1]; };
 // Türkçe ekler: Vakıf'tan / Market'ten, Vakıf'a / Market'e
 function _lastV(w){ const m = String(w).toLocaleLowerCase('tr').match(/[aeıioöuü](?=[^aeıioöuü]*$)/); return m ? m[0] : 'e'; }
 const _back = w => 'aıou'.includes(_lastV(w));
@@ -1725,7 +1726,7 @@ function persistNames(){
   catch(e){ alert('Fiyat adları kaydedilemedi.'); return false; }
 }
 function applyNames(){
-  const opts = [1,2,3,4,5,6].map(i=>`<option value="${i}">${esc(lvName(i))}</option>`).join('');
+  const opts = NPLV().map(i=>`<option value="${i}">${esc(lvName(i))}</option>`).join('');
   const sA = $('fLevel'), sB = $('fLevel2'), cA = sA.value || '1', cB = sB.value || '2';
   sA.innerHTML = opts; sB.innerHTML = opts; sA.value = cA; sB.value = cB;
   for(let i=1;i<=6;i++){ const el = $('lvl'+i); if(el) el.textContent = lvName(i); }
@@ -1733,15 +1734,21 @@ function applyNames(){
 }
 function openNames(){
   $('namesList').innerHTML = [1,2,3,4,5,6].map(i=>`
-    <label style="display:flex;align-items:center;gap:10px;font-size:13px">
-      <span style="width:60px;color:var(--muted);font-weight:600">Fiyat ${i}</span>
-      <input id="ln${i}" style="flex:1" placeholder="Fiyat ${i}" value="${esc(levelNames[i-1])}">
-    </label>`).join('');
-  $('discBaseSel').innerHTML = [1,2,3,4,5,6].map(i=>`<option value="${i}">${esc(lvName(i))}${(levelNames[i-1]||'').trim()?` (Fiyat ${i})`:''}</option>`).join('');
+    <label data-lnrow="${i}" style="display:${(levelNames[i-1]||'').trim()?'flex':'none'};align-items:center;gap:10px;font-size:13px">
+      <span style="width:26px;color:var(--muted);font-weight:700">${i}.</span>
+      <input id="ln${i}" style="flex:1" placeholder="${esc(tr('Seviye adı'))}" value="${esc(levelNames[i-1])}">
+      <button type="button" data-lndel="${i}" title="${esc(tr('Seviyeyi kaldır'))}" style="color:#c62828">🗑</button>
+    </label>`).join('') + `<button type="button" id="lnAdd" style="align-self:flex-start;font-weight:700">＋ ${esc(tr('Seviye ekle'))}</button><div class="na" style="font-size:12px">${esc(tr('En fazla 6 seviye. Adı boş olan seviye programın hiçbir yerinde görünmez.'))}</div>`;
+  const _lnUpd = () => { const vis = [1,2,3,4,5,6].filter(i=>$('namesList').querySelector(`[data-lnrow="${i}"]`).style.display!=='none'); $('lnAdd').style.display = vis.length>=6 ? 'none' : ''; };
+  $('namesList').onclick = e=>{ const a = e.target.closest('#lnAdd'), d = e.target.closest('[data-lndel]');
+    if(a){ const i = [1,2,3,4,5,6].find(i=>$('namesList').querySelector(`[data-lnrow="${i}"]`).style.display==='none'); if(i){ $('namesList').querySelector(`[data-lnrow="${i}"]`).style.display = 'flex'; $('ln'+i).focus(); } _lnUpd(); $('namesDirty').hidden = false; }
+    if(d){ const i = +d.dataset.lndel, nm = $('ln'+i).value.trim(); if(nm && !confirm(tr('Bu fiyat seviyesi kaldırılsın mı?') + '\n' + nm + '\n' + tr('Kaydedince bu seviye programın her yerinden kalkar.'))) return; $('ln'+i).value = ''; $('namesList').querySelector(`[data-lnrow="${i}"]`).style.display = 'none'; _lnUpd(); $('namesDirty').hidden = false; } };
+  setTimeout(_lnUpd, 0);
+  $('discBaseSel').innerHTML = NPLV().map(i=>`<option value="${i}">${esc(lvName(i))}</option>`).join('');
   $('discBaseSel').value = String(discBase);
   $('namesDirty').hidden = true;
   $('namesOverlay').classList.add('open');
-  $('ln1').focus();
+  try{ $('ln1').focus(); }catch(_){}
 }
 const readNames = () => [1,2,3,4,5,6].map(i=>$('ln'+i).value.trim());
 function closeNames(force){
@@ -1855,7 +1862,7 @@ function matchF(val, f, isNum){
 const KEY_LV = 'nakis_liste_gorunum_v1';
 const LV_MET = [['p','Fiyat (KDV hariç)'],['d','İndirim oranı (sadece Fiyat 1)'],['k','Nakset Kâr €'],['m','Nakset kar marjı'],['u','Müşteri Kâr € (son satışa göre)'],['c','Müşteri kar marjı (son satışa göre)']];
 const LV_BASE = [['akt','Aktif','Ürün bilgileri'],['img','Resim','Ürün bilgileri'],['barkod','Barkod','Ürün bilgileri'],['stok','Stok Kodu','Ürün bilgileri'],['grup','Grup','Ürün bilgileri'],['koli','Koli','Ürün bilgileri'],['kdv','KDV','Ürün bilgileri'],['birim','Satış birimi','Ürün bilgileri'],['pkKg','Birim ağırlığı (kg)','Ürün bilgileri'],
-  ['alis','Alış','Alış & satış'],['maliyet','Maliyetli Alış','Alış & satış'],['son','Son Satış (KDV dahil)','Alış & satış'],['sonnet','Son Satış (KDV hariç)','Alış & satış'],['mof','Müşteriye Özel Fiyat','Alış & satış'],
+  ['alis','Alış','Alış & satış'],['maliyet','Maliyetli Alış','Alış & satış'],['son','Son Satış (KDV dahil)','Alış & satış'],['sonnet','Son Satış (KDV hariç)','Alış & satış'],
   ['hedef','Hedef (Basic) Fiyat','Hedef fiyat'],['hedefm','Hedef Marj %','Hedef fiyat'],['basmal','Başlangıç Maliyetli Alış','Hedef fiyat'],['hedefl','Hedef Fiyat Seviyesi','Hedef fiyat'],['hpk','Planlanan Kâr €','Hedef fiyat'],['hpm','Planlanan Marj %','Hedef fiyat'],
   ['hgk','Hedefte Güncel Kâr €','Hedef fiyat'],['hgm','Hedefte Güncel Marj %','Hedef fiyat'],['hdk','Hedeften Fark € (birim)','Hedef fiyat'],['hdm','Hedeften Fark (marj puanı)','Hedef fiyat'],['hneed','Planlanan Marj için Gereken Fiyat','Hedef fiyat'],
   ['ted','Tedarikçi','Tedarikçi & stok'],['tedKod','Sipariş Kodu','Tedarikçi & stok'],['tedGun','Teslim Süresi (gün)','Tedarikçi & stok'],['stokMik','Stok','Tedarikçi & stok'],['minStok','Min. Stok','Tedarikçi & stok'],['maxStok','Hedef Stok','Tedarikçi & stok']];
@@ -2033,13 +2040,13 @@ function readForm(){
 }
 function buildCalcRows(){
   $('calcBody').innerHTML = [1,2,3,4,5,6].map(i=>`
-    <tr><td><b id="lvl${i}">${esc(lvName(i))}</b>${(levelNames[i-1]||'').trim()?`<div style="font-size:11px;color:var(--muted)">Fiyat ${i}</div>`:''}</td>
+    <tr ${(levelNames[i-1]||'').trim()?'':'style="display:none"'}><td><b id="lvl${i}">${esc(lvName(i))}</b></td>
       <td class="num"><input id="fp${i}" inputmode="decimal" placeholder="0,00"></td>
       <td class="num" id="cd${i}"></td>
       <td class="num" id="mm${i}"></td>
       <td class="num" id="um${i}"></td>
     </tr>`).join('') + `
-    <tr style="background:#f3fbf5"><td><b>Müşteriye Özel Fiyat</b><div style="font-size:11px;color:var(--muted)">Fiyat 7</div></td>
+    <tr style="display:none"><td><b>Müşteriye Özel Fiyat</b></td>
       <td class="num"><input id="f_mof" inputmode="decimal" placeholder="0,00"></td>
       <td class="num" id="cd7"></td>
       <td class="num" id="mm7"></td>
@@ -2184,9 +2191,9 @@ function download(name, content, type){
 const today = () => new Date().toISOString().slice(0,10);
 /* ---- Excel'e aktar: sütun / ürün seçimi ---- */
 const KEY_CSVSEL = 'nakis_excel_secim_v1';
-const CSV_BASE = [['img','Resim'],['durum','Durum'],['barkod','Barkod'],['stok','Stok Kodu'],['ad','Ürün Adı'],['grup','Ürün Grubu'],['koli','Koli İçi Adet'],['birim','Satış Birimi'],['kdv','KDV %'],['alis','Alış Fiyatı'],['maliyet','Alış Maliyetli Fiyat'],['mof','Müşteriye Özel Fiyat'],['son','Son Satış KDV dahil'],['sonnet','Son Satış KDV hariç'],['hedef','Hedef (Basic) Fiyat'],['hedefm','Hedef Marj %'],['basmal','Başlangıç Maliyetli Alış'],['hedefl','Hedef Fiyat Seviyesi'],['hpk','Planlanan Kâr €'],['hpm','Planlanan Marj %'],['hgk','Hedefte Güncel Kâr €'],['hgm','Hedefte Güncel Marj %'],['hdk','Hedeften Fark € (birim)'],['hdm','Hedeften Fark (marj puanı)'],['hneed','Planlanan Marj için Gereken Fiyat'],['ted','Tedarikçi'],['tedKod','Sipariş Kodu'],['tedGun','Teslim Süresi (gün)'],['stokMik','Stok'],['minStok','Min. Stok'],['maxStok','Hedef Stok']];
+const CSV_BASE = [['img','Resim'],['durum','Durum'],['barkod','Barkod'],['stok','Stok Kodu'],['ad','Ürün Adı'],['grup','Ürün Grubu'],['koli','Koli İçi Adet'],['birim','Satış Birimi'],['kdv','KDV %'],['alis','Alış Fiyatı'],['maliyet','Alış Maliyetli Fiyat'],['son','Son Satış KDV dahil'],['sonnet','Son Satış KDV hariç'],['hedef','Hedef (Basic) Fiyat'],['hedefm','Hedef Marj %'],['basmal','Başlangıç Maliyetli Alış'],['hedefl','Hedef Fiyat Seviyesi'],['hpk','Planlanan Kâr €'],['hpm','Planlanan Marj %'],['hgk','Hedefte Güncel Kâr €'],['hgm','Hedefte Güncel Marj %'],['hdk','Hedeften Fark € (birim)'],['hdm','Hedeften Fark (marj puanı)'],['hneed','Planlanan Marj için Gereken Fiyat'],['ted','Tedarikçi'],['tedKod','Sipariş Kodu'],['tedGun','Teslim Süresi (gün)'],['stokMik','Stok'],['minStok','Min. Stok'],['maxStok','Hedef Stok']];
 const CSV_MET = [['fiyat','Fiyat (KDV hariç)'],['ind','İndirim Oranı %'],['mkar','Nakset Kâr €'],['mmarj','Nakset Kar Marjı %'],['ckar','Müşteri Kâr € (son satışa göre)'],['cmarj','Müşteri Kar Marjı % (son satışa göre)']];
-const csvAll = () => ({b:CSV_BASE.map(x=>x[0]).filter(k=>k!=='img'), l:[1,2,3,4,5,6], m:CSV_MET.map(x=>x[0]), st:'aktif', g:''});
+const csvAll = () => ({b:CSV_BASE.map(x=>x[0]).filter(k=>k!=='img'), l:NPLV(), m:CSV_MET.map(x=>x[0]), st:'aktif', g:''});
 function csvLoad(){ return {...csvAll(), b:[], l:[], m:[]}; try{ const o = JSON.parse(localStorage.getItem(KEY_CSVSEL)); if(o && Array.isArray(o.b) && Array.isArray(o.l) && Array.isArray(o.m)) return {...csvAll(), ...o}; }catch(e){} return csvAll(); }
 function csvRead(){
   const ov = $('csvOverlay'), q = n => [...ov.querySelectorAll(`input[data-cs="${n}"]:checked`)].map(x=>x.value);
@@ -2216,7 +2223,7 @@ function openCsvSel(){
           <select id="csvGr"><option value="">${tr('Tüm gruplar')}</option>${groups.map(g=>`<option value="${esc(g)}">${esc(g)}</option>`).join('')}</select></label>
       </div>
       ${bar('b','Ürün bilgileri')}<div class="chips">${CSV_BASE.map(([k,l])=>chip('b',k,tr(l),s.b.includes(k))).join('')}</div>
-      ${bar('l','Fiyat seviyeleri')}<div class="chips">${[1,2,3,4,5,6].map(i=>chip('l',i,lvName(i),s.l.includes(i))).join('')}</div>
+      ${bar('l','Fiyat seviyeleri')}<div class="chips">${NPLV().map(i=>chip('l',i,lvName(i),s.l.includes(i))).join('')}</div>
       ${bar('m','Her fiyat seviyesi için sütunlar')}<div class="chips">${CSV_MET.map(([k,l])=>chip('m',k,tr(l),s.m.includes(k))).join('')}</div>
       <p class="hint">${tr('Fiyat seviyesi seçip alttan sütun seçmezseniz her seviyenin fiyat sütunu gelir. Boş fiyatlar boş sütun olarak gelir; doldurduktan sonra "Excel\'den İçe Aktar" ile geri yükleyebilirsiniz.')}<br>${tr('Seçimleriniz bir sonraki aktarım için hatırlanır.')}</p>
     </div>
@@ -2251,7 +2258,7 @@ function csvCols(sel){
     basmal:p=>HA(p).b, hedefl:p=>lvN(HA(p).L), hpk:p=>HA(p).pk, hpm:p=>HA(p).pm, hgk:p=>HA(p).gk, hgm:p=>HA(p).gm, hdk:p=>HA(p).dk, hdm:p=>HA(p).dm, hneed:p=>HA(p).need,
     ted:p=>p.ted||'', tedKod:p=>p.tedKod||'', tedGun:p=>num(p.tedGun), stokMik:p=>num(p.stokMik), minStok:p=>num(p.minStok), maxStok:p=>num(p.maxStok)};
   const bk = CSV_BASE.map(x=>x[0]).filter(k=>sel.b.includes(k));
-  const lv = [1,2,3,4,5,6].filter(i=>sel.l.includes(i));
+  const lv = NPLV().filter(i=>sel.l.includes(i));
   let mk = CSV_MET.map(x=>x[0]).filter(k=>sel.m.includes(k)); if(lv.length && !mk.length) mk = ['fiyat'];
   const cols = [], add = (h, g, t, v, k) => cols.push({h, g, t:t||'s', v, k});
   const base = g => bk.filter(k=>G[k]===g).forEach(k=>add(BH[k], g, T[k], V[k], k));
@@ -2818,7 +2825,7 @@ const pctTxt = v => v==null||!isFinite(v) ? '–' : fmtP(v);
 const repSel = { grp:new Set(), prd:new Set(), ex:new Set() };
 const repMode = () => document.querySelector('input[name="repMode"]:checked').value;
 function repActiveLevels(){ // en az bir üründe fiyatı olan seviyeler
-  return [1,2,3,4,5,6].filter(i => actv().some(p => num(p.fiyat?.[i-1])!=null));
+  return NPLV().filter(i => actv().some(p => num(p.fiyat?.[i-1])!=null));
 }
 function openReport(){
   const allG = [...new Set([...groups, ...products.map(p=>p.grup).filter(Boolean)])];
@@ -2831,7 +2838,7 @@ function openReport(){
   const act = repActiveLevels();
   const chosen = [+$('fLevel').value, +$('fLevel2').value];
   repLvSaved = null;
-  $('repLevels').innerHTML = [1,2,3,4,5,6].filter(i=>act.includes(i) || chosen.includes(i)).map(i=>
+  $('repLevels').innerHTML = NPLV().filter(i=>act.includes(i) || chosen.includes(i)).map(i=>
     `<label><input type="checkbox" data-l="${i}" ${chosen.includes(i)?'checked':''}> ${esc(lvName(i))}</label>`).join('');
   if(!$('repOverlay').classList.contains('open')) repAct = 'aktif';
   $('repAct').innerHTML = ractOpts();
@@ -3330,7 +3337,7 @@ const NEW_KV = ['hedef','grup','guncel','eksik'];   // v4 ile eklenen raporlar
 const permGroups = () => [
   ['Ürün bilgileri (düzenleme)', [['barkod','Barkod'],['stok','Stok Kodu'],['ad','Ürün Adı'],['grup','Ürün Grubu'],['koli','Koli İçi Adet'],['kdv','KDV'],['img','Resim']]],
   ['Alış fiyatları (düzenleme)', [['alis','Alış Fiyatı'],['maliyet','Alış Maliyetli Fiyat']]],
-  ['Satış fiyatları (düzenleme)', [1,2,3,4,5,6].map(i=>['f'+i, lvName(i)+((levelNames[i-1]||'').trim()?` <small>(Fiyat ${i})</small>`:'')]).concat([['mof','Müşteriye Özel Fiyat'],['son','Son Satış (KDV dahil)'],['hedef','Hedef (Basic) Fiyat']])],
+  ['Satış fiyatları (düzenleme)', NPLV().map(i=>['f'+i, lvName(i)]).concat([['son','Son Satış (KDV dahil)'],['hedef','Hedef (Basic) Fiyat']])],
   ['Ürün işlemleri', [['ekle','Yeni ürün ekle'],['sil','Ürün sil'],['aktif','Ürünü aktif / pasif yap'],['toplu','Toplu sıfırla']]],
   ['Ürün araçları', [['topfiyat','Toplu fiyat güncelleme'],['icaktar',"Excel'den içe aktarma"],['etiket','Etiket & fiyat listesi'],['tedarik','Tedarikçi bilgisi (görme / düzenleme)'],['stokduz','Stok bilgisi (düzenleme)'],['stokgor','Stok & sipariş önerisi'],['degisiklik','Son değişiklikler']]],
   ['Üretim', [['recete','Reçete tanımlama'],['urt','Üretim kaydı girme'],['urtsil','Üretim kaydı silme'],['urtrap','Üretim geçmişi & rapor']]],
@@ -3390,7 +3397,7 @@ function loadUsers(){
   const a = users.find(x=>uKey(x.u)==='admin'); if(a) a.p = ALL_P.slice();
 }
 function persistUsers(){ try{ localStorage.setItem(KEY_USERS, JSON.stringify(users)); }catch(e){ alert('Kullanıcılar kaydedilemedi.'); } }
-const can = perm => !!me && (window.NP_RO ? !['kullanici','yukle'].includes(perm) : uKey(me.u)==='admin' || me.p.includes(perm) || ((perm==='rapxls' || perm==='rappdf') && me.p.includes('sube')) || (perm==='mof' && me.p.some(x=>/^f[1-6]$/.test(x))));
+const can = perm => !!me && perm!=='mof' && (window.NP_RO ? !['kullanici','yukle'].includes(perm) : uKey(me.u)==='admin' || me.p.includes(perm) || ((perm==='rapxls' || perm==='rappdf') && me.p.includes('sube')) || (perm==='mof' && me.p.some(x=>/^f[1-6]$/.test(x))));
 const EDIT_F = ['barkod','stok','ad','grup','koli','kdv','img','alis','maliyet','hedef','f1','f2','f3','f4','f5','f6','mof','son','tedarik','stokduz'];
 const canEdit = () => EDIT_F.some(can) || can('ekle');
 
@@ -5536,8 +5543,8 @@ const filtBar = f => `<div class="tbar">
   <select data-tf="t">${tedOpts(f.t)}${msTail(f.t)}</select>
   <select data-tf="akt"><option value="aktif" ${!f.akt||f.akt==='aktif'?'selected':''}>${esc(tr('Aktif ürünler'))}</option><option value="pasif" ${f.akt==='pasif'?'selected':''}>${esc(tr('Pasif ürünler'))}</option><option value="hepsi" ${f.akt==='hepsi'?'selected':''}>${esc(tr('Tüm ürünler (aktif + pasif)'))}</option></select>${tplSel(f)}</div>`;
 // fiyat / değer alanları (okuma, yazma, yetki)
-const VF = () => [1,2,3,4,5,6].map(i=>['f'+i, lvName(i)+' (KDV hariç)', 'f'+i]).concat([
-  ['mof','Müşteriye Özel Fiyat (KDV hariç)','mof'], ['son','Son Satış (KDV dahil)','son'], ['hedef','Hedef (Basic) Fiyat','hedef'], ['alis','Alış Fiyatı','alis'], ['maliyet','Maliyetli Alış','maliyet']]);
+const VF = () => NPLV().map(i=>['f'+i, lvName(i)+' (KDV hariç)', 'f'+i]).concat([
+  ['son','Son Satış (KDV dahil)','son'], ['hedef','Hedef (Basic) Fiyat','hedef'], ['alis','Alış Fiyatı','alis'], ['maliyet','Maliyetli Alış','maliyet']]);
 const vfLabel = k => (VF().find(x=>x[0]===k)||[k,k])[1];
 const getV = (p, k) => /^f\d$/.test(k) ? num(p.fiyat?.[+k[1]-1]) : num(p[k]);
 function setV(p, k, v){ if(/^f\d$/.test(k)){ p.fiyat = [0,1,2,3,4,5].map(i=>p.fiyat?.[i] ?? ''); p.fiyat[+k[1]-1] = v; } else p[k] = v; }
@@ -5678,8 +5685,8 @@ function readCsv(text){
   return rows.filter(r=>r.some(v=>String(v).trim()!==''));
 }
 const IX_T = () => [['_key','— eşleştirme anahtarı —'],['ad','Ürün Adı (sadece yeni ürünler)','ekle'],['grup','Ürün Grubu','grup'],['koli','Koli İçi Adet','koli'],['alis','Alış Fiyatı','alis'],['maliyet','Maliyetli Alış','maliyet']]
-  .concat([1,2,3,4,5,6].map(i=>['f'+i, lvName(i)+' (KDV hariç)','f'+i]))
-  .concat([['mof','Müşteriye Özel Fiyat (KDV hariç)','mof'],['son','Son Satış (KDV dahil)','son'],['hedef','Hedef (Basic) Fiyat','hedef'],['durum','Durum (Aktif / Pasif)','aktif'],['ted','Tedarikçi','tedarik'],['tedKod','Sipariş Kodu','tedarik'],['tedGun','Teslim Süresi (gün)','tedarik'],['stokMik','Stok','stokduz'],['minStok','Min. Stok','stokduz'],['maxStok','Hedef Stok','stokduz']]);
+  .concat(NPLV().map(i=>['f'+i, lvName(i)+' (KDV hariç)','f'+i]))
+  .concat([['son','Son Satış (KDV dahil)','son'],['hedef','Hedef (Basic) Fiyat','hedef'],['durum','Durum (Aktif / Pasif)','aktif'],['ted','Tedarikçi','tedarik'],['tedKod','Sipariş Kodu','tedarik'],['tedGun','Teslim Süresi (gün)','tedarik'],['stokMik','Stok','stokduz'],['minStok','Min. Stok','stokduz'],['maxStok','Hedef Stok','stokduz']]);
 const IX = {rows:null, head:[], name:'', map:{}, key:'auto', keyCol:-1, hdr:true, addNew:false, plan:null, st:'hepsi', newSt:'aktif', byName:true};
 // katı sayı: '4.May' gibi Excel'in tarihe çevirdiği değerler kabul edilmez
 const ixNum = raw => { if(typeof raw==='number') return isFinite(raw) ? raw : null; const t = String(raw).trim().replace(/\s|€/g,''); if(!/^-?\d{1,3}([.,]?\d{3})*([.,]\d+)?$|^-?\d+([.,]\d+)?$/.test(t)) return null; return num(t); };
@@ -5696,7 +5703,7 @@ function ixGuess(){
   g('grup', /grup|grub|warengruppe|kategori/); g('koli', /koli|karton|^ve$|inhalt|packung/); g('son', /sonsatis|uvp|^vk$|verkauf/); g('hedef', /hedef|basic/);
   g('tedKod', /siparis|bestellnr|lieferantenartikel/); g('ted', /tedarik|lieferant|supplier/); g('tedGun', /teslim|lieferzeit/);
   g('durum', /^durum$|^status$/); g('minStok', /minstok|mindest|^min/); g('maxStok', /hedefstok|maxstok|^max/); g('stokMik', /^stok$|stokmiktar|bestand|menge/);
-  [1,2,3,4,5,6].forEach(i=>g('f'+i, new RegExp('^(fiyat|preis)'+i+'$'), fold(lvName(i))));
+  NPLV().forEach(i=>g('f'+i, new RegExp('^(fiyat|preis)'+i+'$'), fold(lvName(i))));
   g('mof', /musteriyeozel|ozelfiyat|sonderpreis|kundenpreis|^(fiyat|preis)7$/);
 }
 function ixFindProd(r){
@@ -5862,13 +5869,13 @@ function lbSide(){ const O = LB.o, E = O.e, Lo = O.l;
       + lbSw('e','tag','Kampanya etiketi',E.tag) + (E.tag ? `<div class="sub"><input data-lotxt="tagTxt" value="${esc(E.tagTxt)}" maxlength="18"></div>` : '')
       + lbSw('e','son','Tavsiye satış (KDV dahil)',E.son) + lbSw('e','valid','Geçerlilik tarihi',E.valid) + (E.valid ? `<div class="sub"><input data-lotxt="validTxt" value="${esc(E.validTxt||'')}" placeholder="${esc(tr('örn. 30.11.2026'))}"></div>` : '')
     : lbSw('l','img','Resim',Lo.img) + lbSw('l','stk','Stok kodu',Lo.stk) + lbSw('l','bc','Barkod',Lo.bc) + lbSw('l','grp','Grup',Lo.grp) + lbSw('l','koli','Koli içi',Lo.koli)
-      + `<h4>${esc(tr('Fiyatlar'))}</h4>` + [1,2,3,4,5,6].map(String).concat(['son']).map(l=>`<label class="npsw"><input type="checkbox" data-lbl="${l}" ${LB.lvs.includes(l)?'checked':''}><span class="tg"></span>${esc(l==='son'?tr('Son Satış (KDV dahil)'):lvName(+l))}</label>`).join('');
+      + `<h4>${esc(tr('Fiyatlar'))}</h4>` + NPLV().map(String).concat(['son']).map(l=>`<label class="npsw"><input type="checkbox" data-lbl="${l}" ${LB.lvs.includes(l)?'checked':''}><span class="tg"></span>${esc(l==='son'?tr('Son Satış (KDV dahil)'):lvName(+l))}</label>`).join('');
   return `<div class="lbside"><h4>${esc(tr('Ürün detayları'))}</h4>${det}
     <h4>${esc(tr('Listeleme seçenekleri'))} <span class="na">(${LB.sel.size} ${esc(tr('ürün seçili'))})</span></h4>${lbSw('fl','hasImg','Sadece resmi olanlar',O.fl.hasImg)}${lbSw('fl','hasPr','Sadece fiyatı olanlar',O.fl.hasPr)}
     <h4>${esc(tr('Sıralama ölçütü'))}</h4><select class="full" data-losrt="1">${[['tpl', LB.f && LB.f.tpl ? 'Şablon sırası' : 'Gruba ve ada göre'],['az',"İsim A'dan Z'ye"],['za',"İsim Z'den A'ya"],['stok','Stok koduna göre'],['pu','Fiyat (artan)'],['pd','Fiyat (azalan)'],['grp','Gruba göre'],['grpH','Gruplara göre (grup başlıklı)']].map(([v,t])=>`<option value="${v}" ${O.srt===v?'selected':''}>${esc(tr(t))}</option>`).join('')}</select></div>`; }
 const lbPrice = (p, lv, vat) => { if(lv==='son') return {v:num(p.son), inc:true};
   const v = num(p.fiyat?.[+lv-1]); if(v==null) return {v:null}; const k = num(p.kdv) ?? 7; return vat==='brut' ? {v:v*(1+k/100), inc:true} : {v, inc:false}; };
-const lvSel = (name, sel) => `<select data-lb="${name}">${[1,2,3,4,5,6].map(i=>`<option value="${i}" ${String(i)===String(sel)?'selected':''}>${esc(lvName(i))}</option>`).join('')}<option value="son" ${sel==='son'?'selected':''}>${esc(tr('Son Satış (KDV dahil)'))}</option></select>`;
+const lvSel = (name, sel) => `<select data-lb="${name}">${NPLV().map(i=>`<option value="${i}" ${String(i)===String(sel)?'selected':''}>${esc(lvName(i))}</option>`).join('')}<option value="son" ${sel==='son'?'selected':''}>${esc(tr('Son Satış (KDV dahil)'))}</option></select>`;
 function openLabels(){
   if(!can('etiket')) return alert(tr('Bu işlem için yetkiniz yok.'));
   openTool('Etiket & Fiyat Listesi', 1150, {
@@ -6008,7 +6015,7 @@ function ofCustSources(){
   return out.sort((a,b)=>a.o-b.o || String(a.c.ad).localeCompare(String(b.c.ad),'tr'));
 }
 const ofLvLab = l => l==='son' ? tr('Son Satış (KDV dahil)') : l==='sonn' ? tr('Son Satış (KDV hariç)') : l==='mof' ? tr('Müşteriye Özel Fiyat') : lvName(+l);
-const OF_LVS = () => [1,2,3,4,5,6].map(String).concat(['mof','sonn','son']);
+const OF_LVS = () => NPLV().map(String).concat(['sonn','son']);
 /* 25.11.: son satış fiyatları her zaman en sonda: önce KDV hariç, en son KDV dahil */
 const ofLvOrd = L => (L||[]).filter(l=>l!=='son' && l!=='sonn').concat((L||[]).includes('sonn') ? ['sonn'] : [], (L||[]).includes('son') ? ['son'] : []);
 const ofLv = (p, l) => l==='son' ? num(p.son) : l==='sonn' ? (num(p.son)!=null ? Math.round(num(p.son)/(1+(num(p.kdv)??7)/100)*100)/100 : null) : l==='mof' ? num(p.mof) : num(p.fiyat?.[+l-1]);
@@ -6534,7 +6541,7 @@ function npAfisOpts(src, go){ let ov = $('kafOv'); if(!ov){ ov = document.create
   ov.onclick = e=>{ if(e.target.closest('[data-kafx]') || e.target===ov){ ov.classList.remove('open'); return; } if(e.target.closest('[data-kafgo]')){
       if(!src.fixed && !KAF.mainLv) return alert(tr('Afiş fiyatı seçin.')); if((KAF.old || KAF.disc) && !KAF.oldLv) return alert(tr('Eski fiyat için bir fiyat seçin.')); ov.classList.remove('open'); go(); } }; }
 /* 24.11.: afiş müşteriye gider → varsayılan başlıkta iç fiyat adları (Vakıf, Market, toptan, özel…) yazmaz */
-function npAfisCleanTitle(t){ let s = String(t||''); const names = [1,2,3,4,5,6].map(i=>String(lvName(i)||'').trim()).concat(['Müşteriye Özel Fiyat','Müşteriye Özel','Son Satış']).filter(n=>n.length>1);
+function npAfisCleanTitle(t){ let s = String(t||''); const names = NPLV().map(i=>String(lvName(i)||'').trim()).concat(['Müşteriye Özel Fiyat','Müşteriye Özel','Son Satış']).filter(n=>n.length>1);
   names.forEach(n=>{ const re = new RegExp('(^|[\\s\\-–_/(),.:])' + n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/[ıiİI]/g,'[ıiİI]').replace(/[şsŞS]/g,'[şsŞS]').replace(/[üuÜU]/g,'[üuÜU]').replace(/[öoÖO]/g,'[öoÖO]').replace(/[çcÇC]/g,'[çcÇC]').replace(/[ğgĞG]/g,'[ğgĞG]') + '(?=$|[\\s\\-–_/(),.:])', 'gi'); s = s.replace(re, '$1'); });
   s = s.replace(/[\s\-–_/]{2,}/g, ' ').replace(/^[\s\-–_/(),.:]+|[\s\-–_/(),.:]+$/g, '').trim(); return s || String(t||''); }
 function npAfis(src){ if(!src.items.length) return alert(tr('Afiş için ürün yok.')); src.title = npAfisCleanTitle(src.title);
@@ -6672,7 +6679,7 @@ const CMP = {f:{akt:'aktif'}, sel:new Set(), it:{}, onlySel:false, cust:'', lvs:
   x:{logo:true, img:true, stok:true, grup:false, koli:true, sonB:true, sonN:true, fark:true, ckarB:true, ckar:true, cmarj:true}};
 try{ const c = JSON.parse(localStorage.getItem(KEY_CMP)||'null'); if(c){ ['lvs','base','cl'].forEach(k=>{ if(c[k]!=null) CMP[k] = c[k]; }); if(c.x) Object.assign(CMP.x, c.x); } }catch(e){}
 const cmpSaveCfg = () => { try{ localStorage.setItem(KEY_CMP, JSON.stringify({lvs:CMP.lvs.filter(l=>l!=='fat'), base:CMP.base==='fat' ? (CMP.lvs.find(l=>l!=='fat')||'1') : CMP.base, x:CMP.x, cl:CMP.cl})); }catch(e){} };
-const CMP_LVS = () => [1,2,3,4,5,6].map(String).concat(['mof','man'], CMP.fat ? ['fat'] : []);
+const CMP_LVS = () => NPLV().map(String).concat(['man'], CMP.fat ? ['fat'] : []);
 const cmpLab = l => l==='mof' ? tr('Müşteriye Özel Fiyat') : l==='man' ? tr('Elle fiyat') : l==='fat' ? tr('Fatura fiyatı') + (CMP.fat && CMP.fat.no ? ' ('+CMP.fat.no+')' : '') : lvName(+l);
 const cmpLabX = l => l==='mof' ? DL('Sonderpreis','Özel fiyat') : l==='man' ? DL('Angebotspreis','Teklif fiyatı') : l==='fat' ? DL('Rechnungspreis','Fatura fiyatı') : lvName(+l);
 const cmpU = p => CMP.it[p.id]?.u || (tplNK(CMP.f && CMP.f.tpl, p) ? puB(p) : puDef(p)), cmpF = p => puFac(p, cmpU(p));
@@ -7031,8 +7038,8 @@ function cmpCustBody(custs){ const D = cmpCustData(), L = D.L, st = cmpStep(), A
   const canSave = !window.NP_RO;
   return `<style>${CMP_CSS}</style>
     <div class="tbar"><label>${esc(tr('Müşteri'))} <input data-cm="cust" list="cmpCL" value="${esc(CMP.cust)}" style="width:220px"></label><datalist id="cmpCL">${(custs||[]).map(s=>`<option value="${esc(s.c.ad)}"></option>`).join('')}</datalist>
-      ${CMP.fat?`<label><b>${esc(tr('Faturadaki fiyat'))}</b> <select data-cm="fbl" style="font-weight:600"><option value="" ${!CMP.fbl?'selected':''}>${esc(tr('Fatura'))}</option>${[1,2,3,4,5,6].map(String).concat(['mof']).map(l=>`<option value="${l}" ${CMP.fbl===l?'selected':''}>${esc(cmpClLab(l))}</option>`).join('')}</select></label>`:''}
-       ${st!==2?`<label><b>${esc(tr('Karşılaştırılacak fiyat'))}</b> <select data-cm="cl" style="border-color:#b5121b;font-weight:600">${st===1?`<option value="" ${!L?'selected':''}>${esc(tr('Karşılaştırma yok'))}</option>`:''}${[1,2,3,4,5,6].map(String).concat(['mof']).map(l=>`<option value="${l}" ${L===l?'selected':''}>${esc(cmpClLab(l))}</option>`).join('')}</select></label>`:''}</div>
+      ${CMP.fat?`<label><b>${esc(tr('Faturadaki fiyat'))}</b> <select data-cm="fbl" style="font-weight:600"><option value="" ${!CMP.fbl?'selected':''}>${esc(tr('Fatura'))}</option>${NPLV().map(String).map(l=>`<option value="${l}" ${CMP.fbl===l?'selected':''}>${esc(cmpClLab(l))}</option>`).join('')}</select></label>`:''}
+       ${st!==2?`<label><b>${esc(tr('Karşılaştırılacak fiyat'))}</b> <select data-cm="cl" style="border-color:#b5121b;font-weight:600">${st===1?`<option value="" ${!L?'selected':''}>${esc(tr('Karşılaştırma yok'))}</option>`:''}${NPLV().map(String).map(l=>`<option value="${l}" ${L===l?'selected':''}>${esc(cmpClLab(l))}</option>`).join('')}</select></label>`:''}</div>
     ${cmpFatBar()}${cmpFrozenBar()}
     <div class="tbar" style="gap:8px">${tab(1, tr('Alış karşılaştırması'))}<span class="na">→</span>${tab(2, tr('Satış kârı'))}<span class="na">→</span>${tab(4, tr('Yan yana'))}</div>
     ${cmpCustTiles(D, st)}
@@ -7308,7 +7315,7 @@ const CAT = {f:{akt:'aktif'}, sel:new Set(), ex:new Set(), mode:'filtre', title:
 try{ const c = JSON.parse(localStorage.getItem(KEY_CAT)||'null'); if(c){ if(c.c) Object.assign(CAT.c, c.c); ['lvs','koliF','mode'].forEach(k=>{ if(c[k]!=null) CAT[k] = c[k]; }); if(c.byGrp!=null) CAT.byGrp = !!c.byGrp; } }catch(e){}
 const catSave = () => { try{ localStorage.setItem(KEY_CAT, JSON.stringify({c:CAT.c, lvs:CAT.lvs, koliF:CAT.koliF, byGrp:CAT.byGrp, mode:CAT.mode})); }catch(e){} };
 const catTitle = () => String(CAT.title||'').trim() || DL('Produktliste','Ürün Listesi');
-const CAT_LVS = () => (can('alis')?['alis']:[]).concat(can('maliyet')?['maliyet']:[], [1,2,3,4,5,6].map(String).filter(l=>can('f'+l)), can('mof')?['mof']:[], ['son']);
+const CAT_LVS = () => (can('alis')?['alis']:[]).concat(can('maliyet')?['maliyet']:[], NPLV().map(String).filter(l=>can('f'+l)), ['son']);
 const catLvLab = l => l==='son' ? DL('UVP (inkl. MwSt.)','Tavsiye satış (KDV dahil)') : l==='alis' ? DL('Einkaufspreis','Alış fiyatı') : l==='maliyet' ? DL('Einstandspreis','Maliyetli alış') : CAT.lvs.filter(x=>!['son','alis','maliyet'].includes(x)).length===1 ? DL('Preis','Fiyat') : l==='mof' ? DL('Sonderpreis','Özel fiyat') : lvName(+l);
 const catPs0 = () => { const L = CAT.mode==='sec' ? filtProds(CAT.f).filter(p=>CAT.sel.has(p.id)) : filtProds(CAT.f).filter(p=>!CAT.ex.has(p.id));
   if(CAT.f.tpl && tplGet(CAT.f.tpl)){ const r = tplRank(CAT.f.tpl), g1 = new Map(); L.forEach(p=>{ const g = p.grup||''; if(!g1.has(g) || r(p)<g1.get(g)) g1.set(g, r(p)); });
@@ -8035,7 +8042,7 @@ const KEY_LOG = 'nakis_degisiklik_log_v1', LOG_MAX = 5000;
 let chLog = []; try{ chLog = JSON.parse(localStorage.getItem(KEY_LOG)||'[]'); if(!Array.isArray(chLog)) chLog = []; }catch(e){ chLog = []; }
 const CH_F = () => [['ad','Ürün Adı',p=>p.ad],['barkod','Barkod',p=>p.barkod],['stok','Stok Kodu',p=>p.stok],['grup','Ürün Grubu',p=>p.grup],['koli','Koli İçi Adet',p=>num(p.koli)],['kdv','KDV',p=>p.kdv],
   ['alis','Alış Fiyatı',p=>num(p.alis)],['maliyet','Maliyetli Alış',p=>num(p.maliyet)],['basMal','Başlangıç Maliyet',p=>num(p.basMal)]]
-  .concat([1,2,3,4,5,6].map(i=>['f'+i, lvName(i), p=>num(p.fiyat?.[i-1])]))
+  .concat(NPLV().map(i=>['f'+i, lvName(i), p=>num(p.fiyat?.[i-1])]))
   .concat([['son','Son Satış (KDV dahil)',p=>num(p.son)],['hedef','Hedef (Basic) Fiyat',p=>num(p.hedef)],['img','Resim',p=>p.img ? p.img.length+':'+p.img.slice(-32) : ''],['pasif','Durum',p=>p.pasif?'Pasif':'Aktif'],
     ['ted','Tedarikçi',p=>p.ted],['tedKod','Sipariş Kodu',p=>p.tedKod],['tedGun','Teslim Süresi (gün)',p=>num(p.tedGun)],['stokMik','Stok',p=>num(p.stokMik)],['minStok','Min. Stok',p=>num(p.minStok)],['maxStok','Hedef Stok',p=>num(p.maxStok)],['birim','Birim',p=>p.birim],['pkKg','Birim ağırlığı (kg)',p=>num(p.pkKg)]]);
 const chFlat = p => { const o = {}; CH_F().forEach(([k,,g])=>{ const v = g(p); o[k] = v==null || v==='' ? '' : (typeof v==='number' ? r4(v) : String(v)); }); return o; };
@@ -8896,7 +8903,7 @@ function renderNewRep(v, ps, tile, lvOpts, L1, LV){
   const hd = karCfg.hdur || '';
   if(v==='fseviye'){
     // her fiyat çifti için ürünlerin çoğunda geçerli sıra bulunur; ona uymayan ürünler + boş kalan seviyeler
-    const Ls = [1,2,3,4,5,6], has = p => Ls.filter(L=>num(p.fiyat?.[L-1])!=null);
+    const Ls = NPLV(), has = p => Ls.filter(L=>num(p.fiyat?.[L-1])!=null);
     const used = Ls.filter(L=>ps.filter(p=>num(p.fiyat?.[L-1])!=null).length >= Math.max(1, ps.length*0.5));
     const dom = {};
     Ls.forEach(a=>Ls.forEach(b=>{ if(a>=b) return; let gt = 0, lt = 0; ps.forEach(p=>{ const x = num(p.fiyat?.[a-1]), y = num(p.fiyat?.[b-1]); if(x==null||y==null) return; if(x>y) gt++; else if(x<y) lt++; });
@@ -9304,7 +9311,7 @@ window.openPHist = openPHist;
 (function(){
 const T = x => typeof tr==='function' ? tr(x) : x;
 i18nAdd({"Alış fiyatı arttı":"Einkaufspreis gestiegen","Satış fiyatları güncellensin mi?":"Verkaufspreise aktualisieren?","Eski kâr marjını korumak için önerilen fiyatlar aşağıda. Kutudaki fiyatı elle değiştirebilir, istemediğiniz satırı ✕ ile çıkarabilirsiniz.":"Vorgeschlagene Preise, um die bisherige Marge zu halten. Preis im Feld änderbar, unerwünschte Zeilen mit ✕ entfernen.","Fiyat":"Preis","Şu anki fiyat":"Aktueller Preis","Eski marj":"Bisherige Marge","Güncellenmezse marj":"Marge ohne Anpassung","Yeni fiyat":"Neuer Preis","Fark":"Differenz","Yeni marj":"Neue Marge","Seçilenleri uygula":"Ausgewählte übernehmen","Hiçbirini değiştirme":"Nichts ändern","elle değiştirildi":"manuell geändert","Yuvarla":"Runden","Kuruş (0,01)":"Cent (0,01)","5 kuruş (0,05)":"5 Cent (0,05)","10 kuruş (0,10)":"10 Cent (0,10)",",x9 ile bitsin":"Endung ,x9","satış fiyatı güncellendi":"Verkaufspreise aktualisiert","Son Satış KDV dahil":"Letzter VK inkl. MwSt.","Müşteriye Özel Fiyat":"Kundenpreis"});
-const LVS = () => [1,2,3,4,5,6].map(i=>({k:'f'+i, lab:lvName(i), perm:'f'+i, get:p=>num(p.fiyat?.[i-1]), set:(p,v)=>{ p.fiyat = [0,1,2,3,4,5].map(j=>p.fiyat?.[j] ?? ''); p.fiyat[i-1] = v; }}))
+const LVS = () => NPLV().map(i=>({k:'f'+i, lab:lvName(i), perm:'f'+i, get:p=>num(p.fiyat?.[i-1]), set:(p,v)=>{ p.fiyat = [0,1,2,3,4,5].map(j=>p.fiyat?.[j] ?? ''); p.fiyat[i-1] = v; }}))
   .concat([{k:'mof', lab:'Müşteriye Özel Fiyat', perm:'mof', get:p=>num(p.mof), set:(p,v)=>{ p.mof = v; }},
            {k:'son', lab:'Son Satış KDV dahil', perm:'son', brut:1, get:p=>num(p.son), set:(p,v)=>{ p.son = v; }}]);
 const RND = {'0.01':v=>Math.round(v*100)/100, '0.05':v=>Math.round(v*20)/20, '0.1':v=>Math.round(v*10)/10, 'x9':v=>{ const c = Math.ceil(v*10)/10 - 0.01; return Math.round((c < v - 0.0001 ? c + 0.1 : c)*100)/100; }};
@@ -9436,7 +9443,7 @@ i18nAdd({
   const canV = () => can('mgor') || can('mduz'), canE = () => can('mduz');
 
   /* ---- fiyat seviyeleri ---- */
-  const LVS = () => [['','—'],...[1,2,3,4,5,6].map(i=>[String(i), lvName(i)]),['mof', tr('Müşteriye Özel Fiyat')],['son', tr('Son Satış (KDV dahil)')]];
+  const LVS = () => [['','—'],...NPLV().map(i=>[String(i), lvName(i)]),['son', tr('Son Satış (KDV dahil)')]];
   const lvLab = l => (LVS().find(x=>x[0]===String(l||''))||['',''])[1];
   const grpOf = c => MG.find(g=>g.ad===c.grup);
   const eff = (c, k) => { const v = trim(c[k]); if(v!=='') return {v, src:'c'}; const g = grpOf(c); const gv = g ? trim(g[k]) : ''; return gv!=='' ? {v:gv, src:'g'} : {v:'', src:''}; };
@@ -10362,7 +10369,7 @@ i18nAdd({
   /* ================= AYNI FİYATLI ÜRÜNLER (fiyat tutarsızlıkları) ================= */
   const KEY_SP = 'nakis_ayni_fiyat_v1';
   const SP = Object.assign({a:'1', b:'2', mode:'eq', g:'', tpl:'', q:'', akt:'aktif'}, ld(KEY_SP, {}));
-  const spLvs = () => [1,2,3,4,5,6].map(String).concat(['mof']);
+  const spLvs = () => NPLV().map(String);
   const spLab = l => l==='mof' ? tr('Müşteriye Özel Fiyat') : lvName(+l);
   const spGet = (p, l) => l==='mof' ? num(p.mof) : num(p.fiyat?.[+l-1]);
   /* kaydedilmemiş değişiklikler: satır listede kalır, "Kaydet" ile ürün bilgilerine yazılır */
@@ -10523,7 +10530,7 @@ i18nAdd({
   { const _rn = renderNewRep; renderNewRep = function(v, ps){ const r = _rn.apply(this, arguments);
       try{
         if(v==='fseviye'){
-          const Ls = [1,2,3,4,5,6], f = (p,L) => num(p.fiyat?.[L-1]), win = {}; Ls.forEach(L=>win[L]=0);
+          const Ls = NPLV(), f = (p,L) => num(p.fiyat?.[L-1]), win = {}; Ls.forEach(L=>win[L]=0);
           const used = Ls.filter(L=>ps.some(p=>f(p,L)!=null));
           used.forEach(a=>used.forEach(b=>{ if(a===b) return; let gt = 0, n = 0; ps.forEach(p=>{ const x = f(p,a), y = f(p,b); if(x==null||y==null||x===y) return; n++; if(x>y) gt++; }); if(n>=3 && gt/n>=0.8) win[a]++; }));
           const chain = used.slice().sort((a,b)=>win[b]-win[a]).map(L=>esc(lvName(L))).join(' &gt; ');
@@ -11309,9 +11316,29 @@ i18nAdd({"Resim yükle": "Bild hochladen"});
 { const _hsZ = homeSections; homeSections = function(){ const s = _hsZ.apply(this, arguments);
   try{ const d = s.find(x=>x[0]==='diger'); if(d){ const prd = s.find(x=>x[0]==='prd'), veri = s.find(x=>x[0]==='veri');
       d[3].forEach(t=>{ const tgt = /Afiş/.test(t[1]) ? prd : veri; if(tgt){ if(!tgt[3].some(x=>x[1]===t[1])) tgt[3].push(t); } });
-      if(prd && veri) s.splice(s.indexOf(d), 1); } }catch(e){} return s; }; }
+      if(prd && veri) s.splice(s.indexOf(d), 1); }
+    const prd2 = s.find(x=>x[0]==='prd'); let fa = null; s.forEach(x=>{ x[3] = x[3].filter(t=>{ if(t[1]==='Fiyat Adları'){ fa = t; return false; } return true; }); });
+    if(fa && prd2){ fa = fa.slice(); fa[1] = 'Fiyat Seviyeleri'; const gi = prd2[3].findIndex(t=>t[1]==='Ürün Grupları'); prd2[3].splice(gi>=0 ? gi+1 : prd2[3].length, 0, fa); }
+    for(let i=s.length-1;i>=0;i--){ if(!s[i][3].length && s[i][0]!=='prd') s.splice(i,1); }
+  }catch(e){} return s; }; }
+/* 27.11.: fiyat seviyeleri yeni düzen – tek seferlik geçiş (admin): Toptan/Özel-1..3 silinir, Müşteriye özel fiyat 3. seviyeye taşınır */
+function npLvMigrate(){ try{ if(typeof me==='undefined' || !me || uKey(me.u)!=='admin' || !Array.isArray(products) || !products.length) return; if(localStorage.getItem('nakis_mig_lv_v1')) return;
+  const R = {top:0, mof:0, hedef:0, user:0, kat:0};
+  products.forEach(p=>{ const f = [0,1,2,3,4,5].map(j=>p.fiyat?.[j] ?? ''); if(String(f[2]??'').trim()) R.top++; const m = p.mof; const hasM = m!=null && String(m).trim()!=='';
+    f[2] = hasM ? m : ''; if(hasM) R.mof++; f[3] = ''; f[4] = ''; f[5] = ''; p.fiyat = f; p.mof = ''; if([3,4,5,6].includes(+p.hedefL)){ p.hedefL = 1; R.hedef++; } });
+  if(!persist()) return;
+  levelNames = [(levelNames[0]||'').trim() || 'Vakıf', (levelNames[1]||'').trim() || 'Market', 'Müşteriye özel fiyat', '', '', '']; persistNames();
+  if(discBase>3){ discBase = 1; persistDisc(); }
+  users.forEach(u=>{ if((u.p||[]).includes('mof') && !u.p.includes('f3')){ u.p.push('f3'); R.user++; } }); persistUsers();
+  try{ const K = hkJ(KEY_HK); K.forEach(k=>{ const old = (k.lvs||[]).map(String); let L = old.filter(l=>!['3','4','5','6'].includes(l)).map(l=>l==='mof'?'3':l); if(!L.some(l=>/^[1-3]$/.test(l))) L.unshift('1'); if(JSON.stringify(L)!==JSON.stringify(old)){ k.lvs = L; R.kat++; } }); hkPut(KEY_HK, K); }catch(e){ console.error(e); }
+  localStorage.setItem('nakis_mig_lv_v1', new Date().toISOString());
+  try{ applyNames(); buildCalcRows(); render(); }catch(_){}
+  alert('✔ ' + tr('Fiyat seviyeleri yeni düzene geçirildi.') + '\n\n• ' + tr('Toptan fiyatı silinen ürün') + ': ' + R.top + '\n• ' + tr('Müşteriye özel fiyatı 3. seviyeye taşınan ürün') + ': ' + R.mof + '\n• ' + tr('Hedef seviyesi Vakıf yapılan ürün') + ': ' + R.hedef + '\n• ' + tr('Yetkisi güncellenen kullanıcı') + ': ' + R.user + '\n• ' + tr('Düzeltilen hazır katalog') + ': ' + R.kat + '\n\n' + tr('Fiyat seviyelerini Ürünler → Fiyat Seviyeleri ekranından yönetebilirsiniz.'));
+}catch(e){ console.error('lv migrate', e); } }
+setInterval(()=>{ try{ if(!document.body.classList.contains('locked')) npLvMigrate(); }catch(_){} }, 5000);
 i18nAdd({"Red nedeni (zorunlu)": "Ablehnungsgrund (Pflicht)", "Her satır için ✔ Kabul veya ✖ Red seçin. Red için neden yazın.": "Für jede Zeile ✔ Annehmen oder ✖ Ablehnen wählen. Bei Ablehnung Grund angeben.", "Hepsini reddet": "Alle ablehnen", "karar bekliyor": "offen", "Kararı onayla": "Entscheidung bestätigen", "Önce bütün satırlara karar verin.": "Bitte zuerst für alle Zeilen entscheiden.", "Reddedilen satırlara neden yazın.": "Bitte Gründe für abgelehnte Zeilen angeben.", "Genel açıklama": "Allgemeine Bemerkung", "isteğe bağlı – satır nedenleri mesaja otomatik eklenir": "optional – Zeilengründe werden automatisch übernommen", "İncele: satır kararları": "Prüfen: Zeilenentscheidungen", "Kısmen kabul": "Teilweise angenommen", "Red": "Abgelehnt"});
 i18nAdd({"Kg girildi": "kg eingegeben", "Miktar girildi": "Menge eingegeben", "Miktar veya Kg – sadece biri": "Menge oder kg – nur eines"});
+i18nAdd({"Fiyat Seviyeleri": "Preisstufen", "Seviye adı": "Name der Stufe", "Seviyeyi kaldır": "Stufe entfernen", "Seviye ekle": "Stufe hinzufügen", "En fazla 6 seviye. Adı boş olan seviye programın hiçbir yerinde görünmez.": "Höchstens 6 Stufen. Eine Stufe ohne Namen erscheint nirgends im Programm.", "Bu fiyat seviyesi kaldırılsın mı?": "Diese Preisstufe entfernen?", "Kaydedince bu seviye programın her yerinden kalkar.": "Nach dem Speichern verschwindet sie überall im Programm.", "Fiyat seviyeleri yeni düzene geçirildi.": "Preisstufen wurden umgestellt.", "Toptan fiyatı silinen ürün": "Artikel mit gelöschtem Großhandelspreis", "Müşteriye özel fiyatı 3. seviyeye taşınan ürün": "Artikel, deren Kundenpreis in Stufe 3 verschoben wurde", "Hedef seviyesi Vakıf yapılan ürün": "Artikel mit Zielstufe auf Vakıf gesetzt", "Yetkisi güncellenen kullanıcı": "Benutzer mit angepassten Rechten", "Düzeltilen hazır katalog": "Angepasste Kataloge", "Fiyat seviyelerini Ürünler → Fiyat Seviyeleri ekranından yönetebilirsiniz.": "Preisstufen verwalten Sie unter Artikel → Preisstufen."});
 i18nAdd({"Tam Yedek (Railway)": "Komplett-Sicherung (Railway)"}); i18nAdd({"Şablon: Vakıf – Market": "Vorlage: Vakıf – Market", "Şube Vakıf-Market Fiyat Karşılaştırma": "Filiale Vakıf-Market Preisvergleich", "Faturanızı yükleyin; Vakıf ve Market fiyatları otomatik karşılaştırılır.": "Laden Sie Ihre Rechnung hoch – Vakıf- und Market-Preise werden automatisch verglichen.", "Kayıtlı karşılaştırmalar": "Gespeicherte Vergleiche", "Kayıtlı karşılaştırma": "Gespeicherter Vergleich", "Kaydedildi": "Gespeichert", "Henüz kayıtlı karşılaştırma yok.": "Noch keine gespeicherten Vergleiche.", "Listeye dön": "Zurück zur Liste", "Devam et": "Weiter", "Kaydet ve bitir": "Speichern und beenden", "Bu karşılaştırma kaydedilmedi. Çıkılsın mı?": "Dieser Vergleich wurde nicht gespeichert. Trotzdem verlassen?", "Bu karşılaştırma kaydedilsin mi? Kaydedildikten sonra değiştirilemez.": "Diesen Vergleich speichern? Danach kann er nicht mehr geändert werden.", "Karşılaştırma kaydedildi": "Vergleich gespeichert", "Kayıtlı karşılaştırma silinsin mi?": "Gespeicherten Vergleich löschen?", "Bu fatura zaten kayıtlı. Lütfen başka bir fatura seçin.": "Diese Rechnung ist bereits gespeichert. Bitte eine andere Rechnung wählen.", "Ara: fatura no, müşteri, tarih…": "Suche: Rechnungsnr., Kunde, Datum…", "Aramaya uyan kayıt yok.": "Keine Treffer.", "Şube (kısıtlı kullanıcı)": "Filiale (eingeschränkter Benutzer)", "Şube Vakıf-Market Fiyat Karşılaştırma – sadece bu ekranı görür": "Filiale Vakıf-Market Preisvergleich – sieht nur diese Ansicht", "Arama paneli (şube)": "Suchleiste (Filiale)", "Resim": "Bild", "Şablondan çık": "Vorlage verlassen", "alış fiyatı": "Einkaufspreis", "Başka fatura yükle": "Andere Rechnung hochladen", "Faturanızı yükleyin; faturadaki fiyatlar otomatik olarak karşılaştırılır.": "Laden Sie Ihre Rechnung hoch – die Preise werden automatisch verglichen.", "Kaydedilen hali": "Gespeicherter Stand", "Kaydedilen teklif": "Gespeichertes Angebot", "fiyatlar kaydedildiği andaki gibi": "Preise wie beim Speichern", "Kaydedilen karşılaştırma silinsin mi? Fatura silinmez.": "Gespeicherten Vergleich löschen? Die Rechnung bleibt erhalten.", "nakliye": "Fracht", "Alış (fatura) + nakliye": "EK (Rechnung) + Fracht", "Nakliye müşterinin kârından düşülür; leergut iade edildiği için düşülmez. Faturadaki miktar ve fiyatlar değiştirilemez.": "Fracht wird vom Gewinn abgezogen; Leergut nicht, da es zurückgegeben wird. Menge und Preise der Rechnung sind nicht änderbar.", "Seçilen fiyattan alıp son satış fiyatından (KDV hariç) satarsa kâr. Leergut iade edildiği için kârdan düşülmez; nakliye 1. adımda girdiğiniz tutardır.": "Gewinn bei Einkauf zum gewählten Preis und Verkauf zum Endpreis (netto). Leergut wird nicht abgezogen (Rückgabe); Fracht ist der Betrag aus Schritt 1.", "Aynı ürünleri aynı son satış fiyatından satarsa: faturadaki fiyatla ve seçilen fiyatla alınca kâr. Leergut iade edildiği için kârdan düşülmez; nakliye seçilen fiyatta 1. adımda girdiğiniz tutardır.": "Gleicher Endpreis: Gewinn mit Rechnungspreis und mit gewähltem Preis. Leergut wird nicht abgezogen (Rückgabe); Fracht beim gewählten Preis ist der Betrag aus Schritt 1."}); i18nAdd({"Faturadaki fiyat": "Preis auf der Rechnung", "Fatura": "Rechnung", "fiyatlarıyla ödediğiniz toplam (nakliye / leergut dahil)": "– so viel haben Sie insgesamt bezahlt (inkl. Fracht / Leergut)", "ile seçilen fiyat aynı tutuyor.": "und der gewählte Preis ergeben denselben Betrag.", "ile almanız daha kârlı": "– Einkauf günstiger", "ile almanız daha pahalı": "– Einkauf teurer", "ile aldığınızda, seçilen fiyata göre bu kadar daha az ödediniz.": "– so viel weniger haben Sie im Vergleich zum gewählten Preis bezahlt.", "Toplam ödenen": "Gesamt bezahlt", "ile daha ucuz": "günstiger", "ile daha pahalı": "teurer"}); i18nAdd({"Veri Aktarımı (Import)": "Datenübernahme (Import)"}); i18nAdd({"Afişte hangi fiyatlar görünsün?": "Welche Preise auf dem Plakat?", "Kampanya fiyatı her zaman büyük ve kırmızı yazılır.": "Der Aktionspreis wird immer groß und rot angezeigt.", "hangi fiyat?": "welcher Preis?", "İndirim rozeti (−%)": "Rabatt-Abzeichen (−%)", "Fiyatlar KDV dahil": "Preise inkl. MwSt.", "Eski fiyat için bir fiyat seçin.": "Für den alten Preis eine Preisstufe wählen.", "Eski fiyat (üstü çizili)": "Alter Preis (durchgestrichen)"});
 i18nAdd({"Afiş başlığı": "Plakattitel", "Afiş fiyatı (büyük, kırmızı)": "Plakatpreis (groß, rot)", "fiyat seçin": "Preis wählen", "Afiş fiyatı seçin.": "Plakatpreis wählen.", "Teklif fiyatı her zaman büyük ve kırmızı yazılır.": "Der Angebotspreis wird immer groß und rot angezeigt.", "Afiş için ürün yok.": "Keine Artikel für das Plakat.", "Seçilen fiyatta hiçbir ürünün fiyatı yok.": "Für den gewählten Preis hat kein Artikel einen Preis.", "Listede görünen ürünlerden afiş": "Plakat aus den angezeigten Artikeln", "Bu katalogdan afiş": "Plakat aus diesem Katalog", "Otomatik afiş": "Automatisches Plakat", "Fiyat Listesi": "Preisliste"});
 i18nAdd({"Afiş": "Plakat", "Kampanya afişi (A4)": "Aktionsplakat (A4)", "Afiş indirildi ve Afişler’e kaydedildi": "Plakat heruntergeladen und unter Plakate gespeichert", "Afiş indirildi": "Plakat heruntergeladen", "Önce kampanyaya ürün seçin.": "Zuerst Artikel für die Aktion wählen.", "Kampanyadan otomatik": "Automatisch aus Aktion"});

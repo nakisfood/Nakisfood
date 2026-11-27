@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 14:02",
+  "tr": "Fiyat seviyeleri yeni düzen: «Fiyat 1/2…» yerine sadece sizin verdiğiniz adlar; Toptan ve Özel-1/2/3 kaldırıldı; Müşteriye özel fiyat 3. seviye oldu; Ürünler → Fiyat Seviyeleri’nden en fazla 6 seviye eklenebilir; boş seviyeler hiçbir yerde görünmez.",
+  "de": "Preisstufen neu: nur noch Ihre eigenen Namen statt «Preis 1/2…»; Großhandel und Spezial-1/2/3 entfernt; Kundenpreis ist Stufe 3; unter Artikel → Preisstufen bis zu 6 Stufen; leere Stufen werden nirgends angezeigt."
+ },
+ {
   "id": "2026-11-27 13:40",
   "tr": "İade formu: bir satırda Miktar (adet) veya Kg – sadece biri girilebilir; «Diğer» iade sebebi kaldırıldı.",
   "de": "Retourenformular: pro Zeile nur Menge (Stk.) oder kg; Grund «Sonstiges» entfernt."
