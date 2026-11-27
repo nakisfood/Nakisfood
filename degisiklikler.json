@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-27 13:40",
+  "tr": "İade formu: bir satırda Miktar (adet) veya Kg – sadece biri girilebilir; «Diğer» iade sebebi kaldırıldı.",
+  "de": "Retourenformular: pro Zeile nur Menge (Stk.) oder kg; Grund «Sonstiges» entfernt."
+ },
+ {
   "id": "2026-11-27 13:19",
   "tr": "İade formu: kullanıcıya «Yeni güncelleme» uyarısı sadece durum değişince (işleme alındı, reddedildi, iade yapıldı) çıkar.",
   "de": "Retourenformular: Hinweis «Neue Aktualisierung» nur bei Statuswechsel."
