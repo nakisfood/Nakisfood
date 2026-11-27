@@ -1,5 +1,10 @@
 [
  {
+  "id": "2026-11-28 00:32",
+  "tr": "Ürün Listesi: «📚 Katalog yap» düğmesi (ekrandaki ürünlerden Hazır Katalog). Arama artık sadece seçili ürünlerin içinde yapılır. Üstteki uyarılar sadece seçili ürünlerle ilgili (0 olanlar, açık teklif ve fatura kârı gösterilmez).",
+  "de": "Artikelliste: Schaltfläche «📚 Katalog erstellen» (fertiger Katalog aus den angezeigten Artikeln). Suche nur noch innerhalb der Auswahl. Hinweise oben nur zur Auswahl (keine Nullwerte, keine offenen Angebote / Rechnungsgewinn)."
+ },
+ {
   "id": "2026-11-28 00:14",
   "tr": "Özel Kullanıcılar → Afişler / Fiyat Listeleri: Afişler modülündeki gibi sarı klasör kartları (adet, yayında sayısı, klasörü tek tıkla yayınla, ✎ 🗑, sürükle). Klasörün içinde afişler resimli kartlar halinde (Yayınla, klasör, Önizle, Ad, Sil); ▦ Kart / ☰ Liste geçişi.",
   "de": "Spezialbenutzer → Plakate / Preislisten: gelbe Ordnerkarten wie im Plakat-Modul (Anzahl, veröffentlicht, Ordner mit einem Klick veröffentlichen, ✎ 🗑, ziehen). Im Ordner Plakate als Bildkarten (Veröffentlichen, Ordner, Vorschau, Name, Löschen); Umschalter ▦ Karten / ☰ Liste."
