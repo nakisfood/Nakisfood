@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-27 22:54",
+  "tr": "Afiş klasörlerinde ✂ (kes) düğmesi artık yazının üstüne binmiyor; kartın sağında ayrı duruyor.",
+  "de": "In Plakat-Ordnern überdeckt die ✂-Schaltfläche den Namen nicht mehr; sie steht rechts separat."
+ },
+ {
+  "id": "2026-11-27 22:50",
+  "tr": "Bütün şifre kutularında 👁 göster / gizle düğmesi (giriş ekranı, Özel Kullanıcılar → yeni kullanıcı şifresi dahil).",
+  "de": "Alle Passwortfelder mit 👁 anzeigen / verbergen (Anmeldung, Sonderbenutzer → neues Passwort usw.)."
+ },
+ {
   "id": "2026-11-27 22:26",
   "tr": "Şikayet ve Öneri formu sadeleşti: sadece açıklama ve resim yükle (kategori, ürün ve ilgili şube alanları kaldırıldı).",
   "de": "Beschwerde- und Vorschlagsformular vereinfacht: nur Beschreibung und Foto (Kategorie, Artikel und Filiale entfernt)."
