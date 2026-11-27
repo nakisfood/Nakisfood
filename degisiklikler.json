@@ -1,5 +1,15 @@
 [
  {
+  "id": "2026-11-27 13:19",
+  "tr": "İade formu: kullanıcıya «Yeni güncelleme» uyarısı sadece durum değişince (işleme alındı, reddedildi, iade yapıldı) çıkar.",
+  "de": "Retourenformular: Hinweis «Neue Aktualisierung» nur bei Statuswechsel."
+ },
+ {
+  "id": "2026-11-27 13:18",
+  "tr": "İade Formları: her satır ayrı ✔ Kabul / ✖ Red (red için neden zorunlu). Hepsi red → red cevabı; en az biri kabul → iade faturası ve «Kısmen kabul». Kullanıcı mesajında kabul ve red edilenler ayrı listelenir.",
+  "de": "Retourenformulare: jede Zeile einzeln ✔ annehmen / ✖ ablehnen (Grund Pflicht). Alle abgelehnt → Ablehnung; mind. eine angenommen → Retourenrechnung und «Teilweise angenommen». Nachricht listet angenommene und abgelehnte Zeilen."
+ },
+ {
   "id": "2026-11-27 13:13",
   "tr": "«Veri Aktarımı (Import)» menüden kaldırıldı, import sayfası kapatıldı (taşıma tamamlandı).",
   "de": "«Datenübernahme (Import)» aus dem Menü entfernt, Import-Seite deaktiviert (Umzug abgeschlossen)."
